@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <link rel="stylesheet" href="/css/buttonStyles.css"/>
+    <link rel="stylesheet" href="/css/adminMainStyles.css"/>
+    <link rel="stylesheet" href="/css/findCreatePageStyles.css"/>
+</head>
+
+<body>
+<div th:replace="pageFragment/header::header"></div>
+
+
+<div class="header-back"></div>
+
+<div class="main-block">
+    <div class="left-block">
+        <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
+    </div>
+
+
+    <div class="central-tickets-block">
+        <div class="search-title">Find clients</span></div>
+
+        <div class="modal-content">
+            <!--------------------------------------------------------------------------->
+            <div id="personal-operations">
+                <div sec:authorize="hasAuthority('ROLE_ADMIN')" class="personal-form-block">
+
+                    <form class="find-personal" action="/admin/findPersonal" method="post">
+                        <input class="select" type="text" name="name" placeholder="name">
+                        <input class="select" type="text" name="surname" placeholder="surname">
+                        <input class="select" type="text" name="telephone" placeholder="telephone">
+                        <input class="button" type="submit" value="find">
+                    </form>
+
+                    <div class="button-see-all-block">
+                        <form class="find-personal" action="/admin/findAllClients" method="post">
+                            <input class="button" type="submit" value="see all">
+                        </form>
+                    </div>
+                </div>
+                <!--------------------------------------------------------------------------->
+
+                <div sec:authorize="hasAuthority('ROLE_DOCTOR')" class="personal-form-block">
+
+                    <form class="find-personal" action="/admin/findPersonal" method="post">
+                        <input class="select" type="text" name="name" placeholder="name">
+                        <input class="select" type="text" name="surname" placeholder="surname">
+                        <input class="select" type="text" name="telephone" placeholder="telephone">
+                        <input class="button" type="submit" value="find">
+                    </form>
+
+                    <div class="button-see-all-block">
+                        <form class="find-personal" action="/admin/findAllClients" method="post">
+                            <input class="button" type="submit" value="see all">
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="pageFragment/adminButtons::admin-buttons"></div>
+
+</div>
+
+
+<script>
+
+
+
+    const buttonPersonal = document.getElementById("personal")
+    const buttonService = document.getElementById("service")
+    let buttonsFindCreatePersonal = document.getElementById("buttons-find-create-personal")
+    const buttonsFindCreateService = document.getElementById("buttons-find-create-service")
+
+    buttonPersonal.onclick = function(){
+    buttonsFindCreatePersonal.style.display=  (buttonsFindCreatePersonal.style.display=== "flex") ? "none" : "flex";
+    }
+
+    buttonService.onclick = function(){
+    buttonsFindCreateService.style.display=(buttonsFindCreateService.style.display=== "flex") ? "none" : "flex";
+    }
+
+
+
+
+
+</script>
+
+
+</body>

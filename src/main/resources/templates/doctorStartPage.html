@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <link rel="stylesheet" href="/css/buttonStyles.css"/>
+    <link rel="stylesheet" href="/css/adminMainStyles.css"/>
+    <link rel="stylesheet" href="/css/adminStartPageStyles.css"/>
+    <link rel="stylesheet" href="/css/findCreatePageStyles.css"/>
+    <link rel="stylesheet" href="/css/setShedulePageStyles.css"/>
+</head>
+
+<body>
+
+<div th:replace="pageFragment/header::header"></div>
+
+<div class="header-back"></div>
+
+
+<div class="main-block">
+    <div class="left-block">
+        <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
+    </div>
+
+    <div class="central-tickets-block">
+
+        <div class="search-title"> Your schedule </div>
+
+
+        <div class="schedule-container">
+            <div class="schedule-block">
+
+                <div class="schedule" th:each="schedule: ${scheduleList}">
+
+
+                    <div th:if="${schedule.dayOff==null}">
+                        <div class="schedule-weekday" th:text="${schedule.weekDay}"></div>
+                        <div class="schedule-date" th:text="${schedule.date}"></div>
+                        <div class="schedule-time">
+                        <div th:text="${schedule.startTime}"></div>
+                        <div th:text="${schedule.endTime}"></div>
+                        </div>
+                        <input class="schedule-id" type="hidden" value="${schedule.id}">
+                    </div>
+                    <div th:if="${schedule.dayOff!=null}">
+                        <div class="schedule-weekday" th:text="${schedule.weekDay}"></div>
+                        <div class="schedule-date" th:text="${schedule.date}"></div>
+                        <div class="day-off" th:text="${schedule.dayOff}"></div>
+                    </div>
+                </div>
+
+                <div class="schedule" th:if="${scheduleList==null}">No schedule</div>
+
+            </div>
+
+        </div>
+
+
+        <div class="search-title" th:if="${!tickets.empty}" th:text="'Your tickets'"></div>
+        <div class="search-title" th:if="${tickets.empty}" th:text="'You have no tickets'"></div>
+
+        <div class="ticket-block-main">
+
+            <div th:if="${!tickets.empty}" th:each="ticket: ${tickets}" class="client-block">
+                <div>
+
+                    <div class="client-name">
+                        <span th:text=${ticket.client.name}></span>
+                        <span th:text=${ticket.client.surname}></span>
+                        <br><br>
+                    </div>
+                   <div class="client-info">
+                    <span th:text=${ticket.service.type} class="client-date"></span>
+                    <div>
+                        <span th:text=${ticket.personalJob.personal.name} class="client-date"></span>
+                        <span th:text=${ticket.personalJob.personal.surname} class="client-date"></span>
+                    </div>
+                    <span th:text=${ticket.personalJob.jobTitle} class="client-date"></span>
+                    <div th:text=${ticket.date} class="client-date"></div>
+                    <div th:text=${ticket.time} class="client-date"></div>
+                    <span class="client-date">Price: </span> <span th:text=${ticket.service.price}
+                                                                   class="client-date"></span>
+                   </div>
+                </div>
+                <div class="doctor-tickets-buttons">
+                    <form th:if="${ticket.state!='request for cancellation'}" class="client-form"
+                          action="/tickets/requestForCancellation" method="post">
+                        <input class="button" type="hidden" name="ticketId" th:value="${ticket.id}">
+                        <input class="button" type="hidden" name="clientId" th:value="${ticket.client.id}">
+                        <input class="cancel-button" type="submit" value="cancel">
+                    </form>
+                    <span class="for-cancel" th:if="${ticket.state=='request for cancellation'}"
+                          th:text="'request for cancellation'"></span>
+                    <form  class="client-form"
+                           action="/medCard/seeMedicalCard" method="post">
+                        <input class="button" type="hidden" name="clientId" th:value="${ticket.client.id}">
+                        <input class="button" type="submit" value="medical card">
+                    </form>
+
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+        <!---------------------------------------------------------contentBlock-->
+
+
+    </div>
+    <div id="right-block"></div>
+    <div th:replace="pageFragment/adminButtons::admin-buttons"></div>
+</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+
+
+
+    <div th:fragment="header" class="header">
+        <div class="title-block">
+            <div class="title">vitaclinic</div>
+        </div>
+
+        <div class="header-line"></div>
+
+        <div class="header-buttons">
+            <div class="button-block">
+
+                <div sec:authorize="isAuthenticated()">
+                <div class="username" sec:authentication="authorities"></div>
+                </div>
+
+                <div>
+                    <form  class="regForms" action="/" method="get">
+                        <input class="button" type="submit" value="main page">
+                    </form>
+                </div>
+
+                <form sec:authorize="hasAuthority('ROLE_ADMIN')" th:if="${session.count!=0&&session.count!=null}" class="regForms" action="/admin/ticketsForCancellation" method="post">
+                    <input class="button" type="submit" th:value="'for cancellation: '+${session.count}">
+                </form>
+
+                <div sec:authorize="hasAuthority('ROLE_ADMIN')" >
+                    <form  class="regForms" action="/admin/start" method="get">
+                        <input class="button" type="submit" value="my account">
+                    </form>
+                </div>
+                <div sec:authorize="hasAuthority('ROLE_CLIENT')" >
+                    <form  class="regForms" action="/client/clientTickets" method="get">
+                        <input class="button" type="submit" value="my account">
+                    </form>
+                </div>
+
+                <div sec:authorize="hasAuthority('ROLE_DOCTOR')" >
+                    <form  class="regForms" action="/doctor/doctorStart" method="get">
+                        <input class="button" type="submit" value="my account">
+                    </form>
+                </div>
+
+
+                <form sec:authorize="!isAuthenticated()" class="regForms" action="/login" method="get">
+                    <input class="button" type="submit" value="log in">
+                </form>
+
+                <form sec:authorize="!isAuthenticated()" class="regForms" action="/registration" method="get">
+                    <input class="button" type="submit" value="sign up">
+                </form>
+
+                <div sec:authorize="hasAuthority('ROLE_CLIENT')" >
+                <form  class="regForms" action="/client/medicalCard" method="get">
+                    <input class="button" type="submit" value="my medical card">
+                </form>
+                </div>
+
+
+                <div sec:authorize="hasAuthority('ROLE_DOCTOR')" >
+                    <form  class="regForms" action="/client/allDoctorClients" method="get">
+                        <input class="button" type="submit" value="my patients">
+                    </form>
+                </div>
+
+                <form sec:authorize="isAuthenticated()" class="regForms"  action="/exit" method="post">
+                    <input class="button" type="submit" value="exit">
+                </form>
+            </div>
+
+
+
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+

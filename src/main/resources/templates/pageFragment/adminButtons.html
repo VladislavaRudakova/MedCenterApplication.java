@@ -1,0 +1,59 @@
+<div sec:authorize="hasAuthority('ROLE_ADMIN')" th:fragment="admin-buttons" class="admin-right-block">
+    <div class="admin-operations-block">
+
+
+        <!------------------------------------------------------------------personal operations-->
+
+        <input id="personal" class="admin-button" type="button" value="personal">
+
+        <div id="buttons-find-create-personal">
+            <form action="/admin/personalOperations" method="get">
+                <input class="find-create-button" type="submit" value="find">
+            </form>
+            <form action="/admin/createPersonal" method="get">
+                <input class="find-create-button" type="submit" value="create new">
+            </form>
+        </div>
+
+        <form action="/admin/clientOperations" method="get">
+            <input class="admin-button" type="submit" value="clients">
+        </form>
+
+        <input id="service" class="admin-button" type="button" value="service">
+
+        <div id="buttons-find-create-service">
+            <form action="/admin/serviceOperations" method="get">
+                <input class="find-create-button" type="submit" value="find">
+            </form>
+            <form action="/admin/createService" method="get">
+                <input class="find-create-button" type="submit" value="create new">
+            </form>
+        </div>
+
+        <form action="/admin/ticketOperations" method="get">
+            <input class="admin-button" type="submit" value="tickets">
+        </form>
+
+    </div>
+</div>
+
+<!------------------------------------------------------------------doctor-->
+
+<div sec:authorize="hasAuthority('ROLE_DOCTOR')" th:fragment="admin-buttons" class="admin-right-block">
+    <div class="admin-operations-block">
+
+
+        <!------------------------------------------------------------------personal operations-->
+
+
+        <form action="/findClient" method="get">
+            <input class="admin-button" type="submit" value="patients">
+        </form>
+
+        <form action="/doctor/doctorStart" method="get">
+            <input id="tickets" class="admin-button" type="submit" value="tickets">
+        </form>
+
+
+    </div>
+</div>

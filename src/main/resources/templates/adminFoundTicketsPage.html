@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <link rel="stylesheet" href="/css/buttonStyles.css"/>
+    <link rel="stylesheet" href="/css/adminMainStyles.css"/>
+    <link rel="stylesheet" href="/css/adminStartPageStyles.css"/>
+    <link rel="stylesheet" href="/css/findCreatePageStyles.css"/>
+    <link rel="stylesheet" href="/css/setShedulePageStyles.css"/>
+    <link rel="stylesheet" href="/css/medCardStyles.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+
+<body>
+
+<div th:replace="pageFragment/header::header"></div>
+
+<div class="header-back"></div>
+
+<div class="main-block">
+    <div class="left-block">
+        <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
+    </div>
+
+    <div class="central-tickets-block">
+
+        <span class="doctor-name">Tickets</span>
+
+
+        <div class="found-personal">
+
+
+            <div th:each="ticket:${tickets}" class="personal-block">
+
+                <div class="personal-name-block">
+                    <span th:text="${ticket.date}" class="instance-info"></span>
+                </div>
+                <div class="personal-name-block">
+                    <span th:text="${ticket.time}" class="instance-info"></span>
+                </div>
+
+
+                <div class="personal-name-block">
+                    <span th:text="${ticket.service.type}" class="instance-info"></span>
+                </div>
+
+                <div th:if="${ticket.personalJob!=null}" class="personal-name-block">
+                    <span th:text="${ticket.personalJob.personal.name}" class="instance-info"></span>
+                    <span th:text="${ticket.personalJob.personal.surname}" class="instance-info"></span>
+                </div>
+
+
+                <div th:if="${ticket.client!=null}" class="personal-name-block">
+                    <span th:text="${ticket.client.name}" class="instance-info"></span>
+                    <span th:text="${ticket.client.surname}" class="instance-info"></span>
+                </div>
+
+
+
+                <div class="personal-name-block">
+                    <span th:text="${ticket.state}" class="instance-info"></span>
+                </div>
+
+                <!------------------------------------------------------------------------------------->
+                <div class="dropdown">
+                    <input onclick="toggleDropdown(this)" class="edit-button" type="button" value="edit">
+                    <div class="dropdown-content">
+                        <!----------------------------------------------->
+                        <form class="edit-form" action="/admin/editTicket" method="post">
+
+                            <div class="name-input-block">
+                                <select id="find-job" class="select" name="state">
+                                    <option th:each="ticketState:${ticketStates}" class="options" th:value="${ticketState}" th:text="${ticketState}"></option>
+                                </select>
+                            </div>
+
+
+                            <input class="button" type="submit" value="send">
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="right-block"></div>
+
+    <div th:replace="pageFragment/adminButtons::admin-buttons"></div>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+
+    flatpickr("#date", {});
+ flatpickr("#date1", {});
+
+
+    const buttonPersonal = document.getElementById("personal")
+   const buttonService = document.getElementById("service")
+   let buttonsFindCreatePersonal = document.getElementById("buttons-find-create-personal")
+   const buttonsFindCreateService = document.getElementById("buttons-find-create-service")
+
+buttonPersonal.onclick = function(){
+buttonsFindCreatePersonal.style.display=  (buttonsFindCreatePersonal.style.display=== "flex") ? "none" : "flex";
+   }
+
+   buttonService.onclick = function(){
+buttonsFindCreateService.style.display=(buttonsFindCreateService.style.display=== "flex") ? "none" : "flex";
+   }
+
+
+
+
+
+
+
+
+
+   function toggleDropdown(button) {
+               let dropdown = button.closest(".dropdown").querySelector(".dropdown-content");
+               dropdown.style.display = (dropdown.style.display === "flex") ? "none" : "flex";
+           }
+
+    function editName(button) {
+               let editNameForm = button.closest(".dropdown").querySelector(".edit-name");
+               editNameForm.style.display = (editNameForm.style.display === "flex") ? "none" : "flex";
+           }
+
+    function editSurname(button) {
+               let editSurnameForm = button.closest(".dropdown").querySelector(".edit-surname");
+               editSurnameForm.style.display = (editSurnameForm.style.display === "flex") ? "none" : "flex";
+           }
+
+function editDob(button) {
+               let editDobForm = button.closest(".dropdown").querySelector(".edit-dob");
+               editDobForm.style.display = (editDobForm.style.display === "flex") ? "none" : "flex";
+           }
+
+    function editEmploymentDate(button) {
+               let editEmploymentDateForm = button.closest(".dropdown").querySelector(".edit-employment-date");
+               editEmploymentDateForm.style.display = (editEmploymentDateForm.style.display === "flex") ? "none" : "flex";
+           }
+
+
+</script>
+
+
+</body>
+</html>

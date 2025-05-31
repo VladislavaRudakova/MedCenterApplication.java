@@ -1,0 +1,224 @@
+
+      #personal-operations{
+      display:flex;
+
+      }
+
+.personal-form-block{
+display: flex;
+flex-direction:column;
+border:solid;
+border-radius: 30px;
+border-width: 1px;
+border-color: #c1c9d1;
+padding:30px;
+
+}
+
+.button-see-all-block{
+display:flex;
+justify-content:flex-end;
+
+}
+
+#create-personal{
+    display:flex;
+
+
+}
+
+#create-personal-form{
+    display:flex;
+    flex-direction:column;
+    width:auto;
+    height:200px;
+    border:solid;
+    border-radius: 30px;
+    border-width: 1px;
+    border-color: #c1c9d1;
+    padding:30px;
+}
+
+.personal-input{
+color: #c1c9d1;
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px;
+  border: solid;
+  border-color: #c1c9d1;;
+  border-width: 1px;
+  height: 30px;
+  width: 150px;
+  margin:5px;
+
+}
+
+#personal-primary-info-block{
+display:flex;
+}
+
+#personal-secondary-info-block{
+display:flex;
+flex-direction:column;
+}
+
+.personal-label{
+font-family: Arial, Helvetica, sans-serif;
+  font-size: 90%;
+  color: #464a50;
+}
+
+
+
+
+#department-for-create{
+
+}
+
+#button-create{
+display:flex;
+justify-content:flex-end;
+}
+
+
+
+
+.tickets-operations {
+    display:flex;
+}
+
+.personal-info-input {
+    display:flex;
+    flex-direction: column;
+}
+
+.found-personal{
+    display:flex;
+    flex-direction:column;
+}
+
+.personal-block{
+    display: flex;
+    align-items: center;
+     justify-content: space-between;
+    width: auto;
+    padding: 50px;
+    padding-top:30px;
+    padding-bottom:30px;
+    border: solid;
+    border-radius: 40px;
+    border-width: 1px;
+    border-color: #c1c9d1;
+    margin:30px;
+    margin-bottom:20px;
+    margin-top:20px;
+
+}
+
+.personal-id{
+    border:solid;
+    border-width:1px;
+    border-color: #c1c9d1;
+    border-radius: 40px;
+    padding:10px;
+    color:#c1c9d1;
+}
+
+.personal-name-block{
+    margin-left:10px;
+    margin-right:10px;
+}
+
+.personal-info{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 100%;
+    color: rgb(106, 117, 141);
+    margin-left:10px;
+    margin-right:10px;
+
+}
+
+.admin-operations-block{
+    display:flex;
+    flex-direction:column;
+    width:100%;
+
+}
+
+#buttons-find-create-personal{
+    display:none;
+}
+
+#buttons-find-create-service{
+    display:none;
+}
+
+.founded-inst-buttons-block{
+display:flex;
+justify-content:flex-end;
+}
+
+.inst-info-block{
+display: flex;
+align-items:center;
+}
+
+.select-instance{
+  color: #c1c9d1;
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px;
+  border: solid;
+  border-color: #c1c9d1;;
+  border-width: 1px;
+  height: 30px;
+  width: 150px;
+  margin:5px;
+}
+
+#find-service{
+width:200px;
+}
+
+
+
+#create-med-card-form{
+    display:flex;
+    flex-direction:column;
+    width:1000px;;
+    height:auto;
+    border:solid;
+    border-radius: 30px;
+    border-width: 1px;
+    border-color: #c1c9d1;
+    padding:30px;
+    padding-bottom:150px;
+}
+#med-card-record{
+    display:flex;
+    flex-direction:column;
+    width:auto;
+    height:auto;
+    padding:30px;
+}
+
+.med-card-label{
+    display:flex;
+    flex-direction:column;
+}
+
+
+
+.med-card-details{
+     display:flex;
+     flex-direction:column;
+     padding:30px;
+}
+
+.med-card-block{
+     display:flex;
+     flex-direction:column;
+}
+
+.med-card-info-block{
+     display:flex;
+     flex-direction:column;
+}

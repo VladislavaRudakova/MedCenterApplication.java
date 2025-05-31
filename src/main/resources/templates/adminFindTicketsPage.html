@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <link rel="stylesheet" href="/css/buttonStyles.css"/>
+    <link rel="stylesheet" href="/css/adminMainStyles.css"/>
+    <link rel="stylesheet" href="/css/findCreatePageStyles.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+
+<body>
+<div th:replace="pageFragment/header::header"></div>
+
+
+<div class="header-back"></div>
+
+<div class="main-block">
+    <div class="left-block">
+        <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
+    </div>
+
+
+    <div class="central-tickets-block">
+        <div class="search-title">Find tickets</span></div>
+
+        <div class="modal-content">
+            <div id="personal-operations">
+                <div class="personal-form-block">
+                    <form class="find-personal" action="/admin/findTickets" method="post">
+                        <input id="date" class="personal-input" type="text" placeholder="date">
+                        <select id="find-service" class="select-instance" name="service">
+                            <option th:each="service:${services}" class="options" th:value="${service.type}" th:text="${service.type}"></option>
+                        </select>
+                        <input class="button" type="submit" value="find">
+                    </form>
+
+                    <div class="button-see-all-block">
+                        <form class="find-personal" action="/admin/findAllTickets" method="post">
+                            <input class="button" type="submit" value="see all">
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="right-block"></div>
+
+    <div th:replace="pageFragment/adminButtons::admin-buttons"></div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+
+
+    flatpickr("#date", {});
+
+const buttonPersonal = document.getElementById("personal")
+const buttonService = document.getElementById("service")
+let buttonsFindCreatePersonal = document.getElementById("buttons-find-create-personal")
+const buttonsFindCreateService = document.getElementById("buttons-find-create-service")
+
+buttonPersonal.onclick = function(){
+buttonsFindCreatePersonal.style.display=  (buttonsFindCreatePersonal.style.display=== "flex") ? "none" : "flex";
+}
+
+buttonService.onclick = function(){
+buttonsFindCreateService.style.display=(buttonsFindCreateService.style.display=== "flex") ? "none" : "flex";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+</body>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <link rel="stylesheet" href="/css/buttonStyles.css"/>
+    <link rel="stylesheet" href="/css/adminMainStyles.css"/>
+    <link rel="stylesheet" href="/css/findCreatePageStyles.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+
+<body>
+<div th:replace="pageFragment/header::header"></div>
+
+
+<div class="header-back"></div>
+
+<div class="main-block">
+    <div class="left-block">
+        <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
+    </div>
+
+
+    <div class="central-tickets-block">
+
+        <span class="doctor-name">Create new service</span>
+        <!---------------------------------------------------------------create personal form-->
+        <div id="create-personal">
+            <form id="create-personal-form" action="/admin/createService" method="post">
+                <div id="personal-primary-info-block">
+                    <label class="personal-label"> Type:
+                        <input class="personal-input" type="text" name="type" placeholder="type">
+                    </label>
+                    <label class="personal-label"> Price:
+                        <input class="personal-input" type="text" name="price" placeholder="price">
+                    </label >
+
+                </div>
+
+
+                <div id="button-create">
+                    <input class="button" type="submit" value="create">
+                </div>
+            </form>
+        </div>
+        <!------------------------------------------------------------/create personal form-->
+    </div>
+
+    <div th:replace="pageFragment/adminButtons::admin-buttons"></div>
+
+
+</div>
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+
+    flatpickr("#date", {});
+flatpickr("#date1", {});
+
+
+
+
+
+const buttonPersonal = document.getElementById("personal")
+    const buttonService = document.getElementById("service")
+    let buttonsFindCreatePersonal = document.getElementById("buttons-find-create-personal")
+    const buttonsFindCreateService = document.getElementById("buttons-find-create-service")
+
+    buttonPersonal.onclick = function(){
+    buttonsFindCreatePersonal.style.display= (buttonsFindCreatePersonal.style.display=== "flex") ? "none" : "flex";
+    }
+
+    buttonService.onclick = function(){
+    buttonsFindCreateService.style.display=(buttonsFindCreateService.style.display=== "flex") ? "none" : "flex";
+    }
+
+
+
+
+</script>
+
+
+</body>

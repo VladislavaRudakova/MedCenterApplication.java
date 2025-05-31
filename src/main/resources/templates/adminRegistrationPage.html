@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+     <link rel="stylesheet" href="css/styles.css"/>
+      <link rel="stylesheet" href="/css/buttonStyles.css"/>
+  </head>
+
+<body>
+
+<div th:replace="pageFragments/header::header"></div>
+
+<div class="main-block">
+    <div class="left-block">
+        <img class="main-image" src="images/mainPhoto.jpg" alt="photo">
+    </div>
+    <div class="central-block">
+        <div class="search">
+            <div class="search-title">
+                Choose the necessary service and time!
+            </div>
+            <form  action="doctors" method="post">
+            <select id="service" class="select" name="options">
+                <option class="options" value="option">service</option>
+                <option class="options"value="option1">service1</option>
+                <option class="options"value="option2">service2</option>
+                <option class="options"value="option3">Опция 3</option>
+            </select>
+            <select id="time"  class="select" name="options">
+                <option class="options" value="option">time</option>
+                <option class="options"value="option1">service1</option>
+                <option class="options"value="option2">service2</option>
+                <option class="options"value="option3">Опция 3</option>
+            </select>
+            
+               
+                <input class="button" type="submit" value="search">
+            </form>
+    
+    
+        
+        
+        </div>
+    </div>
+    <div class="right-block">
+    </div>
+</div>
+
+
+
+
+</body>

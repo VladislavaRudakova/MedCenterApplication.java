@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+
+<body>
+
+<div th:replace="pageFragment/header::header"></div>
+
+<div class="header-back"></div>
+
+<div class="main-block">
+    <div class="left-block">
+        <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
+    </div>
+    <div class="central-block">
+
+        <div class="central-block-content">
+
+            <div class="search-title"> You are registered successfully!</div>
+            <div class="client-block-main">
+                <div class="client-block">
+                    <div>
+                        <div class="client-name">
+                            <span th:text=${ticket.client.name}></span>
+
+                            <span th:text=${ticket.client.surname}></span>
+                            <br><br>
+                        </div>
+                        <span th:text=${ticket.service.type} class="client-date"></span>
+
+                        <div th:if="${ticket.personalJob!=null}">
+                            <span th:text=${ticket.personalJob.personal.name} class="client-date"></span>
+                            <span th:text=${ticket.personalJob.personal.surname} class="client-date"></span>
+                        </div>
+                        <span th:if="${ticket.personalJob!=null}" th:text=${ticket.personalJob.jobTitle}
+                              class="client-date"></span>
+                        <div th:text=${ticket.date} class="client-date"></div>
+                        <div th:text=${ticket.time} class="client-date"></div>
+                        <span class="client-date">Price: </span> <span th:text=${ticket.service.price}
+                                                                       class="client-date"></span>
+                    </div>
+                </div>
+                <div class="client-tickets">
+                    <form class="client-form" action="/client/clientTickets" method="get">
+                        <input class="button" type="hidden" name="clientId" th:value="${ticket.client.id}">
+                        <input class="button" type="submit" value="my tickets">
+                    </form>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <!---------------------------------------------------------contentBlock-->
+
+
+    </div>
+    <div class="right-block">
+    </div>
+</div>
+
+
+</body>
+
+</html>

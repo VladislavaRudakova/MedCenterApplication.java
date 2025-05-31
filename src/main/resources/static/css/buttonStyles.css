@@ -1,0 +1,149 @@
+
+.button {
+    border: solid;
+    border-width: 1px;
+    border-color: rgb(0, 68, 255);
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: rgb(0, 68, 255);
+    margin: 5px;
+    margin-bottom: 0;
+  }
+
+  .button:hover {
+    background-color: rgb(127, 172, 255);
+    color: white;
+    border-color: rgb(127, 172, 255);
+    cursor: pointer;
+  }
+
+
+  .find-create-button{
+  width:95px;
+   border: solid;
+      border-width: 1px;
+      border-color: rgb(0, 68, 255);
+      background-color: rgb(255, 255, 255);
+      border-radius: 20px;
+      padding: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
+      color: rgb(0, 68, 255);
+      margin: 5px;
+      margin-bottom: 0;
+
+  }
+
+  .edit-button{
+  z-index:0;
+    border: solid;
+    border-width: 1px;
+    border-color: rgb(0, 68, 255);
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: rgb(0, 68, 255);
+    margin: 5px;
+    margin-bottom: 0;
+  }
+
+  .cancel-button{
+      border: solid;
+      border-width: 1px;
+      border-color: rgb(106, 117, 141);
+      background-color: rgb(255, 255, 255);
+      border-radius: 20px;
+      padding: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
+      color: rgb(106, 117, 141);
+      margin: 5px;
+      margin-bottom: 0;
+    }
+
+.cancel-button:hover{
+
+    background-color: rgb(106, 117, 141);
+     color: rgb(255, 255, 255);
+     cursor: pointer;
+  }
+
+
+.button-attach-result{
+      border: solid;
+      border-width: 1px;
+      border-color: rgb(106, 117, 141);
+      background-color: rgb(255, 255, 255);
+      border-radius: 20px;
+      padding: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
+      color: rgb(106, 117, 141);
+      margin: 5px;
+      margin-bottom: 0;
+    }
+
+.button-attach-result:hover{
+
+    background-color: rgb(106, 117, 141);
+     color: rgb(255, 255, 255);
+     cursor: pointer;
+  }
+
+
+
+
+  .edit-input{
+
+  }
+
+  .ticket-button{
+       border: none;
+       border-bottom:solid;
+      border-width: 1px;
+      border-color: rgb(0, 68, 255);
+      background-color: rgb(255, 255, 255);
+      color: rgb(0, 68, 255);
+      margin: 5px;
+      margin-bottom: 0;
+  }
+
+  .ticket-button:hover{
+    border:solid;
+    background-color: rgb(255, 255, 255);
+    border-width:1px;
+     margin-bottom: 0;
+     cursor: pointer;
+    }
+
+    .correct-time-button{
+        border: solid;
+        border-width: 1px;
+        border-color: rgb(0, 68, 255);
+        background-color: rgb(255, 255, 255);
+        border-radius: 20px;
+        padding: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+        color: rgb(0, 68, 255);
+        margin: 5px;
+        margin-bottom: 0;
+    }
+
+    .correct-time-button:hover {
+        background-color: rgb(127, 172, 255);
+        color: white;
+        border-color: rgb(127, 172, 255);
+        cursor: pointer;
+      }
+
+
+      .doctor-tickets-buttons{
+      display:flex;
+
+      }

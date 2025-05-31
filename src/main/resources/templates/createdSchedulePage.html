@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <link rel="stylesheet" href="/css/setShedulePageStyles.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+
+<body>
+<div th:replace="pageFragment/header::header"></div>
+
+
+<div class="header-back"></div>
+
+<div class="main-block">
+    <div class="left-block">
+        <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
+    </div>
+
+
+    <div class="central-tickets-block">
+
+
+        <div class="search-title">
+            <span th:text="${personalJob.personal.name}"></span>
+            <span th:text="${personalJob.personal.surname}"></span>
+            <span th:text="${personalJob.jobTitle}"></span>
+            <span> schedule</span>
+        </div>
+        <!-----------------------------------------------------------schedule-->
+
+        <div class="schedule-container">
+            <div class="schedule-block">
+                <div class="schedule" th:each="schedule: ${scheduleList}">
+                    <div class="schedule-date" th:text="${schedule.date}"></div>
+                    <div th:text="${schedule.startTime}"></div>
+                    <div th:text="${schedule.endTime}"></div>
+
+                </div>
+            </div>
+        </div>
+
+        <form class="doctors-form" action="/setSchedule" method="post">
+            <input type="hidden" name="personalJobId" th:value="${personalJob.id}">
+            <input id="doctor-sign-up" class="button" type="submit" value="set schedule">
+        </form>
+
+        <!-----------------------------------------------------------/set schedule modal-->
+
+        <div id="set-schedule">
+            <div class="personal-set-schedule-block">
+                <div class="close-button">
+                    <div id="close">&times;</div>
+
+                </div>
+
+                <form id="set-schedule-form" action="/admin/setSchedule" method="post">
+
+                    <div id="selects">
+
+
+                        <div>
+                            <div class="date-select">
+                                <input id="start-date" class="select" type="text" name="date1" placeholder="date">
+                                <input id="end-date" class="select" type="text" name="date2" placeholder="date">
+                            </div>
+                            <div id="time-select-1">
+                                <select id="start-time-1" class="select" name="startTime1">
+                                    <option th:each="time:${times}" class="options" th:value="${time}" th:text="${time}"></option>
+                                </select>
+                                <select id="end-time-1" class="select" name="endTime1">
+                                    <option th:each="time:${times}" class="options" th:value="${time}" th:text="${time}"></option>
+                                </select>
+                            </div>
+                            <div id="time-select-2">
+                                <select id="start-time-2" class="select" name="startTime2">
+                                    <option th:each="time:${times}" class="options" th:value="${time}"
+                                            th:text="${time}"></option>
+                                </select>
+                                <select id="end-time-2" class="select" name="endTime2">
+                                    <option th:each="time:${times}" class="options" th:value="${time}"
+                                            th:text="${time}"></option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <select id="set-schedule-style" class="select" name="shift">
+                            <option class="options" value="" disabled selected></option>
+                            <option class="options" value="for day">for day</option>
+                            <option class="options" value="fixed">fixed</option>
+                            <option class="options" value="1/1">shift schedule 1/1</option>
+                            <option class="options" value="2/2">shift schedule 2/2</option>
+                            <option class="options" value="3/3">shift schedule 3/3</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <input type="hidden" name="personalJobId" th:value="${personalJob.id}">
+                    <div id="button-set">
+                        <input class="button" type="submit" value="set">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-----------------------------------------------------------/correct schedule modal-->
+        <div id="set-schedule-by-day" class="schedule-container">
+            <div class="close-button">
+
+
+            </div>
+            <span id="title">Correct schedule</span>
+            <form class="doctors-form" action="/setSchedule" method="post">
+                <input id="date" type="hidden" name="date">
+                <select id="start-time1" class="select" name="endTime">
+                    <option th:each="time:${times}" class="options" th:value="${time}"
+                            th:text="${time}"></option>
+                </select>
+                <select id="start-time2" class="select" name="endTime">
+                    <option th:each="time:${times}" class="options" th:value="${time}"
+                            th:text="${time}"></option>
+                </select>
+
+                <input class="button" type="submit" value="send">
+            </form>
+
+        </div>
+
+        <!-----------------------------------------------------------/correct schedule modal-->
+    </div>
+
+    <div th:replace="pageFragment/adminButtons::admin-buttons"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+<script>
+
+    flatpickr("#start-date", {});
+    flatpickr("#end-date", {});
+    <!-----------------------------------------------------------right buttons
+    const buttonPersonal = document.getElementById("personal")
+    const buttonService = document.getElementById("service")
+    const buttonsFindCreatePersonal = document.getElementById("buttons-find-create-personal")
+    const buttonsFindCreateService = document.getElementById("buttons-find-create-service")
+
+    buttonPersonal.onclick = function(){
+    buttonsFindCreatePersonal.style.display='flex';
+    }
+    buttonService.onclick = function(){
+    buttonsFindCreateService.style.display='flex';
+    }
+    <!-----------------------------------------------------------schedule form-->
+
+
+const scheduleStyle = document.getElementById("set-schedule-style")
+const endDate = document.getElementById("end-date")
+const startDate = document.getElementById("start-date")
+const timeSelectSecond = document.getElementById("time-select-2")
+
+
+scheduleStyle.addEventListener("change", function(){
+    const value = scheduleStyle.value;
+
+    if (value==="for day"){
+    endDate.style.display='none';
+    timeSelectSecond.style.display='none';
+    startDate.style.width='210px';
+} else if (value==="fixed"){
+    endDate.style.display='flex';
+     startDate.style.width='100px';
+     timeSelectSecond.style.display='none'
+} else{
+endDate.style.display='flex';
+startDate.style.width='100px';
+timeSelectSecond.style.display='flex'
+
+}
+
+})
+<!-----------------------------------------------------------url setting-->
+
+ document.getElementById("set-schedule-style").addEventListener("change", function() {
+        var selectedValue = this.value;
+        var form = document.getElementById("set-schedule-form");
+
+        if (selectedValue === "for day") {
+            form.action = "/admin/setScheduleForDay";
+        } else if (selectedValue === "fixed") {
+            form.action = "/admin/setScheduleForPeriod";
+        } else if (selectedValue === "1/1") {
+            form.action = "/admin/setScheduleForPeriod";
+        } else if (selectedValue === "2/2") {
+            form.action = "/admin/setScheduleForPeriod";
+        }else if (selectedValue === "3/3") {
+            form.action = "/admin/shift3";
+        }else if (selectedValue === "day off") {
+            form.action = "/admin/setDayOff";
+        }
+    });
+
+
+
+
+
+
+
+
+
+
+
+<!------------------------------------------------------------->
+
+    const newTimeForm = document.getElementById('set-schedule-by-day')
+    const dateInput = document.getElementById('date');
+    const titleSpan = document.getElementById('title');
+
+    document.querySelectorAll('.schedule').forEach(schedule => {
+    schedule.onclick = function(event) {
+    let dateElement = this.querySelector('.schedule-date'); // Находим дату внутри родителя
+    if (dateElement) {
+    let date = dateElement.innerText; // Получаем текст даты
+    newTimeForm.style.display = 'flex';
+    dateInput.setAttribute('data-date', date);
+    titleSpan.textContent += " " + date;
+    }
+    };
+    });
+</script>
+
+</body>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <link rel="stylesheet" href="/css/buttonStyles.css"/>
+    <link rel="stylesheet" href="/css/adminMainStyles.css"/>
+    <link rel="stylesheet" href="/css/findCreatePageStyles.css"/>
+    <link rel="stylesheet" href="/css/medCardStyles.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+
+<body>
+<div th:replace="pageFragment/header::header"></div>
+
+
+<div class="header-back"></div>
+
+<div class="main-block">
+    <div class="left-block">
+        <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
+    </div>
+
+
+    <div class="central-tickets-block">
+<span>
+    <span th:text="${session.client.name}" class="doctor-name"></span>
+        <span th:text="${session.client.surname}" class="doctor-name"></span>
+        <span class="doctor-name"> medical card</span>
+</span>
+
+
+        <!---------------------------------------------------------------create personal form-->
+        <div id="create-med-card-form">
+            <div th:text="${date}" class="doctor-name" ></div>
+            <div class="med-card-doctor-name">
+                <span th:text="${personalJob.personal.name}" class="doctor-name"></span>
+                <span th:text="${personalJob.personal.surname}" class="doctor-name"></span>
+            </div>
+
+            <form id="med-card-record" action="/medCard/makeRecord" th:object="${medCard}" method="post">
+
+                <label class="med-card-label"> Complaints:
+                    <textarea class="med-card-input" rows="10" maxlength="250" name="complaints"
+                              th:field="*{complaints}" ></textarea>
+                </label>
+                <label class="med-card-label">Diagnosis:
+                    <textarea class="med-card-input" rows="10" maxlength="250" name="diagnosis" th:field="*{diagnosis}"></textarea>
+                </label>
+                <label class="med-card-label">Examination result:
+                    <textarea class="med-card-input" rows="10" maxlength="250" name="examinationResult"
+                              th:field="*{examinationResult}" ></textarea>
+                </label>
+                <label class="med-card-label">Appointment:
+                    <textarea class="med-card-input" rows="10" maxlength="250" name="appointment"
+                              th:field="*{appointment}" ></textarea>
+                </label>
+
+
+                <div class="record-buttons-block">
+                    <div>
+                        <input class="button-attach-result" type="submit" value="attach examination result">
+                    </div>
+                    <div>
+                        <input class="button" type="submit" value="create">
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+        <!------------------------------------------------------------/create personal form-->
+    </div>
+    <div id="right-block"></div>
+    <div th:replace="pageFragment/adminButtons::admin-buttons"></div>
+
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+
+    flatpickr("#date", {});
+flatpickr("#date1", {});
+
+
+const buttonPersonal = document.getElementById("personal")
+const formPersonal = document.getElementById("personal-operations")
+const buttonCreatePersonal = document.getElementById("create-personal-button")
+const formCreatePersonal = document.getElementById("create-personal")
+
+const personalModal = document.getElementById("personal-modal")
+
+buttonPersonal.onclick = function (){
+personalModal.style.display='flex';
+}
+
+
+</script>
+
+
+</body>

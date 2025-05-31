@@ -1,0 +1,125 @@
+
+.schedule-container{
+   display:flex;
+}
+
+
+.schedule-block{
+   display:flex;
+   width:auto;
+   border:solid;
+   border-width:1px;
+   border-color: #c1c9d1;
+   border-radius: 40px;
+   padding:20px;
+   color:#c1c9d1;
+}
+
+.schedule{
+   border:solid;
+   border-width:1px;
+   border-color: #c1c9d1;
+   border-radius: 20px;
+   padding:20px;
+   margin:10px;
+   color:#c1c9d1;
+
+}
+
+#set-schedule{
+  display:flex;
+
+}
+
+.personal-set-schedule-block{
+  display:flex;
+  border:solid;
+  width:auto;
+  border-width:1px;
+  border-color: #c1c9d1;
+  border-radius: 20px;
+  padding:20px;
+  margin:10px;
+  color:#c1c9d1;
+}
+
+#set-schedule-by-day{
+  display:none;
+}
+
+
+.personal-photo{
+
+   width:70px;
+   height:70px;
+
+   margin:10px;
+   color:#c1c9d1;
+
+}
+
+.dropdown {
+position: relative;
+display: inline-block;
+}
+
+.dropdown-content{
+display:none;
+flex-direction:column;
+z-index:100;
+position: absolute;
+background-color: rgb(255, 255, 255);
+border:solid;
+ border-width:1px;
+  border-color: #c1c9d1;
+  border-radius: 20px;
+  padding:20px;
+}
+
+.edit-form{
+
+}
+
+.edit-name{
+display:none;
+}
+
+.edit-surname{
+display:none;
+}
+
+.edit-dob{
+display:none;
+}
+.edit-experience{
+display:none;
+}
+
+.edit-employment-date{
+display:none;
+}
+.edit-dismissal-date{
+display:none;
+}
+.edit-job{
+display:none;
+}
+.edit-department{
+display:none;
+}
+
+
+.photo{
+
+width:70px;
+   height:70px;
+    border-radius: 35px;
+    object-fit: cover;
+}
+
+
+
+
+
+
+}

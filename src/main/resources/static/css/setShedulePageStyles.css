@@ -1,0 +1,161 @@
+
+.schedule-container{
+   display:flex;
+   width:auto;
+   margin:20px;
+}
+
+
+.schedule-block{
+   display:flex;
+   width:auto;
+   border:solid;
+   border-width:1px;
+   border-color: #c1c9d1;
+   border-radius: 40px;
+   padding:20px;
+   color:#c1c9d1;
+}
+
+.schedule{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    color:rgb(106, 117, 141);
+
+   border:solid;
+   border-width:1px;
+   border-color: #c1c9d1;
+   border-radius: 20px;
+   padding:20px;
+   margin:10px;
+   color:#c1c9d1;
+}
+
+.schedule-date{
+color:rgb(106, 117, 141);
+}
+
+.day-off{
+font-family: Arial, Helvetica, sans-serif;
+color:rgb(106, 117, 141);
+}
+.schedule-time{
+color:rgb(106, 117, 141);
+}
+
+
+#set-schedule{
+  display:none;
+
+}
+
+.personal-set-schedule-block{
+  display:flex;
+  border:solid;
+  width:auto;
+  border-width:1px;
+  border-color: #c1c9d1;
+  border-radius: 20px;
+  padding:20px;
+  margin:10px;
+  color:#c1c9d1;
+}
+
+#set-schedule-by-day{
+  display:none;
+  border:solid;
+  border-width:1px;
+   border-color: #c1c9d1;
+    border-radius: 20px;
+    padding:20px;
+      margin:10px;
+}
+
+.date-select{
+display:flex;
+}
+
+#set-schedule-form{
+display:flex;
+flex-direction:column;
+}
+
+#button-set{
+display:flex;
+justify-content:flex-end;
+}
+
+#set-schedule-style{
+width:250px;
+}
+
+#selects{
+display:flex;
+}
+
+.day-tickets{
+display:none;
+flex-direction:column;
+position:absolute;
+width:150px;;
+padding:10px;
+border:solid;
+border-width:1px;
+border-radius:10px;
+border-color:#c1c9d1;
+background-color: rgb(255, 255, 255);
+}
+
+.day-ticket{
+display:block;
+color:rgb(106, 117, 141)
+}
+
+
+
+
+.correct-time{
+display:none;
+
+}
+
+.set-day-off{
+display:none;
+}
+
+.correct-ticket-time{
+display:flex;
+}
+
+.set-buttons-block{
+display:flex;
+
+}
+#set-tickets{
+  display:none;
+
+}
+.checkbox{
+  display:none;
+}
+
+.schedule-weekday{
+ color:rgb(106, 117, 141);
+ font-family: Arial, Helvetica, sans-serif;
+
+}
+
+.ticket-input-date-style{
+display:flex;
+
+}
+#ticket-form{
+display:flex;
+}
+
+.tickets-dropdown{
+position:relative;
+}
+
+

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+
+<body>
+
+<div th:replace="pageFragment/header::header"></div>
+
+<div class="header-back"></div>
+
+<div class="main-block">
+    <div class="left-block">
+        <img class="main-image" src="images/mainPhoto.jpg" alt="photo">
+    </div>
+
+    <div class="central-doctors-block">
+
+        <span class="doctor-name" th:text="${session.serviceType}"></span>
+        <span class="doctor-name" th:text="' '+${session.ticketDate}"></span>
+        <div class="doctors">
+
+            <!----------------------------------------------------------------------------------if personal-->
+            <div th:if="${instance.equals('personal')}" th:each="personal:${session.personalList}" class="doctors-block">
+
+                <div class="doctor-avatar">
+                    <img class="image" th:src="${personal.personal.photo}" alt="photo">
+                </div>
+
+                <div>
+                    <div class="name-block">
+                        <span th:text="${personal.personal.name}" class="doctor-name"></span>
+                        <span th:text="${personal.personal.surname}" class="doctor-name"></span>
+                    </div>
+                    <div class="doctor-experience">
+                        <span th:text="${personal.jobTitle}" class="doctor-experience"></span>
+                    </div>
+                    <div class="doctor-experience" th:text="${personal.personal.experience}+' years'">
+                        experience: 5 years
+                    </div>
+                    <div class="doctor-experience" th:text="'Appointment price: '+${session.service.price}"></div>
+
+                    <form class="doctors-form" action="/client/clientTicket" method="post">
+
+
+                        <select id="ticket-time" class="select" name="ticketId">
+                            <option th:each="ticket:${personal.tickets}" class="options"
+                                    th:if="${ticket.date==session.ticketDate&&ticket.state=='AVAILABLE'}"
+                                    th:value="${ticket.id}" th:text="${ticket.time}"></option>
+                        </select>
+
+                        <input type="hidden" name="doctorId" th:value="${personal.id}">
+                        <input id="doctor-sign-up" class="button" type="submit" value="sign up">
+                    </form>
+                </div>
+            </div>
+
+            <!----------------------------------------------------------------------------------if service-->
+
+            <div th:if="${instance.equals('service')}"  class="doctors-block">
+
+
+                <div>
+                    <div class="name-block">
+                        <span th:text="${session.service.type}" class="doctor-name"></span>
+                    </div>
+
+
+                    <div class="doctor-experience" th:text="'Price: '+${session.service.price}"></div>
+
+                    <form class="doctors-form" action="/client/clientTicket" th:object="${ticketObject}" method="post">
+                        <select id="ticket-time1" class="select" name="ticketId">
+                            <option th:each="ticket:${session.service.tickets}" class="options"
+                                    th:if="${ticket.date==session.ticketDate&&ticket.state=='AVAILABLE'}"
+                                    th:value="${ticket.id}" th:text="${ticket.time}"></option>
+                        </select>
+
+
+                        <input id="doctor-sign-up1" class="button" type="submit" value="sign up">
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="back-button">
+
+            <form class="regForms" action="/" method="get">
+                <input id="cancel-button" class="button" type="submit" value="back">
+            </form>
+        </div>
+
+    </div>
+    <div class="right-block">
+    </div>
+</div>
+
+</body>
+</html>

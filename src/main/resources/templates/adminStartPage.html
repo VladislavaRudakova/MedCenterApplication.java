@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <link rel="stylesheet" href="/css/buttonStyles.css"/>
+    <link rel="stylesheet" href="/css/adminMainStyles.css"/>
+    <link rel="stylesheet" href="/css/adminStartPageStyles.css"/>
+    <link rel="stylesheet" href="/css/findCreatePageStyles.css"/>
+    <link rel="stylesheet" href="/css/setShedulePageStyles.css"/>
+</head>
+
+<body>
+<div th:replace="pageFragment/header::header"></div>
+
+
+<div class="header-back"></div>
+
+<div class="main-block">
+    <div class="left-block">
+        <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
+    </div>
+
+
+    <div class="central-tickets-block">
+
+
+        <div class="search-title">Hello, <span sec:authentication="name"> </span></div>
+        <div class="search-title">Your schedule:</div>
+
+        <div class="schedule-container">
+            <div class="schedule-block">
+                <div th:if="${scheduleList!=null}" class="schedule" th:each="schedule: ${scheduleList}">
+                    <div th:text="${schedule.date}"></div>
+                    <div th:text="${schedule.startTime}"></div>
+                    <div th:text="${schedule.endTime}"></div>
+                </div>
+                <div class="schedule" th:if="${scheduleList==null}">No schedule</div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="pageFragment/adminButtons::admin-buttons"></div>
+
+</div>
+
+
+<script>
+    const buttonPersonal = document.getElementById("personal")
+    const buttonService = document.getElementById("service")
+    let buttonsFindCreatePersonal = document.getElementById("buttons-find-create-personal")
+    const buttonsFindCreateService = document.getElementById("buttons-find-create-service")
+
+    buttonPersonal.onclick = function(){
+    buttonsFindCreatePersonal.style.display=  (buttonsFindCreatePersonal.style.display=== "flex") ? "none" : "flex";
+    }
+
+    buttonService.onclick = function(){
+    buttonsFindCreateService.style.display=(buttonsFindCreateService.style.display=== "flex") ? "none" : "flex";
+    }
+
+</script>
+
+
+</body>

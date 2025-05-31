@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+     <link rel="stylesheet" href="Styles.css"/>
+  </head>
+
+<body>
+
+<div th:replace="pageFragments/header::header"></div>
+
+<div class="main-block">
+    <div class="left-block">
+        
+    </div>
+    <div class="central-block">
+        <div class="doctors-block">
+
+            <div class="doctor-avatar">
+
+
+            </div>
+
+            <div>
+                <div class="doctor-name">
+                    Alexander Ivanenko
+                </div>
+                <div class="doctor-experience">
+                    doctor neurologist
+                </div>
+                <div class="doctor-experience">
+                    experience: 5 years
+                </div>
+                  <form class="doctors-form" action="doctors" method="post">
+           
+            <select id="ticket-time"  class="select" name="options">
+                <option class="options" value="option">time</option>
+                <option class="options"value="option1">service1</option>
+                <option class="options"value="option2">service2</option>
+                <option class="options"value="option3">Опция 3</option>
+            </select>
+            
+               
+                <input class="button" type="submit" value="search">
+            </form> 
+
+               
+               
+
+            </div>
+            
+    
+    
+        
+        
+        </div>
+    </div>
+    <div class="right-block">
+    </div>
+</div>
+
+
+
+
+</body>

@@ -1,0 +1,57 @@
+
+.med-card-label{
+color:rgb(106, 117, 141);
+ font-family: Arial, Helvetica, sans-serif;
+
+}
+
+.med-card-doctor-name{
+display:flex;
+
+}
+
+.med-card-input{
+     width:700px;;
+        height:100px;
+        border:solid;
+        border-radius: 10px;
+        border-width: 1px;
+        border-color: #c1c9d1;
+        }
+
+.record-buttons-block{
+margin-top:40px;
+margin-right:50px;
+display:flex;
+justify-content:flex-end;
+}
+
+.med-card-details{
+display:flex;
+flex-direction:column;
+border:solid;
+border-width:1px;
+border-radius:20px;
+ border-color: #c1c9d1;
+
+}
+
+.instance-info{
+border-color:#c1c9d1;
+border-width:1px;
+ font-family: Arial, Helvetica, sans-serif;
+  font-size: 100%;
+  color: rgb(106, 117, 141);
+  margin-bottom: 20px;
+}
+
+.instance-info-content{
+border-bottom:solid;
+border-color:#c1c9d1;
+border-width:1px;
+ font-family: Arial, Helvetica, sans-serif;
+  font-size: 100%;
+  color: rgb(106, 117, 141);
+  padding:10px;
+  margin-bottom: 20px;
+}

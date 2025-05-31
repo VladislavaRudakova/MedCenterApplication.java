@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <link rel="stylesheet" href="/css/buttonStyles.css"/>
+    <link rel="stylesheet" href="/css/adminMainStyles.css"/>
+    <link rel="stylesheet" href="/css/findCreatePageStyles.css"/>
+    <link rel="stylesheet" href="/css/setShedulePageStyles.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+
+<body>
+<div th:replace="pageFragment/header::header"></div>
+
+
+<div class="header-back"></div>
+
+<div class="main-block">
+    <div class="left-block">
+        <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
+    </div>
+
+
+    <div class="central-tickets-block">
+
+
+        <div th:if="${personalJob!=null}" class="search-title">
+            <span th:text="${personalJob.personal.name}"></span>
+            <span th:text="${personalJob.personal.surname}"></span>
+            <span th:text="${personalJob.jobTitle}"></span>
+            <span> schedule</span>
+        </div>
+        <div th:if="${service!=null}" id="service-title"  class="search-title">
+            <span th:text="${service.type}"></span>
+            <span> schedule</span>
+        </div>
+        <!-----------------------------------------------------------schedule-->
+
+        <div class="schedule-container">
+            <div class="schedule-block">
+                <div class="schedule" th:if="${scheduleList!=null}" th:each="schedule: ${scheduleList}">
+
+                    <input class="checkbox" type="checkbox" value="tickets">
+                    <div th:if="${schedule.dayOff==null}">
+                        <div class="schedule-weekday" th:text="${schedule.weekDay}"></div>
+                        <div class="schedule-date" th:text="${schedule.date}"></div>
+                        <div class="schedule-time">
+                        <div th:text="${schedule.startTime}"></div>
+                        <div th:text="${schedule.endTime}"></div>
+                        </div>
+                        <input class="schedule-id" type="hidden" value="${schedule.id}">
+                    </div>
+                    <div th:if="${schedule.dayOff!=null}">
+                        <div class="schedule-weekday" th:text="${schedule.weekDay}"></div>
+                        <div class="schedule-date" th:text="${schedule.date}"></div>
+                        <div class="day-off" th:text="${schedule.dayOff}"></div>
+                    </div>
+
+                    <!-----------------------------------------------------------------------------------tickets------------->
+                    <div th:with="filteredTickets=${ticketsByDate[schedule.date]}">
+                        <div th:if="${not #lists.isEmpty(filteredTickets)}" class="tickets-dropdown">
+
+                            <input onclick="seeDayTickets(this)" class="ticket-button" type="button" value="tickets">
+
+                            <div class="day-tickets">
+                                <div th:each="ticket: ${dayTickets}" th:if="${ticket.date==schedule.date}"
+                                     class="day-ticket">
+                                    <div th:text="${ticket.time}+' '+${ticket.state}"></div>
+                                </div>
+
+                                <form action="/admin/findDayTickets" class="correct-ticket-time" method="post">
+                                    <input th:if="${personalJob!=null}" class="button" type="hidden" name="personalJobId"
+                                           th:value="${personalJob.id}">
+                                    <input class="button" type="hidden" name="date" th:value="${schedule.date}">
+
+                                    <input class="button" type="submit" value="details">
+                                </form>
+
+                            </div>
+                        </div>
+                        <!------------------------------------------------------------------------------correct time----------->
+                        <div th:if="${#lists.isEmpty(filteredTickets)}" class="correct-time-dropdown">
+                            <input onclick="correctTime(this)" class="correct-time-button" type="button"
+                                   value="correct">
+
+                            <form action="/admin/correctSchedule" class="correct-time" method="post">
+                                <input th:if="${personalJob!=null}" class="button" type="hidden" name="personalJobId"
+                                       th:value="${personalJob.id}">
+                                <input th:if="${personalJob!=null}" class="button" type="hidden" name="instance"
+                                       th:value="personalJob">
+                                <input th:if="${service!=null}" class="button" type="hidden" name="instance"
+                                       th:value="service">
+
+                                <input class="button" type="hidden" name="scheduleId" th:value="${schedule.id}">
+                                <input class="button" type="hidden" name="startTimeExist"
+                                       th:value="${schedule.startTime}">
+                                <input class="button" type="hidden" name="endTimeExist"
+                                       th:value="${schedule.endTime}">
+
+                                <div id="time-select">
+                                    <select id="start-time" class="select" name="startTime">
+                                        <option th:each="time:${times}" class="options" th:value="${time}"
+                                                th:text="${time}"></option>
+                                    </select>
+                                    <select id="end-time" class="select" name="endTime">
+                                        <option th:each="time:${times}" class="options" th:value="${time}"
+                                                th:text="${time}"></option>
+                                    </select>
+                                </div>
+
+                                <input class="button" type="submit" value="send">
+                            </form>
+                            <form action="/admin/setDayOff" class="set-day-off" method="post">
+                                <input th:if="${personalJob!=null}"  class="button" type="hidden" name="personalJobId"
+                                       th:value="${personalJob.id}">
+                                <input class="button" type="hidden" name="scheduleId" th:value="${schedule.id}">
+
+                                <input class="button" type="submit" value="set day off">
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+                <!------------------------------------------------------------------------------------------------------>
+                <div class="schedule" th:if="${scheduleList==null}">No schedule</div>
+
+
+            </div>
+        </div>
+        <!------------------------------------------------------------------------------------buttons set-------->
+        <div class="set-buttons-block">
+            <form class="doctors-form" action="/setSchedule" method="post">
+                <input th:if="${personalJob!=null}" id="personal-for-schedule" type="hidden" name="personalJobId"
+                       th:value="${personalJob.id}">
+                <input th:if="${service!=null}" id="service-for-schedule" type="hidden" name="serviceId"
+                       th:value="${service.id}">
+                <input onclick="openSetScheduleForm()" class="button" type="button" value="set schedule">
+            </form>
+
+
+            <form id="ticket-form" class="doctors-form" action="/setTickets" method="post">
+                <input th:if="${personalJob!=null}" type="hidden" name="personalJobId" th:value="${personalJob.id}">
+                <input onclick="openSetTicketsForm()" class="button" type="button" value="set tickets">
+            </form>
+
+
+        </div>
+        <!-----------------------------------------------------------/set schedule modal-->
+
+        <div id="set-schedule">
+            <div class="personal-set-schedule-block">
+                <div class="close-button">
+                    <div id="close">&times;</div>
+
+                </div>
+
+                <form id="set-schedule-form" action="/admin/setSchedule" method="post">
+
+                    <div id="selects">
+
+
+                        <div>
+                            <div class="date-select">
+                                <input id="start-date" class="select" type="text" name="date1" placeholder="date">
+                                <input id="end-date" class="select" type="text" name="date2" placeholder="date">
+                            </div>
+                            <div id="time-select-1">
+                                <select id="start-time-1" class="select" name="startTime1">
+                                    <option th:each="time:${times}" class="options" th:value="${time}"
+                                            th:text="${time}"></option>
+                                </select>
+                                <select id="end-time-1" class="select" name="endTime1">
+                                    <option th:each="time:${times}" class="options" th:value="${time}"
+                                            th:text="${time}"></option>
+                                </select>
+                            </div>
+                            <div id="time-select-2">
+                                <select id="start-time-2" class="select" name="startTime2">
+                                    <option th:each="time:${times}" class="options" th:value="${time}"
+                                            th:text="${time}"></option>
+                                </select>
+                                <select id="end-time-2" class="select" name="endTime2">
+                                    <option th:each="time:${times}" class="options" th:value="${time}"
+                                            th:text="${time}"></option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <select id="set-schedule-style" class="select" name="shift">
+                            <option class="options" value="" disabled selected></option>
+                            <option class="options" value="for day">for day</option>
+                            <option class="options" value="fixed">fixed</option>
+                            <option class="options" value="1/1">shift schedule 1/1</option>
+                            <option class="options" value="2/2">shift schedule 2/2</option>
+                            <option class="options" value="3/3">shift schedule 3/3</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <input th:if="${personalJob!=null}" type="hidden" name="personalJobId" th:value="${personalJob.id}">
+                    <div id="button-set">
+                        <input class="button" type="submit" value="set">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-----------------------------------------------------------set tickets modal-->
+        <div id="set-tickets">
+            <div class="personal-set-schedule-block">
+                <div class="close-button">
+                    <div id="close1">&times;</div>
+
+                </div>
+
+                <form id="set-tickets-form" action="/admin/createTickets" method="post">
+
+                    <div class="ticket-input-date-style">
+                        <div class="date-select">
+                            <input id="start-ticket-date" class="select" type="text" name="date1"
+                                   placeholder="date">
+                            <input id="end-ticket-date" class="select" type="text" name="date2" placeholder="date">
+                        </div>
+
+                        <select id="service-type" class="select" name="serviceType">
+                            <option class="options" value="" disabled selected></option>
+                            <option class="options" name="serviceType" th:each="serviceType: ${serviceTypes}"
+                                    th:value="${serviceType}" th:text="${serviceType}"></option>
+                        </select>
+                        <select id="set-ticket-style" class="select" name="setTicketStyle">
+                            <option class="options" value="" disabled selected></option>
+                            <option class="options" value="for day">for day</option>
+                            <option class="options" value="for period">for period</option>
+                        </select>
+                    </div>
+
+                    <select id="ticket-time-range" class="select" name="timeRange">
+                        <option class="options" value="" disabled selected></option>
+                        <option class="options" value="10">10</option>
+                        <option class="options" value="20">20</option>
+                    </select>
+
+                    <input class="schedule-id-for-tickets" type="hidden" value="${schedule.id}">
+
+                    <div id="button-set-ticket">
+                        <input class="button" type="submit" value="create tickets">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div th:replace="pageFragment/adminButtons::admin-buttons"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+<script>
+
+    flatpickr("#start-date", {});
+    flatpickr("#end-date", {});
+    <!-----------------------------------------------------------right buttons
+    const buttonPersonal = document.getElementById("personal")
+    const buttonService = document.getElementById("service")
+    let buttonsFindCreatePersonal = document.getElementById("buttons-find-create-personal")
+    const buttonsFindCreateService = document.getElementById("buttons-find-create-service")
+
+    buttonPersonal.onclick = function(){
+    buttonsFindCreatePersonal.style.display=  (buttonsFindCreatePersonal.style.display=== "flex") ? "none" : "flex";
+    }
+
+    buttonService.onclick = function(){
+    buttonsFindCreateService.style.display=(buttonsFindCreateService.style.display=== "flex") ? "none" : "flex";
+    }
+    <!-----------------------------------------------------------schedule form-->
+
+
+const scheduleStyle = document.getElementById("set-schedule-style")
+const endDate = document.getElementById("end-date")
+const startDate = document.getElementById("start-date")
+const timeSelectSecond = document.getElementById("time-select-2")
+
+
+scheduleStyle.addEventListener("change", function(){
+    const value = scheduleStyle.value;
+
+    if (value==="for day"){
+    endDate.style.display='none';
+    timeSelectSecond.style.display='none';
+    startDate.style.width='210px';
+} else if (value==="fixed"){
+    endDate.style.display='flex';
+     startDate.style.width='100px';
+     timeSelectSecond.style.display='none'
+} else{
+endDate.style.display='flex';
+startDate.style.width='100px';
+timeSelectSecond.style.display='flex'
+
+}
+
+})
+<!-----------------------------------------------------------url setting-->
+
+ document.getElementById("set-schedule-style").addEventListener("change", function() {
+        var selectedValue = this.value;
+        var form = document.getElementById("set-schedule-form");
+        const serviceTitle = document.getElementById("service-title");
+
+
+
+
+          if (serviceTitle==null) {
+
+        if (selectedValue === "for day") {
+            form.action = "/admin/setScheduleForDay";
+        } else if (selectedValue === "fixed") {
+            form.action = "/admin/setScheduleForPeriod";
+        } else if (selectedValue === "1/1") {
+            form.action = "/admin/setScheduleForPeriod";
+        } else if (selectedValue === "2/2") {
+            form.action = "/admin/setScheduleForPeriod";
+        }else if (selectedValue === "3/3") {
+            form.action = "/admin/shift3";
+        }else if (selectedValue === "day off") {
+            form.action = "/admin/setDayOff";
+        }
+     }
+
+
+             else if (serviceTitle!=null) {
+
+         if (selectedValue === "for day") {
+            form.action = "/admin/setServiceScheduleForDay";
+        } else if (selectedValue === "fixed") {
+            form.action = "/admin/setServiceScheduleForPeriod";
+        } else if (selectedValue === "1/1") {
+            form.action = "/admin/setServiceScheduleForPeriod";
+        } else if (selectedValue === "2/2") {
+            form.action = "/admin/setServiceScheduleForPeriod";
+        }else if (selectedValue === "3/3") {
+            form.action = "/admin/shift3";
+        }else if (selectedValue === "day off") {
+            form.action = "/admin/setDayOff";
+        }
+    }
+
+});
+
+
+
+
+
+
+
+<!-----------------------------------------------------------dropdown-->
+ function seeDayTickets(button) {
+               let dropdown = button.closest(".tickets-dropdown").querySelector(".day-tickets");
+
+               dropdown.style.display = (dropdown.style.display === "flex") ? "none" : "flex";
+
+           }
+
+
+    function correctTime(button) {
+               let dropdown = button.closest(".correct-time-dropdown").querySelector(".correct-time");
+                let dropdown1 = button.closest(".correct-time-dropdown").querySelector(".set-day-off");
+               dropdown.style.display = (dropdown.style.display === "flex") ? "none" : "flex";
+                dropdown1.style.display = (dropdown1.style.display === "flex") ? "none" : "flex";
+           }
+
+     function openSetScheduleForm() {
+    let setScheduleForm = document.getElementById("set-schedule");
+     setScheduleForm.style.display = (setScheduleForm.style.display === "flex") ? "none" : "flex";
+
+    }
+
+
+     function openSetTicketsForm() {
+    let setTicketsForm = document.getElementById("set-tickets");
+let checkboxes = document.querySelectorAll(".checkbox");
+     setTicketsForm.style.display = (setTicketsForm.style.display === "flex") ? "none" : "flex";
+ checkboxes.forEach(checkbox => {
+        checkbox.style.display = (checkbox.style.display === "block") ? "none" : "block";
+    });
+    }
+
+<!-----------------------------------------------------------checkbox-->
+
+ document.addEventListener("DOMContentLoaded", function () {
+        const checkboxes = document.querySelectorAll(".checkbox");
+        const startDateInput = document.getElementById("start-ticket-date");
+        const endDateInput = document.getElementById("end-ticket-date");
+        const scheduleIdInput = document.getElementById("schedule-id");
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", function () {
+                let scheduleDiv = this.closest(".schedule");
+                let scheduleDate = scheduleDiv.querySelector(".schedule-date").innerText;
+
+                if (this.checked) {
+                    if (!startDateInput.value) {
+                        startDateInput.value = scheduleDate;
+                    } else if (!endDateInput.value) {
+                        endDateInput.value = scheduleDate;
+                    }
+                } else {
+
+                    if (startDateInput.value === scheduleDate) {
+                        startDateInput.value = "";
+                    } else if (endDateInput.value === scheduleDate) {
+                        endDateInput.value = "";
+                    }
+                }
+            });
+        });
+    });
+<!-----------------------------------------------------------tickets-->
+const ticketStyle = document.getElementById("set-ticket-style")
+
+ticketStyle.addEventListener("change", function(){
+const endDate = document.getElementById("end-ticket-date")
+const startDate = document.getElementById("start-ticket-date")
+
+    const value = ticketStyle.value;
+
+    if (value==="for day"){
+    endDate.style.display='none';
+
+    startDate.style.width='210px';
+} else if (value==="for period"){
+    endDate.style.display='flex';
+     startDate.style.width='100px';
+}
+
+})
+
+<!-----------------------------------------------------------tickets-->
+
+ document.getElementById("set-ticket-style").addEventListener("change", function() {
+        var selectedValue = this.value;
+        var form = document.getElementById("set-tickets-form");
+
+        if (selectedValue === "for day") {
+            form.action = "/admin/createTickets";
+        } else if (selectedValue === "for period") {
+            form.action = "/admin/createTicketsForPeriod";
+        }
+    });
+
+    <!-----------------------------------------------------------tickets buttons-->
+   document.addEventListener("DOMContentLoaded", function () {
+    let ticketForm = document.getElementById("ticket-form");
+    let correctTimeButtons = document.querySelectorAll(".correct-time-button");
+
+
+
+    let hasHiddenButton = Array.from(correctTimeButtons).some(button =>
+        getComputedStyle(button).display != "none"
+    );
+
+    if (hasHiddenButton) {
+        ticketForm.style.display = "flex";
+    }
+});
+
+</script>
+
+</body>

@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+     <link rel="stylesheet" href="css/styles.css"/>
+  </head>
+
+<body>
+
+<div th:replace="pageFragment/header::header"></div>
+
+<div class="header-back"></div>
+
+<div class="main-block">
+    <div class="left-block">
+        <img class="main-image" src="images/mainPhoto.jpg" alt="photo">
+    </div>
+    <div class="central-block">
+        <div class="search">
+            <div class="search-title">
+              Enter your login and password
+            </div>
+        
+           
+                
+
+                <div class="regFormBlock">
+                    <form class="regForms" action="/login" method="post">
+                       
+                        <div class="regFormContainer">
+                            <label  class="reg-form-label" for="login">Login: </label>
+                            <div class="field"><input class="reg-form" type="text" id="login" name="username"></div>
+                        </div>
+                        <div class="regFormContainer">
+                            <label  class="reg-form-label" for="password">Password: </label>
+                            <div class="field"><input class="reg-form" type="password" id="password" name="password"></div>
+                        </div>
+    
+                        <div class="signUpButton">
+                            <input id="signUp" class="button" type="submit" value="log in">
+                        </div>
+
+                    </form>
+    
+                </div>
+
+
+               
+            
+    
+    
+        
+        
+        </div>
+    </div>
+    <div class="right-block">
+    </div>
+</div>
+
+
+
+
+</body>
