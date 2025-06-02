@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -37,10 +38,30 @@ public interface PersonalJobRepository extends JpaRepository<PersonalJob, Intege
     @Modifying
     @Query("""
         update PersonalJob p SET
-           p.jobTitle = case when :jobTitle IS NOT NULL THEN :jobTitle ELSE p.jobTitle END,
-           p.department.id = CASE WHEN :departmentId IS NOT NULL THEN :departmentId ELSE p.department.id END
-           WHERE p.id = :id""")
-    void updatePersonalJob(@Param("jobTitle") String jobTitle, @Param("departmentId") Integer departmentId, @Param("departmentId") Integer personalJobId);
+           p.jobTitle = case when :jobTitle is not null then :jobTitle else p.jobTitle end,
+           p.department.id = case when :departmentId is not null then :departmentId else p.department.id end
+           where p.id = :id""")
+    void updatePersonalJob1(@Param("jobTitle") String jobTitle, @Param("departmentId") Integer departmentId, @Param("personalJobId") Integer personalJobId);
+
+    @Modifying
+    @Query("""
+        update PersonalJob p set
+           p.personal.name = case when :name is not null then :name else p.personal.name end,
+           p.personal.surname = case when :surname is not null then :surname else p.personal.surname end
+           p.personal.experience = case when :experience is not null then :experience else p.personal.experience end
+           p.jobTitle = case when :jobTitle is not null then :jobTitle else p.jobTitle end,
+           p.department.id = case when :departmentId is not null then :departmentId else p.department.id end
+           where p.id = :id""")
+    void updatePersonalJob(@Param("name") String name, @Param("surname") String surname, @Param("birthDate") Date birthDate,
+                           @Param("experience") Integer experience, @Param("employmentDate") Date employmentDate,
+                           @Param("jobTitle") String jobTitle, @Param("departmentId") Integer departmentId,
+                           @Param("personalJobId") Integer personalJobId );
+
+
+    @Modifying(clearAutomatically = true)
+    @Query("update PersonalJob p set p.personal.dismissalDate = :dismissalDate where p.personal.id = :personalId")
+    void updateDismissalDate(@Param("dismissalDate") Date dismissalDate, @Param("personalId") Integer personalJobId);
+
 
 
     @Modifying(clearAutomatically = true)

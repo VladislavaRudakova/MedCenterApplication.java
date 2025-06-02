@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -58,10 +59,7 @@ public class AdminPersonalController {
         for (PersonalJobStates personalJobState : personalJobStates){
           personalJobStatesList.add(personalJobState.toString());
         }
-
-        System.out.println("PERSONAL STATES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+personalJobStatesList);
         model.addAttribute("personalStates", personalJobStatesList);
-
         return "adminFoundPersonalPage";
     }
 
@@ -75,7 +73,6 @@ public class AdminPersonalController {
 
     @PostMapping(value = "/createPersonal")
     public String createPersonal(@ModelAttribute PersonalJobDto personalJob, Model model) {
-        System.out.println("PERSONAL to SAVE "+personalJob);
         personalJobService.createPersonalJob(personalJob);
         List<PersonalJobDto>personalJobDtoList=personalJobService.findByNameSurnameJob(personalJob.getPersonal().getName(),personalJob.getPersonal().getSurname(),personalJob.getJobTitle());
         model.addAttribute("personalList",personalJobDtoList.getLast());
@@ -84,7 +81,6 @@ public class AdminPersonalController {
 
     @PostMapping(value = "/personalRegistration")
     public String personalReg(Model model, @RequestParam Integer personalJobId) {
-        System.out.println("PERSONALJOB ID!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+personalJobId);
         Roles[] roles = Roles.values();
         List<String> rolesList = new ArrayList<>();
         for (Roles role : roles){
@@ -94,6 +90,27 @@ public class AdminPersonalController {
         model.addAttribute("user", new UserDto());
         model.addAttribute("personalJobId", personalJobId);
         return "registrationPage";
+    }
+
+    @PostMapping(value = "/editPersonal")
+    public String editPersonal(@ModelAttribute PersonalJobDto personalJob, Model model) {
+
+        PersonalJobDto personalJobDto = personalJobService.findByIdDto(personalJob.getId());
+
+        if (personalJob.getPersonal().getBirthDate()==null){
+            personalJob.getPersonal().setBirthDate(personalJobDto.getPersonal().getBirthDate());
+        }
+        if (personalJob.getPersonal().getEmploymentDate()==null){
+            personalJob.getPersonal().setEmploymentDate(personalJobDto.getPersonal().getEmploymentDate());
+        }
+        if (personalJob.getPersonal().getDismissalDate()!=null){
+            personalJobService.updateDismissalDate(Date.valueOf(personalJob.getPersonal().getDismissalDate()),personalJob.getId());
+        }
+
+        personalJobService.updatePersonalJob(personalJob);
+        personalJobDto = personalJobService.findByIdDto(personalJob.getId());
+        model.addAttribute("personalJob",personalJob);
+        return "adminFoundPersonalPage";
     }
 
 

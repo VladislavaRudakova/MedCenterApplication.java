@@ -11,19 +11,12 @@ import com.medCenter.medCenter.model.repository.PersonalRepository;
 import com.medCenter.medCenter.service.DepartmentService;
 import com.medCenter.medCenter.service.PersonalJobService;
 import com.medCenter.medCenter.service.PersonalService;
-import com.medCenter.medCenter.service.TicketService;
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -168,7 +161,7 @@ public class PersonalJobServiceImpl implements PersonalJobService {
 
         PersonalJob personalJob = dtoToPersonalJobWithCreatePersonal(personalJobDto);
 
-        System.out.println("PERSONAL JOB TO SAVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+personalJob);
+        System.out.println("PERSONAL JOB TO SAVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + personalJob);
         personalJobRepository.save(personalJob);
 
     }
@@ -182,7 +175,15 @@ public class PersonalJobServiceImpl implements PersonalJobService {
     @Transactional
     @Override
     public void updatePersonalJob(PersonalJobDto personalJobDto) {
-        personalJobRepository.updatePersonalJob(personalJobDto.getJobTitle(), personalJobDto.getDepartment().getId(), personalJobDto.getId());
+        personalJobRepository.updatePersonalJob(personalJobDto.getPersonal().getName(),
+                personalJobDto.getPersonal().getSurname(), Date.valueOf(personalJobDto.getPersonal().getBirthDate()),
+                personalJobDto.getPersonal().getExperience(), Date.valueOf(personalJobDto.getPersonal().getEmploymentDate()),
+                personalJobDto.getJobTitle(), personalJobDto.getDepartment().getId(), personalJobDto.getId());
+    }
+
+    @Override
+    public void updateDismissalDate(Date dismissalDate, Integer personalJobId) {
+        personalJobRepository.updateDismissalDate(dismissalDate, personalJobId);
     }
 
 

@@ -39,4 +39,6 @@ public interface PersonalJobService {
 
     void updatePersonalJob(PersonalJobDto personalJobDto);
 
+    void updateDismissalDate(Date dismissalDate, Integer personalJobId);
+
 }
