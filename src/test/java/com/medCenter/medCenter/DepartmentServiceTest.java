@@ -26,21 +26,15 @@ public class DepartmentServiceTest {
 
         Assertions.assertNotNull(departmentService);
 
-        DepartmentDto departmentDto = DepartmentDto.builder()
-                .name("testDepartment").build();
+        DepartmentDto departmentDto = DepartmentDto.builder().name("testDepartment").build();
 
         departmentService.createDepartment(departmentDto);
         DepartmentDto departmentDtoSaved = departmentService.findByName("testDepartment");
 
         Assertions.assertNotNull(departmentDtoSaved);
-        Assertions.assertEquals(departmentDtoSaved.getName(),"testDepartment");
+        Assertions.assertEquals(departmentDtoSaved.getName(), "testDepartment");
 
     }
-
-
-
-
-
 
 
 }

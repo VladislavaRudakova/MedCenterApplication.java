@@ -52,7 +52,8 @@
                 </form>
 
                 <div sec:authorize="hasAuthority('ROLE_CLIENT')" >
-                <form  class="regForms" action="/client/medicalCard" method="get">
+                <form  class="regForms" action="/medCard/seeMedicalCard" method="post">
+                    <input class="button" type="hidden" name="clientId" th:value="${clientId}">
                     <input class="button" type="submit" value="my medical card">
                 </form>
                 </div>

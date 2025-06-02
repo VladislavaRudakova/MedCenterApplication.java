@@ -30,6 +30,8 @@ public interface TicketService {
 
     List<TicketDto> findActualByPersonalJob(Integer personalJobId);
 
+    List<TicketDto> findWherePersonalIsNull();
+
     List<PersonalJobDto> findByServiceDateTime(String serviceType, Date date, Time minTime, Time maxTime, String state);
 
     TicketDto findByDoctorIdAndTime(Integer doctorId, Time time);

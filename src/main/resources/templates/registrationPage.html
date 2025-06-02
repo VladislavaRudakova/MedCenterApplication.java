@@ -14,7 +14,7 @@
 <div class="header-back"></div>
 <div class="main-block">
     <div class="left-block">
-        <img class="main-image" src="images/mainPhoto.jpg" alt="photo">
+        <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
     </div>
     <div class="central-block">
         <div class="search">
@@ -27,25 +27,33 @@
                 <form class="regForms" action="/registration" th:object="${user}" method="post">
                     <div class="regFormContainer">
                         <label class="reg-form-label" for="username">User name: </label>
-                        <div class="field"><input class="reg-form" type="text" id="username" th:field="*{username}" name="name"></div>
+                        <div class="field"><input class="reg-form" type="text" id="username" th:field="*{username}"
+                                                  name="name"></div>
                     </div>
                     <div class="regFormContainer">
                         <label class="reg-form-label" for="username">E_mail: </label>
-                        <div class="field"><input class="reg-form" type="text" id="email" th:field="*{email}" name="email"></div>
+                        <div class="field"><input class="reg-form" type="text" id="email" th:field="*{email}"
+                                                  name="email"></div>
                     </div>
 
                     <div class="regFormContainer">
                         <label class="reg-form-label" for="login">Login: </label>
-                        <div class="field"><input class="reg-form" type="text" id="login" th:field="*{userCredentials.login}" name="login"></div>
+                        <div class="field"><input class="reg-form" type="text" id="login"
+                                                  th:field="*{userCredentials.login}" name="login"></div>
                     </div>
                     <div class="regFormContainer">
                         <label class="reg-form-label" for="password">Password: </label>
-                        <div class="field"><input class="reg-form" type="password" id="password" th:field="*{userCredentials.password}" name="password"></div>
+                        <div class="field"><input class="reg-form" type="password" id="password"
+                                                  th:field="*{userCredentials.password}" name="password"></div>
                     </div>
 
+                    <select id="role" class="personal-input" th:field="*{role}" name="role">
+                        <option th:each="role:${roles}" class="options" th:value="${role}"
+                                th:text="${role}"></option>
+                    </select>
 
                     <div class="signUpButton">
-
+                        <input  class="button" type="hidden" name="personalJobId" th:value="${personalJobId}">
                         <input id="signUp" class="button" type="submit" value="sign up">
                     </div>
 

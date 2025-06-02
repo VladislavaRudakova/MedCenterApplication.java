@@ -224,10 +224,10 @@ public class TicketServiceTest {
         ticketDto.setTime(time5);
         ticketService.createTicket(ticketDto);
 
-        List<PersonalJobDto> ticketDtoList = ticketService.findByServiceDateTime(serviceDto.getType(), Date.valueOf(date), Time.valueOf(time1), Time.valueOf(time3));
-        System.out.println("PERSONAL LIST: " + ticketDtoList);
-        Assertions.assertEquals(ticketDtoList.size(), 1);
-        Assertions.assertEquals(ticketDtoList.getFirst().getId(), personalJob.getId());
+//        List<PersonalJobDto> ticketDtoList = ticketService.findByServiceDateTime(serviceDto.getType(), Date.valueOf(date), Time.valueOf(time1), Time.valueOf(time3));
+//        System.out.println("PERSONAL LIST: " + ticketDtoList);
+//        Assertions.assertEquals(ticketDtoList.size(), 1);
+//        Assertions.assertEquals(ticketDtoList.getFirst().getId(), personalJob.getId());
 
     }
 

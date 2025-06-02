@@ -27,11 +27,15 @@ public class UserController {
     private final BCryptPasswordEncoder encoder;
 
     @PostMapping(value = "/registration")
-    public String registration(@ModelAttribute UserDto userDto, @RequestParam(required = false) Integer personalJobId) {
+    public String registration(@ModelAttribute UserDto userDto, @RequestParam(required = false) Integer personalJobId, Model model) {
         try {
             userService.registration(userDto,personalJobId, encoder);
         }catch (LoginException e){
             e.getLocalizedMessage();
+            return "";
+        }
+        if (personalJobId!=null){
+            model.addAttribute("personalJobId", personalJobId);
         }
         return "loginPage";
     }

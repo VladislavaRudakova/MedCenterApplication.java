@@ -49,7 +49,7 @@
 
                 </div>
                 <div class="client-tickets">
-                    <form th:if="${ticket.subState!='REQUEST_FOR_CANCELLATION'&&ticket.subState!='CANCELLED'}"
+                    <form th:if="${ticket.subState!='REQUEST_FOR_CANCELLATION'}"
                           class="client-form"
                           action="/client/requestForCancellation" method="post">
                         <input class="button" type="hidden" name="ticketId" th:value="${ticket.id}">
@@ -59,8 +59,6 @@
                     <span class="for-cancel" th:if="${ticket.subState=='REQUEST_FOR_CANCELLATION'}"
                           th:text="'request for cancellation'"></span>
 
-                    <span class="for-cancel" th:if="${ticket.subState=='CANCELLED'}"
-                          th:text="'cancelled'"></span>
                 </div>
             </div>
 

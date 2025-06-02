@@ -2,10 +2,12 @@ package com.medCenter.medCenter.service.impl;
 
 import com.medCenter.medCenter.dto.PersonalDto;
 import com.medCenter.medCenter.model.entity.Personal;
+import com.medCenter.medCenter.model.repository.PersonalJobRepository;
 import com.medCenter.medCenter.model.repository.PersonalRepository;
 import com.medCenter.medCenter.service.PersonalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -16,9 +18,10 @@ import java.util.List;
 public class PersonalServiceImpl implements PersonalService {
 
     private final PersonalRepository personalRepository;
+    private final PersonalJobRepository personalJobRepository;
 
 
-    public PersonalDto personalToDto(Personal personal){ //mapping dto to entity
+    public PersonalDto personalToDto(Personal personal) { //mapping dto to entity
         PersonalDto personalDto = PersonalDto.builder()
                 .id(personal.getId())
                 .name(personal.getName())
@@ -28,7 +31,7 @@ public class PersonalServiceImpl implements PersonalService {
                 .state(personal.getState())
                 .experience(personal.getExperience())
                 .photo(personal.getPhoto()).build();
-        if (personal.getDismissalDate()!=null){
+        if (personal.getDismissalDate() != null) {
             personalDto.setDismissalDate(personal.getDismissalDate().toLocalDate());
         }
         return personalDto;
@@ -54,16 +57,23 @@ public class PersonalServiceImpl implements PersonalService {
 
     @Override
     public List<PersonalDto> findByNameSurnameBirthDate(String name, String surname, String birthDate) {
-        List<Personal> personalList = personalRepository.findByNameSurnameAndBirthDate(name, surname,Date.valueOf(birthDate));
+        List<Personal> personalList = personalRepository.findByNameSurnameAndBirthDate(name, surname, Date.valueOf(birthDate));
         List<PersonalDto> personalDtoList = new ArrayList<>();
         for (Personal personal : personalList) {
 
-        PersonalDto personalDto = personalToDto(personal);
+            PersonalDto personalDto = personalToDto(personal);
             personalDtoList.add(personalDto);
         }
         return personalDtoList;
     }
 
+    @Transactional
+    @Override
+    public void updateState(String state, Integer personalId) {
+
+        personalRepository.updateState(state, personalId);
+        personalJobRepository.updateState(state, personalId);
+    }
 
 
 }

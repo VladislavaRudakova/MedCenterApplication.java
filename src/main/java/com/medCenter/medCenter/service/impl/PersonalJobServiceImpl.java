@@ -34,13 +34,9 @@ import java.util.Set;
 public class PersonalJobServiceImpl implements PersonalJobService {
 
     private final PersonalJobRepository personalJobRepository;
-
     private final PersonalService personalService;
-
     private final PersonalRepository personalRepository;
-
     private final DepartmentService departmentService;
-
     private final DepartmentRepository departmentRepository;
 
 
@@ -172,6 +168,7 @@ public class PersonalJobServiceImpl implements PersonalJobService {
 
         PersonalJob personalJob = dtoToPersonalJobWithCreatePersonal(personalJobDto);
 
+        System.out.println("PERSONAL JOB TO SAVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+personalJob);
         personalJobRepository.save(personalJob);
 
     }

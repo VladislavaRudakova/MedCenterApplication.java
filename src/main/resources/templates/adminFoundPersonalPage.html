@@ -66,7 +66,7 @@
                     <input class="button" type="submit" value="see schedule">
                 </form>
 
-                <form th:if="${personal.user==null}" action="/admin/getRegPersonalForm" method="post">
+                <form th:if="${personal.user==null}" action="/admin/personalRegistration" method="post">
                     <input type="hidden" name="personalJobId" th:value="${personal.id}">
                     <input class="button" type="submit" value="register">
                 </form>
@@ -103,7 +103,11 @@
                                     <option th:each="job:${jobs}" class="options" th:value="${job}" th:text="${job}"></option>
                                 </select>
                             </div>
-
+                            <div class="name-input-block">
+                                <select id="state" class="select" name="state">
+                                    <option th:each="personalJobState:${personalStates}" class="options" th:value="${personalJobState}" th:text="${personalJobState}"></option>
+                                </select>
+                            </div>
 
                             <input class="button" type="submit" value="send">
                         </form>
@@ -114,7 +118,7 @@
             </div>
 
 
-            <div class="schedule" th:if="${scheduleList==null}">No such personal</div>
+
 
 
 
@@ -124,11 +128,6 @@
         </div>
 
 
-        <div class="back-button">
-            <form class="regForms" action="/" method="get">
-                <input id="cancel-button" class="button" type="submit" value="back">
-            </form>
-        </div>
 
     </div>
     <div id="right-block"></div>

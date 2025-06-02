@@ -21,11 +21,8 @@
     <div class="left-block">
         <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
     </div>
-
     <div class="central-tickets-block">
-
-        <div class="search-title"> Your schedule </div>
-
+        <div class="search-title"> Your schedule</div>
 
         <div class="schedule-container">
             <div class="schedule-block">
@@ -37,8 +34,8 @@
                         <div class="schedule-weekday" th:text="${schedule.weekDay}"></div>
                         <div class="schedule-date" th:text="${schedule.date}"></div>
                         <div class="schedule-time">
-                        <div th:text="${schedule.startTime}"></div>
-                        <div th:text="${schedule.endTime}"></div>
+                            <div th:text="${schedule.startTime}"></div>
+                            <div th:text="${schedule.endTime}"></div>
                         </div>
                         <input class="schedule-id" type="hidden" value="${schedule.id}">
                     </div>
@@ -48,9 +45,7 @@
                         <div class="day-off" th:text="${schedule.dayOff}"></div>
                     </div>
                 </div>
-
                 <div class="schedule" th:if="${scheduleList==null}">No schedule</div>
-
             </div>
 
         </div>
@@ -69,18 +64,18 @@
                         <span th:text=${ticket.client.surname}></span>
                         <br><br>
                     </div>
-                   <div class="client-info">
-                    <span th:text=${ticket.service.type} class="client-date"></span>
-                    <div>
-                        <span th:text=${ticket.personalJob.personal.name} class="client-date"></span>
-                        <span th:text=${ticket.personalJob.personal.surname} class="client-date"></span>
+                    <div class="client-info">
+                        <span th:text=${ticket.service.type} class="client-date"></span>
+                        <div>
+                            <span th:text=${ticket.personalJob.personal.name} class="client-date"></span>
+                            <span th:text=${ticket.personalJob.personal.surname} class="client-date"></span>
+                        </div>
+                        <span th:text=${ticket.personalJob.jobTitle} class="client-date"></span>
+                        <div th:text=${ticket.date} class="client-date"></div>
+                        <div th:text=${ticket.time} class="client-date"></div>
+                        <span class="client-date">Price: </span> <span th:text=${ticket.service.price}
+                                                                       class="client-date"></span>
                     </div>
-                    <span th:text=${ticket.personalJob.jobTitle} class="client-date"></span>
-                    <div th:text=${ticket.date} class="client-date"></div>
-                    <div th:text=${ticket.time} class="client-date"></div>
-                    <span class="client-date">Price: </span> <span th:text=${ticket.service.price}
-                                                                   class="client-date"></span>
-                   </div>
                 </div>
                 <div class="doctor-tickets-buttons">
                     <form th:if="${ticket.state!='request for cancellation'}" class="client-form"
@@ -91,8 +86,8 @@
                     </form>
                     <span class="for-cancel" th:if="${ticket.state=='request for cancellation'}"
                           th:text="'request for cancellation'"></span>
-                    <form  class="client-form"
-                           action="/medCard/seeMedicalCard" method="post">
+                    <form class="client-form"
+                          action="/medCard/seeMedicalCard" method="post">
                         <input class="button" type="hidden" name="clientId" th:value="${ticket.client.id}">
                         <input class="button" type="submit" value="medical card">
                     </form>
@@ -102,7 +97,6 @@
 
 
         </div>
-
 
 
         <!---------------------------------------------------------contentBlock-->

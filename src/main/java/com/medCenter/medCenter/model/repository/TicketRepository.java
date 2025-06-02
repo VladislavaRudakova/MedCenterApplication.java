@@ -34,6 +34,9 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     @Query("select t from Ticket t where t.personalJob.id = :personalJobId")
     List<Ticket> findByPersonalJob(@Param("personalJobId") Integer personalJob);
 
+    @Query("select t from Ticket t where t.personalJob.id is null and t.client.id is not null")
+    List<Ticket> findWherePersonalIsNull();
+
     @Query("select t from Ticket t where t.personalJob.id = :personalJobId and t.client.id is not null and state= :state" )
     List<Ticket> findActualByPersonalJob(@Param("personalJobId") Integer personalJobId, @Param("state") String state);
 

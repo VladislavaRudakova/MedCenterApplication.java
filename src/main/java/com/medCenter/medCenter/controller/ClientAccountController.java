@@ -3,9 +3,9 @@ package com.medCenter.medCenter.controller;
 
 import com.medCenter.medCenter.dto.ClientDto;
 import com.medCenter.medCenter.dto.TicketDto;
-import com.medCenter.medCenter.dto.TicketDtoLight;
 import com.medCenter.medCenter.dto.UserDto;
-import com.medCenter.medCenter.model.entity.*;
+import com.medCenter.medCenter.model.entity.TicketStates;
+import com.medCenter.medCenter.model.entity.TicketSubStates;
 import com.medCenter.medCenter.securityConfig.UserDetailsImpl;
 import com.medCenter.medCenter.service.ClientService;
 import com.medCenter.medCenter.service.TicketService;
@@ -13,15 +13,15 @@ import com.medCenter.medCenter.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.sql.Time;
 import java.util.List;
 
 
@@ -55,7 +55,6 @@ public class ClientAccountController {
                              HttpSession session, Model model, @AuthenticationPrincipal UserDetailsImpl user) {
 
         UserDto userDto = userService.userToDto(user.getUser());
-
         ClientDto client = ClientDto.builder()
                 .name(name)
                 .surname(surname)
@@ -79,14 +78,17 @@ public class ClientAccountController {
 
     @GetMapping(value = "/clientTickets")
     public String findAllTickets(@AuthenticationPrincipal UserDetailsImpl user, Model model, HttpSession session) {
-        String clientId = (String) session.getAttribute("clientId");
-
-        if (clientId == null) {
+        TicketDto ticketDto = (TicketDto) session.getAttribute("ticket");
+        Integer clientId = null;
+        if (ticketDto!=null){
+            clientId = ticketDto.getId();
+        } else  {
             ClientDto client = clientService.findByUserId(user.getUser().getId());
-            clientId = String.valueOf(client.getId());
+            clientId = client.getId();
         }
-        List<TicketDto> tickets = ticketService.findByClient(Integer.valueOf(clientId));
+        List<TicketDto> tickets = ticketService.findByClient(clientId);
         model.addAttribute("tickets", tickets);
+        model.addAttribute("clientId", clientId);
         return "clientTicketsPage";
     }
 

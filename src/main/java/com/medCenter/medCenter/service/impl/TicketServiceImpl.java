@@ -200,6 +200,17 @@ public class TicketServiceImpl implements TicketService {
         return ticketDtoList;
     }
 
+    @Override
+    public List<TicketDto> findWherePersonalIsNull() {
+        List<Ticket> tickets = ticketRepository.findWherePersonalIsNull();
+        List<TicketDto> ticketDtoList = new ArrayList<>();
+        for (Ticket ticket : tickets) {
+            TicketDto ticketDto = ticketToDto(ticket);
+            ticketDtoList.add(ticketDto);
+        }
+        return ticketDtoList;
+    }
+
 
     @Override
     public List<TicketDto> findByState(String state) {

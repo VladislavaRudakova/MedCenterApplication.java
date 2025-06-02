@@ -27,29 +27,29 @@
         <span class="doctor-name">Create new personal</span>
         <!---------------------------------------------------------------create personal form-->
         <div id="create-personal">
-            <form id="create-personal-form" action="admin/createPersonal" method="post">
+            <form id="create-personal-form" action="/admin/createPersonal" th:object="${personalJob}" method="post">
                 <div id="personal-primary-info-block">
                     <label class="personal-label"> Name:
-                        <input class="personal-input" type="text" name="name" placeholder="name">
+                        <input class="personal-input" type="text" name="name" th:field="*{personal.name}" placeholder="name">
                     </label>
                     <label class="personal-label"> Surname:
-                        <input class="personal-input" type="text" name="surname" placeholder="surname">
-                    </label >
+                        <input class="personal-input" type="text" name="surname" th:field="*{personal.surname}"  placeholder="surname">
+                    </label>
                     <label class="personal-label" for="date">Birthdate:
-                    <input id="date" class="personal-input" type="text" placeholder="birth date">
+                    <input id="date" class="personal-input" type="text" th:field="*{personal.birthDate}" placeholder="birth date">
                     </label>
                 </div>
 
                 <div id="personal-secondary-info-block">
                     <label class="personal-label" for="date1">Employment date:
-                    <input id="date1" class="personal-input" type="text" placeholder="employment date">
+                    <input id="date1" class="personal-input" type="text" th:field="*{personal.employmentDate}" placeholder="employment date">
                     </label>
                     <label class="personal-label" for="job"> Job title:
-                        <input id="job"  class="personal-input" type="text" name="jobTitle" placeholder="job">
+                        <input id="job"  class="personal-input" type="text" name="jobTitle" th:field="*{jobTitle}" placeholder="job">
                     </label>
                     <label class="personal-label" for="department">Department:
-                        <select id="department" class="personal-input" name="job">
-                            <option th:each="department:${departments}" class="options" th:value="${department.name}"
+                        <select id="department" class="personal-input" th:field="*{department.name}" name="job">
+                            <option th:each="department:${departments}" class="options"  th:value="${department.name}"
                                     th:text="${department.name}"></option>
                         </select>
                     </label>
