@@ -1,17 +1,16 @@
 package com.medCenter.medCenter.controller;
 
 import com.medCenter.medCenter.dto.ClientDto;
+import com.medCenter.medCenter.model.entity.ClientStates;
 import com.medCenter.medCenter.securityConfig.UserDetailsImpl;
 import com.medCenter.medCenter.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -21,26 +20,52 @@ public class AdminClientController {
 
     private final ClientService clientService;
 
-
     @GetMapping(value = "/clientOperations")
-    public String findAllPersonal(Model model,  @AuthenticationPrincipal UserDetailsImpl user) {
+    public String findAllPersonal(Model model, @AuthenticationPrincipal UserDetailsImpl user) { //getting search form
         model.addAttribute(user.getUser().getRole(), "role");
+        model.addAttribute("clientToFind", new ClientDto()); //object for data receiving
         return "adminFindClientsPage";
     }
 
 
-
     @PostMapping(value = "/findAllClients")
     public String findAllClients(Model model) {
+        ClientStates[] clientStates = ClientStates.values();
+        List<String> clientStatesList = new ArrayList<>();
+        for (ClientStates clientState : clientStates) { //get states list
+            clientStatesList.add(clientState.toString());
+        }
+        model.addAttribute("clientStates", clientStatesList);
+        model.addAttribute("clientToEdit", new ClientDto()); //object for data receiving
         List<ClientDto> clients = clientService.findAll();
         model.addAttribute("clients", clients);
         return "adminFoundClientsPage";
     }
 
     @PostMapping(value = "/findClient")
-    public String findClientByNameSurname(Model model, @RequestParam String name, @RequestParam String surname) {
-        List<ClientDto> clients = clientService.findByNameAndSurname(name,surname);
+    public String findClientByNameSurname(Model model, @ModelAttribute ClientDto client) {
+        ClientStates[] clientStates = ClientStates.values();
+        List<String> clientStatesList = new ArrayList<>();
+        for (ClientStates clientState : clientStates) {
+            clientStatesList.add(clientState.toString());
+        }
+        model.addAttribute("clientStates", clientStatesList);
+        model.addAttribute("clientToEdit", new ClientDto());
+
+
+        List<ClientDto> clients = clientService.findClients(client);
         model.addAttribute("clients", clients);
         return "adminFoundClientsPage";
     }
+
+    @PostMapping(value = "/editClient")
+    public String editClient(Model model, @ModelAttribute ClientDto clientToEdit, @RequestParam Integer clientId) {
+        clientToEdit.setId(clientId);
+        clientService.updateClient(clientToEdit);
+        ClientDto clientDto = clientService.findByIdDto(clientId);
+        model.addAttribute("clientUpdated", clientDto);
+        return "adminFoundClientsPage";
+    }
+
+
 }

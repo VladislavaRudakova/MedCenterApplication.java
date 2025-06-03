@@ -23,17 +23,18 @@ public interface PersonalRepository extends JpaRepository<Personal, Integer> {
     @Modifying
     @Query("""
         update Personal p set
-           p.name = case when :name is not null then :name else p.name end,
-           p.surname = case when :surname is not null then :surname else p.surname end
-           p.birthDate = case when :birthDate is not null then :birthDate else p.birthDate end
-           p.employmentDate = case when :employmentDate is not null then :employmentDate else p.employmentDate end
+           p.name = case when :name is not null and :name!='' then :name else p.name end,
+           p.surname = case when :surname is not null and :surname!='' then :surname else p.surname end,
+           p.birthDate = case when :birthDate is not null then :birthDate else p.birthDate end,
+           p.employmentDate = case when :employmentDate is not null then :employmentDate else p.employmentDate end,
            p.experience = case when :experience is not null then :experience else p.experience end
-         
            where p.id = :id""")
-    void updatePersonalJob(@Param("name") String name, @Param("surname") String surname, @Param("birthDate") Date birthDate,
-                           @Param("experience") Integer experience, @Param("employmentDate") Date employmentDate);
+    void updatePersonal(@Param("name") String name, @Param("surname") String surname, @Param("birthDate") Date birthDate,
+                        @Param("experience") Integer experience, @Param("employmentDate") Date employmentDate, @Param("id") Integer personalId );
 
 
-
+    @Modifying(clearAutomatically = true)
+    @Query("update Personal p set p.dismissalDate = :dismissalDate where p.id = :personalId")
+    void updateDismissalDate(@Param("state") Date date, @Param("personalId") Integer personalId);
 
 }

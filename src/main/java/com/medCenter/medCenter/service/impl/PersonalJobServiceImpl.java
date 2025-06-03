@@ -175,10 +175,8 @@ public class PersonalJobServiceImpl implements PersonalJobService {
     @Transactional
     @Override
     public void updatePersonalJob(PersonalJobDto personalJobDto) {
-        personalJobRepository.updatePersonalJob(personalJobDto.getPersonal().getName(),
-                personalJobDto.getPersonal().getSurname(), Date.valueOf(personalJobDto.getPersonal().getBirthDate()),
-                personalJobDto.getPersonal().getExperience(), Date.valueOf(personalJobDto.getPersonal().getEmploymentDate()),
-                personalJobDto.getJobTitle(), personalJobDto.getDepartment().getId(), personalJobDto.getId());
+        personalJobRepository.updatePersonalJob(
+                personalJobDto.getJobTitle(), personalJobDto.getDepartment().getId(), personalJobDto.getState(), personalJobDto.getId());
     }
 
     @Override

@@ -56,16 +56,30 @@
                     <input onclick="toggleDropdown(this)" class="button" type="button" value="edit">
                     <div class="dropdown-content">
                         <!----------------------------------------------->
-                        <form class="edit-form" action="/admin/findSchedule" method="post">
+                        <form class="edit-form" action="/admin/editClient" th:object="${clientToEdit}" method="post">
 
                             <div class="name-input-block">
-                                <select id="find-job" class="select" name="job">
-                                    <option th:each="job:${jobs}" class="options" th:value="${job}"
-                                            th:text="${job}"></option>
-                                </select>
+                                <input class="name-input" type="text" name="name" th:field="*{name}"
+                                       placeholder="name">
                             </div>
 
+                            <div class="name-input-block">
+                                <input class="name-input" type="text" name="surname" th:field="*{surname}"
+                                       placeholder="surname">
+                            </div>
 
+                            <div class="name-input-block">
+                                <input class="name-input" type="text" name="telephoneNumber" th:field="*{telephoneNumber}"
+                                       placeholder="telephone">
+                            </div>
+
+                            <div class="name-input-block">
+                                <select id="find-job" class="select" th:value="${clientState}" name="state">
+                                    <option th:each="clientState:${clientStates}" class="options"
+                                            th:text="${clientState}"></option>
+                                </select>
+                            </div>
+                            <input class="button" type="hidden" name="clientId" th:value="${client.id}">
                             <input class="button" type="submit" value="send">
                         </form>
 

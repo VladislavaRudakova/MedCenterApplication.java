@@ -38,22 +38,21 @@ public class ClientAccountController {
 
     @PostMapping(value = "/clientTicket")
     public String clientTicketRegistration(@RequestParam Integer ticketId, Model model, @AuthenticationPrincipal UserDetailsImpl user, HttpSession session) {
-        TicketDto ticket = ticketService.findById(ticketId);
+        TicketDto ticket = ticketService.findById(ticketId); //find ticket selected by user
         ClientDto client = null;
         try {
-            client = clientService.findByUserId(user.getUser().getId());
+            client = clientService.findByUserId(user.getUser().getId()); //if user is already attached to client find him
         } catch (EntityNotFoundException e) {
-            session.setAttribute("ticket", ticket);
+            session.setAttribute("ticket", ticket); //if user is not attached to client save new client
             return "saveClientPage";
         }
-        return updateTicketClient(client, ticket, model);
+        return updateTicketClient(client, ticket, model); //make ticket clientId not null
     }
 
 
     @PostMapping(value = "/saveClient")
     public String saveClient(@RequestParam String name, @RequestParam String surname, @RequestParam String telephone,
                              HttpSession session, Model model, @AuthenticationPrincipal UserDetailsImpl user) {
-
         UserDto userDto = userService.userToDto(user.getUser());
         ClientDto client = ClientDto.builder()
                 .name(name)
@@ -61,15 +60,15 @@ public class ClientAccountController {
                 .telephoneNumber(telephone)
                 .user(userDto)
                 .build();
-        clientService.createClient(client);
-        client = clientService.findByUserId(user.getUser().getId());
+        clientService.createClient(client); //save new client
+        client = clientService.findByUserId(user.getUser().getId()); //find client for get it id
         TicketDto ticket = (TicketDto) session.getAttribute("ticket");
-        return updateTicketClient(client, ticket, model);
+        return updateTicketClient(client, ticket, model); //make ticket clientId not null
     }
 
     @Transactional
     private String updateTicketClient(ClientDto client, TicketDto ticket, Model model) {
-        ticketService.updateClientAndState(client.getId(), TicketStates.NOT_AVAILABLE.toString(), ticket.getId());
+        ticketService.updateClientAndState(client.getId(), TicketStates.NOT_AVAILABLE.toString(), ticket.getId()); // set client id to ticket
         ticket.setClient(client);
         model.addAttribute("ticket", ticket);
         return "clientTicketPage";
@@ -80,13 +79,13 @@ public class ClientAccountController {
     public String findAllTickets(@AuthenticationPrincipal UserDetailsImpl user, Model model, HttpSession session) {
         TicketDto ticketDto = (TicketDto) session.getAttribute("ticket");
         Integer clientId = null;
-        if (ticketDto!=null){
+        if (ticketDto != null) {
             clientId = ticketDto.getId();
-        } else  {
+        } else {
             ClientDto client = clientService.findByUserId(user.getUser().getId());
             clientId = client.getId();
         }
-        List<TicketDto> tickets = ticketService.findByClient(clientId);
+        List<TicketDto> tickets = ticketService.findByClient(clientId); //find tickets to show it in client account
         model.addAttribute("tickets", tickets);
         model.addAttribute("clientId", clientId);
         return "clientTicketsPage";
@@ -95,9 +94,8 @@ public class ClientAccountController {
 
     @PostMapping(value = "/requestForCancellation")
     public String cancelTicket(@RequestParam String clientId, @RequestParam String ticketId, Model model) {
-
-        ticketService.updateSubState(TicketSubStates.REQUEST_FOR_CANCELLATION.toString(), Integer.valueOf(ticketId));
-        List<TicketDto> tickets = ticketService.findByClient(Integer.valueOf(clientId));
+        ticketService.updateSubState(TicketSubStates.REQUEST_FOR_CANCELLATION.toString(), Integer.valueOf(ticketId)); //send request for ticket cancellation
+        List<TicketDto> tickets = ticketService.findByClient(Integer.valueOf(clientId)); //reload updated tickets on page
         model.addAttribute("tickets", tickets);
         return "clientTicketsPage";
     }

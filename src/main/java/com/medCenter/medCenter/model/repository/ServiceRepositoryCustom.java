@@ -8,4 +8,5 @@ import java.util.List;
 public interface ServiceRepositoryCustom {
 
     List<Service> findService (String type, Double price);
+
 }

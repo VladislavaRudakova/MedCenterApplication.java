@@ -76,39 +76,49 @@
                     <input onclick="toggleDropdown(this)" class="button" type="button" value="edit">
                     <div class="dropdown-content">
                         <!----------------------------------------------->
-                        <form class="edit-form" action="/admin/findSchedule" method="post">
-
-                                <div class="name-input-block">
-                                    <input class="name-input" type="text" placeholder="name">
-
-                                </div>
+                        <form class="edit-form" action="/admin/editPersonal" th:object="${personalJob}" method="post">
 
                             <div class="name-input-block">
-                                <input class="name-input" type="text" placeholder="surname">
-
+                                <input class="name-input" type="text" name="name" th:field="*{personal.name}"
+                                       placeholder="name">
                             </div>
 
                             <div class="name-input-block">
-                                <input id="date" class="name-input" type="text" placeholder="birth date">
+                                <input class="name-input" type="text" name="surname" th:field="*{personal.surname}"
+                                       placeholder="surname">
+                            </div>
 
+
+                            <div class="name-input-block">
+                                <input id="date" class="name-input" type="text" name="birthDate"
+                                       th:field="*{personal.birthDate}" placeholder="birth date">
                             </div>
 
                             <div class="name-input-block">
-                                <input id="date1" class="name-input" type="text" placeholder="employment">
+                                <input id="date1" class="name-input" type="text" name="employmentDate"
+                                       th:field="*{personal.employmentDate}" placeholder="employment">
 
                             </div>
-
                             <div class="name-input-block">
-                                <select id="find-job" class="select" name="job">
-                                    <option th:each="job:${jobs}" class="options" th:value="${job}" th:text="${job}"></option>
-                                </select>
-                            </div>
-                            <div class="name-input-block">
-                                <select id="state" class="select" name="state">
-                                    <option th:each="personalJobState:${personalStates}" class="options" th:value="${personalJobState}" th:text="${personalJobState}"></option>
+                                <select id="dep" class="select" th:field="*{department.name}" name="department">
+                                    <option th:each="department:${departments}" class="options"
+                                            th:value="${department.name}" th:text="${department.name}"></option>
                                 </select>
                             </div>
 
+                            <div class="name-input-block">
+                                <select id="find-job" class="select" th:field="*{jobTitle}" name="jobTitle">
+                                    <option th:each="job:${jobs}" class="options" th:value="${job}"
+                                            th:text="${job}"></option>
+                                </select>
+                            </div>
+                            <div class="name-input-block">
+                                <select id="state" class="select" th:field="*{state}" name="state">
+                                    <option th:each="personalJobState:${personalStates}" class="options"
+                                            th:value="${personalJobState}" th:text="${personalJobState}"></option>
+                                </select>
+                            </div>
+                            <input class="button" type="hidden" name="personalJobId" th:value="${personal.id}">
                             <input class="button" type="submit" value="send">
                         </form>
 
@@ -118,15 +128,7 @@
             </div>
 
 
-
-
-
-
-
-
-
         </div>
-
 
 
     </div>

@@ -35,18 +35,17 @@ public class MedCardController {
 
     @PostMapping("/seeMedicalCard")
     public String seeMedCard(@RequestParam Integer clientId, HttpSession session, Model model) {
-        List<MedCardDto> medCardDtoList = medCardService.findByClientId(clientId);
+        List<MedCardDto> medCardDtoList = medCardService.findByClientId(clientId); //find medical card
         model.addAttribute("medCards", medCardDtoList);
         ClientDto clientDto = clientService.findByIdDto(clientId);
         session.setAttribute("client", clientDto);
-        Set<String> serviceTypes = getServiceTypes();
+        Set<String> serviceTypes = getServiceTypes(); //get service type list for select med card appointment form
         model.addAttribute("serviceTypes", serviceTypes);
         return "medCardPage";
     }
 
     private Set<String> getServiceTypes() {
         Set<String> serviceTypes = serviceService.findAllTypes();
-
         for (String service : serviceTypes) {
             if (isAppointment(service)) {
                 service = "doctor appointment";
@@ -64,11 +63,11 @@ public class MedCardController {
     }
 
     @GetMapping("/getMedCardForm")
-    public String makeRecord(Model model, HttpSession session,@RequestParam String serviceType, @AuthenticationPrincipal UserDetailsImpl user) {
+    public String makeRecord(Model model, HttpSession session, @RequestParam String serviceType, @AuthenticationPrincipal UserDetailsImpl user) {
         LocalDate localDate = LocalDate.now();
         PersonalJobDto personalJob = personalJobService.findByUserId(user.getUser().getId());
         ServiceDto serviceDto = serviceService.findByType(serviceType);
-        session.setAttribute("service",serviceDto);
+        session.setAttribute("service", serviceDto);
         session.setAttribute("personalJob", personalJob);
         model.addAttribute("medCard", new MedCardDto());
         model.addAttribute("date", localDate);
@@ -91,13 +90,10 @@ public class MedCardController {
 
     @PostMapping("/seeRecordDetails")
     public String seeRecordDetails(Model model, HttpSession session, @RequestParam String medCardId) {
-       MedCardDto medCardDto= medCardService.findByIdDto(Integer.valueOf(medCardId));
+        MedCardDto medCardDto = medCardService.findByIdDto(Integer.valueOf(medCardId));
         model.addAttribute("medCard", medCardDto);
         return "detailsMedCardRecordPage";
     }
-
-
-
 
 
 }

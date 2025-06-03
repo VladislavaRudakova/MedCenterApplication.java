@@ -30,7 +30,6 @@ public class ClientServiceImpl implements ClientService {
                 .surname(client.getSurname())
                 .telephoneNumber(client.getTelephoneNumber())
                 .build();
-
         if (client.getState() != null) {
             clientDto.setState(client.getState());
         }
@@ -38,7 +37,6 @@ public class ClientServiceImpl implements ClientService {
             UserDto userDto = userService.userToDto(client.getUser());
             clientDto.setUser(userDto);
         }
-
         return clientDto;
     }
 
@@ -112,6 +110,24 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void updateState(String state, Integer clientId) {
         clientRepository.updateState(state, clientId);
+    }
+
+    @Transactional
+    @Override
+    public void updateClient(ClientDto clientToEdit) {
+        clientRepository.updateClient(clientToEdit.getName(), clientToEdit.getSurname(), clientToEdit.getTelephoneNumber(),
+                clientToEdit.getState(), clientToEdit.getId());
+    }
+
+    @Override
+    public List<ClientDto> findClients(ClientDto clientDto) {
+       List<Client>clients = clientRepository.findClients(clientDto);
+        List<ClientDto> clientDtoList = new ArrayList<>();
+        for (Client client : clients) {
+            ClientDto clientDto1 = clientToDto(client);
+            clientDtoList.add(clientDto1);
+        }
+        return clientDtoList;
     }
 
 

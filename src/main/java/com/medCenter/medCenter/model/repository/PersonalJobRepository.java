@@ -43,19 +43,15 @@ public interface PersonalJobRepository extends JpaRepository<PersonalJob, Intege
            where p.id = :id""")
     void updatePersonalJob1(@Param("jobTitle") String jobTitle, @Param("departmentId") Integer departmentId, @Param("personalJobId") Integer personalJobId);
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query("""
         update PersonalJob p set
-           p.personal.name = case when :name is not null then :name else p.personal.name end,
-           p.personal.surname = case when :surname is not null then :surname else p.personal.surname end
-           p.personal.experience = case when :experience is not null then :experience else p.personal.experience end
            p.jobTitle = case when :jobTitle is not null then :jobTitle else p.jobTitle end,
-           p.department.id = case when :departmentId is not null then :departmentId else p.department.id end
+           p.department.id = case when :departmentId is not null then :departmentId else p.department.id end,
+           p.state = case when :state is not null then :state else p.state end
            where p.id = :id""")
-    void updatePersonalJob(@Param("name") String name, @Param("surname") String surname, @Param("birthDate") Date birthDate,
-                           @Param("experience") Integer experience, @Param("employmentDate") Date employmentDate,
-                           @Param("jobTitle") String jobTitle, @Param("departmentId") Integer departmentId,
-                           @Param("personalJobId") Integer personalJobId );
+    void updatePersonalJob(@Param("jobTitle") String jobTitle, @Param("departmentId") Integer departmentId, @Param("state") String state,
+                           @Param("id") Integer personalJobId );
 
 
     @Modifying(clearAutomatically = true)

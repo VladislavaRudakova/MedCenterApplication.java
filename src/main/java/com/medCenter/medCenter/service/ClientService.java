@@ -25,5 +25,9 @@ public interface ClientService {
 
     void updateState(String state, Integer clientId);
 
+    void updateClient(ClientDto clientToEdit);
+
+    List<ClientDto> findClients(ClientDto clientDto);
+
 
 }

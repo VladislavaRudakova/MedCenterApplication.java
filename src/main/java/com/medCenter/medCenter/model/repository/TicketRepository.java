@@ -12,7 +12,7 @@ import java.sql.Time;
 import java.util.List;
 import java.util.Set;
 
-public interface TicketRepository extends JpaRepository<Ticket, Integer> {
+public interface TicketRepository extends JpaRepository<Ticket, Integer>, TicketRepositoryCustom {
 
     @Query("select t.personalJob from Ticket t where t.service.type = :serviceType and t.date = :date and t.time >= :minTime and t.time <= :maxTime and t.state= :state")
     List<PersonalJob> findByServiceDateTime(@Param("serviceType") String serviceType, @Param("date") Date date, @Param("minTime") Time minTime, @Param("maxTime") Time maxTime, @Param("state") String state);

@@ -27,12 +27,12 @@
         <div class="modal-content">
             <!--------------------------------------------------------------------------->
             <div id="personal-operations">
-                <div sec:authorize="hasAuthority('ROLE_ADMIN')" class="personal-form-block">
+                <div sec:authorize="hasAuthority('ROLE_ADMIN')"  class="personal-form-block">
 
-                    <form class="find-personal" action="/admin/findPersonal" method="post">
-                        <input class="select" type="text" name="name" placeholder="name">
-                        <input class="select" type="text" name="surname" placeholder="surname">
-                        <input class="select" type="text" name="telephone" placeholder="telephone">
+                    <form class="find-personal" action="/admin/findClient" th:object="${clientToFind}" method="post">
+                        <input class="select" type="text" name="name" th:field="*{name}"  placeholder="name">
+                        <input class="select" type="text" name="surname" th:field="*{surname}" placeholder="surname">
+                        <input class="select" type="text" name="telephone" th:field="*{telephoneNumber}" placeholder="telephone">
                         <input class="button" type="submit" value="find">
                     </form>
 
@@ -46,7 +46,7 @@
 
                 <div sec:authorize="hasAuthority('ROLE_DOCTOR')" class="personal-form-block">
 
-                    <form class="find-personal" action="/admin/findPersonal" method="post">
+                    <form class="find-personal" action="/admin/findClient" method="post">
                         <input class="select" type="text" name="name" placeholder="name">
                         <input class="select" type="text" name="surname" placeholder="surname">
                         <input class="select" type="text" name="telephone" placeholder="telephone">

@@ -34,4 +34,5 @@ public class ServiceRepositoryCustomImpl implements ServiceRepositoryCustom {
 
         return entityManager.createQuery(cq).getResultList();
     }
+
 }
