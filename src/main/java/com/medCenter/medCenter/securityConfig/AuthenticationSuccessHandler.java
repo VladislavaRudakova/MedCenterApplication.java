@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 @Component
 public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -22,9 +23,16 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
         String redirectUrl = "/";
         if (savedRequest != null) {
             redirectUrl = savedRequest.getRedirectUrl();
-            if (savedRequest.getRedirectUrl().equals("http://localhost:8080/client/clientTicket?continue")) {//!!!!!!!!!!!!!! for correction!
+            String regex = "http://[^/]+/client/clientTicket\\?continue";
+            if (Pattern.matches(regex, redirectUrl)) {
+
                 redirectUrl = "/personal";
             }
+
+
+//            if (savedRequest.getRedirectUrl().equals("http://localhost:8080/client/clientTicket?continue")) {//!!!!!!!!!!!!!! for correction!
+//                redirectUrl = "/personal";
+//            }
 
         } else {
             for (GrantedAuthority authority : authorities) {
@@ -35,7 +43,7 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
                     redirectUrl = "/client/clientTickets";
                 } else if ("ROLE_DOCTOR".equals(role)) {
                     redirectUrl = "/doctor/doctorStart";
-                }else if ("ROLE_NURSE".equals(role)) {
+                } else if ("ROLE_NURSE".equals(role)) {
                     redirectUrl = "/nurse/nurseStart";
                 }
             }

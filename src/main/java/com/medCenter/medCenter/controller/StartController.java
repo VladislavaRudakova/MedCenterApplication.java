@@ -1,12 +1,15 @@
 package com.medCenter.medCenter.controller;
 
 
+import com.medCenter.medCenter.MedCenterApplication;
 import com.medCenter.medCenter.model.entity.ScheduleStates;
 import com.medCenter.medCenter.model.entity.TicketStates;
 import com.medCenter.medCenter.service.ScheduleService;
 import com.medCenter.medCenter.service.ServiceService;
 import com.medCenter.medCenter.service.TicketService;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +26,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class StartController {
 
+    private static final Logger logger = LogManager.getLogger(MedCenterApplication.class);
     private final ServiceService serviceService;
     private final ScheduleService scheduleService;
     private final TicketService ticketService;
@@ -43,6 +47,7 @@ public class StartController {
 
     @GetMapping(value = "/")
     public String start(Model model) {
+        logger.info("START METHOD BEGIN");
         List<String> times = generateTime();
         LocalDate date = LocalDate.now();
         scheduleService.updateStateByDate(ScheduleStates.CLOSED.toString(), Date.valueOf(date));//close all schedules where date is before actual date
