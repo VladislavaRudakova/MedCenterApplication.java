@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <link rel="stylesheet" href="/css/styles.css"/>
     <link rel="stylesheet" href="/css/buttonStyles.css"/>
@@ -46,13 +46,17 @@
 
 
 
-                <form action="/admin/findClientTickets" method="post">
+                <form  sec:authorize="hasAuthority('ROLE_ADMIN')" action="/admin/findClientTickets" method="post">
                     <input type="hidden" name="clientId" th:value="${client.id}">
                     <input class="button" type="submit" value="see tickets">
                 </form>
+                    <form  sec:authorize="hasAuthority('ROLE_DOCTOR')" action="/medCard/seeMedicalCard" method="post">
+                        <input type="hidden" name="clientId" th:value="${client.id}">
+                        <input class="button" type="submit" value="see medical card">
+                    </form>
 
                 <!------------------------------------------------------------------------------------->
-                <div class="dropdown">
+                <div sec:authorize="hasAuthority('ROLE_ADMIN')" class="dropdown">
                     <input onclick="toggleDropdown(this)" class="button" type="button" value="edit">
                     <div class="dropdown-content">
                         <!----------------------------------------------->

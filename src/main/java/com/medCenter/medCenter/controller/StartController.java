@@ -3,7 +3,6 @@ package com.medCenter.medCenter.controller;
 
 import com.medCenter.medCenter.model.entity.ScheduleStates;
 import com.medCenter.medCenter.model.entity.TicketStates;
-import com.medCenter.medCenter.service.PersonalJobService;
 import com.medCenter.medCenter.service.ScheduleService;
 import com.medCenter.medCenter.service.ServiceService;
 import com.medCenter.medCenter.service.TicketService;
@@ -24,12 +23,11 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class StartController {
 
-    private final PersonalJobService personalJobService;
     private final ServiceService serviceService;
     private final ScheduleService scheduleService;
     private final TicketService ticketService;
 
-    private List<String> generateTime() {
+    private List<String> generateTime() { //get times for service search
         List<String> times = new ArrayList<>();
         LocalTime time = LocalTime.of(8, 0);
         times.add(time.toString());
@@ -47,14 +45,10 @@ public class StartController {
     public String start(Model model) {
         List<String> times = generateTime();
         LocalDate date = LocalDate.now();
-        scheduleService.updateStateByDate(ScheduleStates.CLOSED.toString(), Date.valueOf(date));
-        ticketService.updateStateByDate(TicketStates.CLOSED.toString(),Date.valueOf(date));
-
-        Set<String> jobs = personalJobService.findJobsNearly("doctor");
+        scheduleService.updateStateByDate(ScheduleStates.CLOSED.toString(), Date.valueOf(date));//close all schedules where date is before actual date
+        ticketService.updateStateByDate(TicketStates.CLOSED.toString(), Date.valueOf(date));//close all tickets where date is before actual date
         Set<String> service = serviceService.findAllTypes();
-
         model.addAttribute("times", times);
-        model.addAttribute("jobs", jobs);
         model.addAttribute("serviceTypes", service);
         return "startPage";
     }

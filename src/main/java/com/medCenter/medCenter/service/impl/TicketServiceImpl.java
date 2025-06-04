@@ -12,17 +12,12 @@ import com.medCenter.medCenter.service.PersonalJobService;
 import com.medCenter.medCenter.service.ServiceService;
 import com.medCenter.medCenter.service.TicketService;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +50,18 @@ public class TicketServiceImpl implements TicketService {
         return ticketToDto(ticket);
     }
 
+    @Override
+    public List<TicketDto> findTickets(TicketDto ticketDto) {
+        List<Ticket> tickets = ticketRepository.findTickets(ticketDto);
+        List<TicketDto> ticketDtoList = new ArrayList<>();
+        for (Ticket ticket : tickets) {
+            TicketDto ticketDto1 = ticketToDto(ticket);
+            ticketDtoList.add(ticketDto1);
+        }
+        return ticketDtoList;
+    }
+
+
     public TicketDto ticketToDto(Ticket ticket) {
 
         ServiceDto serviceDto = serviceService.serviceToDto(ticket.getService());
@@ -75,6 +82,9 @@ public class TicketServiceImpl implements TicketService {
         }
         if (ticket.getSubState() != null) {
             ticketDto.setSubState(ticket.getSubState());
+        }
+        if (ticket.getCancelRequestFromRole() != null) {
+            ticketDto.setCancelRequestFromRole(ticket.getCancelRequestFromRole());
         }
         return ticketDto;
     }
@@ -191,7 +201,18 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<TicketDto> findActualByPersonalJob(Integer personalJobId) {
-        List<Ticket> tickets = ticketRepository.findActualByPersonalJob(personalJobId,TicketStates.NOT_AVAILABLE.toString());
+        List<Ticket> tickets = ticketRepository.findActualByPersonalJob(personalJobId, TicketStates.NOT_AVAILABLE.toString());
+        List<TicketDto> ticketDtoList = new ArrayList<>();
+        for (Ticket ticket : tickets) {
+            TicketDto ticketDto = ticketToDto(ticket);
+            ticketDtoList.add(ticketDto);
+        }
+        return ticketDtoList;
+    }
+
+    @Override
+    public List<TicketDto> findActualByClient(Integer clientId) {
+        List<Ticket> tickets = ticketRepository.findActualByClient(clientId, TicketStates.NOT_AVAILABLE.toString());
         List<TicketDto> ticketDtoList = new ArrayList<>();
         for (Ticket ticket : tickets) {
             TicketDto ticketDto = ticketToDto(ticket);
@@ -272,7 +293,6 @@ public class TicketServiceImpl implements TicketService {
 
         Set<String> dates = ticketRepository.findDates(personalJobDto.getId());
         boolean isDate = false;
-
         for (ScheduleDto scheduleDto : scheduleDtoList) {
             for (String date : dates) {
                 if (scheduleDto.getDate().toString().equals(date)) {
@@ -281,7 +301,6 @@ public class TicketServiceImpl implements TicketService {
                 }
             }
             if (isDate) continue;
-
             TicketDto ticketDto = TicketDto.builder()
                     .date(scheduleDto.getDate())
                     .time(scheduleDto.getStartTime())
@@ -289,21 +308,30 @@ public class TicketServiceImpl implements TicketService {
                     .personalJob(personalJobDto)
                     .state(TicketStates.AVAILABLE.toString())
                     .build();
-
             createTickets(ticketDto, scheduleDto, timeRange);
-
         }
+    }
+
+    @Transactional
+    @Override
+    public void updateCancelFromRole(String role, Integer ticketId) {
+        ticketRepository.updateCancelFromRole(role, ticketId);
+    }
+
+    @Transactional
+    @Override
+    public void updateSubStateAndRole(String subState, String role, Integer ticketId) {
+        ticketRepository.updateSubStateAndRole(subState, role, ticketId);
     }
 
     private void createTickets(TicketDto ticketDto, ScheduleDto scheduleDto, Integer timeRange) {
         LocalTime ticketTime = ticketDto.getTime();
         while (ticketDto.getTime().isBefore(scheduleDto.getEndTime())) {
-            if ((scheduleDto.getEndTime().minusMinutes(timeRange)).isBefore(ticketTime)) {
+            if ((scheduleDto.getEndTime().minusMinutes(timeRange)).isBefore(ticketTime)) { //check the difference between the time of the last ticket and the time of the end of the shift
                 break;
             }
-            createTicket(ticketDto);
+            createTicket(ticketDto); //create ticket
             ticketTime = ticketTime.plusMinutes(timeRange);
-            System.out.println("TICKET TIME!!!" + ticketTime);
             ticketDto.setTime(ticketTime);
         }
     }

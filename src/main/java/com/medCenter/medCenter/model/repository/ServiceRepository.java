@@ -22,4 +22,6 @@ public interface ServiceRepository extends JpaRepository<Service, Integer>,Servi
     List<Service> findByTypeLike(@RequestParam String type);
 
 
+
+
 }

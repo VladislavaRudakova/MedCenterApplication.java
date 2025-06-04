@@ -33,6 +33,10 @@
                         <select id="find-job" class="select" th:field="*{jobTitle}" name="job">
                             <option th:each="job:${jobs}" class="options" th:value="${job}" th:text="${job}"></option>
                         </select>
+                        <select id="state" class="select" th:field="*{state}" name="state">
+                            <option th:each="personalJobState:${personalStates}" class="options"
+                                    th:value="${personalJobState}" th:text="${personalJobState}"></option>
+                        </select>
                         <input class="button" type="submit" value="find">
                     </form>
 

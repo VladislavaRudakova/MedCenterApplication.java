@@ -29,5 +29,6 @@ public interface ClientService {
 
     List<ClientDto> findClients(ClientDto clientDto);
 
+    List<ClientDto> findClientsByDoctor (ClientDto clientDto, Integer personalJobId);
 
 }

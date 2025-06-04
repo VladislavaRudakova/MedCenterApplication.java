@@ -29,6 +29,12 @@ public class AdminPersonalController {
     public String findAllPersonal(Model model) {
         Set<String> jobs = personalJobService.findAllJob();
         model.addAttribute("jobs", jobs);
+        PersonalJobStates[] personalJobStates = PersonalJobStates.values();
+        List<String> personalJobStatesList = new ArrayList<>();
+        for (PersonalJobStates personalJobState : personalJobStates) {
+            personalJobStatesList.add(personalJobState.toString());
+        }
+        model.addAttribute("personalStates", personalJobStatesList);
         model.addAttribute("personalJob", new PersonalJobWithoutPersonalDto());
         return "adminFindPersonalPage";
     }
@@ -75,10 +81,12 @@ public class AdminPersonalController {
 
     @PostMapping(value = "/createPersonal")
     public String createPersonal(@ModelAttribute PersonalJobDto personalJob, Model model) {
+        personalJob.setState(PersonalJobStates.ACTIVE.toString());
         personalJobService.createPersonalJob(personalJob); //create personal
         List<PersonalJobDto> personalJobDtoList = personalJobService.findByNameSurnameJob(personalJob.getPersonal().getName(), //find created
                 personalJob.getPersonal().getSurname(), personalJob.getJobTitle());
         model.addAttribute("personalList", personalJobDtoList.getLast());
+        model.addAttribute("personalJob", new PersonalJobDto());
         return "adminFoundPersonalPage";
     }
 

@@ -47,7 +47,7 @@ public class MedCardController {
     private Set<String> getServiceTypes() {
         Set<String> serviceTypes = serviceService.findAllTypes();
         for (String service : serviceTypes) {
-            if (isAppointment(service)) {
+            if (isAppointment(service)) { //if appointment make general type without subdivision
                 service = "doctor appointment";
             }
         }
@@ -55,14 +55,14 @@ public class MedCardController {
     }
 
 
-    private boolean isAppointment(String serviceType) {
+    private boolean isAppointment(String serviceType) { //define is service doctor appointment
         String regex = "doctor \\w+ appointment";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(serviceType);
         return matcher.find();
     }
 
-    @GetMapping("/getMedCardForm")
+    @GetMapping("/getMedCardForm") //get form to make a record
     public String makeRecord(Model model, HttpSession session, @RequestParam String serviceType, @AuthenticationPrincipal UserDetailsImpl user) {
         LocalDate localDate = LocalDate.now();
         PersonalJobDto personalJob = personalJobService.findByUserId(user.getUser().getId());
@@ -81,8 +81,8 @@ public class MedCardController {
         medCard.setPersonalJob((PersonalJobDto) session.getAttribute("personalJob"));
         medCard.setService((ServiceDto) session.getAttribute("service"));
         medCard.setDate(LocalDate.now());
-        medCardService.createMedCard(medCard);
-        MedCardDto medCardDto = medCardService.findByClientIdPersonalJobIdAndDate(medCard.getClient().getId(),
+        medCardService.createMedCard(medCard); //create record in med card
+        MedCardDto medCardDto = medCardService.findByClientIdPersonalJobIdAndDate(medCard.getClient().getId(), //find created
                 medCard.getPersonalJob().getId(), Date.valueOf(medCard.getDate())).getLast();
         model.addAttribute("medCardSaved", medCardDto);
         return "createdMedCardRecordPage";
@@ -90,7 +90,7 @@ public class MedCardController {
 
     @PostMapping("/seeRecordDetails")
     public String seeRecordDetails(Model model, HttpSession session, @RequestParam String medCardId) {
-        MedCardDto medCardDto = medCardService.findByIdDto(Integer.valueOf(medCardId));
+        MedCardDto medCardDto = medCardService.findByIdDto(Integer.valueOf(medCardId)); //find record to see details
         model.addAttribute("medCard", medCardDto);
         return "detailsMedCardRecordPage";
     }

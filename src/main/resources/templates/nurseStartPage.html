@@ -44,27 +44,28 @@
                        <div th:text=${ticket.time} class="client-date"></div>
                        <span class="client-date">Price: </span> <span th:text=${ticket.service.price}
                                                                       class="client-date"></span>
-
                    </div>
-
                 </div>
                 <div class="client-tickets">
-                    <form th:if="${ticket.cancelRequestFromRole!='ROLE_CLIENT'}"
+                    <form th:if="${ticket.subState!='REQUEST_FOR_CANCELLATION'}"
                           class="client-form"
                           action="/client/requestForCancellation" method="post">
                         <input class="button" type="hidden" name="ticketId" th:value="${ticket.id}">
                         <input class="button" type="hidden" name="clientId" th:value="${ticket.client.id}">
                         <input class="button" type="submit" value="cancel">
                     </form>
-                    <span class="for-cancel" th:if="${ticket.subState=='REQUEST_FOR_CANCELLATION'&&ticket.cancelRequestFromRole=='ROLE_CLIENT'}"
+                    <span class="for-cancel" th:if="${ticket.subState=='REQUEST_FOR_CANCELLATION'}"
                           th:text="'request for cancellation'"></span>
-
+                    <form class="client-form"
+                          action="/medCard/seeMedicalCard" method="post">
+                        <input class="button" type="hidden" name="clientId" th:value="${ticket.client.id}">
+                        <input class="button" type="submit" value="medical card">
+                    </form>
                 </div>
+
             </div>
 
-            <form th:if="${tickets.empty}" class="client-form" action="/" method="get">
-                <input class="button" type="submit" value="find service">
-            </form>
+
 
         </div>
 

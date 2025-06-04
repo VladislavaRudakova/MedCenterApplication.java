@@ -1,6 +1,8 @@
 package com.medCenter.medCenter.controller;
 
+import com.medCenter.medCenter.dto.PersonalJobDto;
 import com.medCenter.medCenter.dto.ServiceDto;
+import com.medCenter.medCenter.service.PersonalJobService;
 import com.medCenter.medCenter.service.ServiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +19,7 @@ import java.util.List;
 public class AdminServiceController {
 
     private final ServiceService serviceService;
+    private final PersonalJobService personalJobService;
 
     @GetMapping(value = "/serviceOperations") //get service search form
     public String findAllPersonal(Model model) {
@@ -54,5 +57,18 @@ public class AdminServiceController {
         model.addAttribute("service", serviceDto1);
         return "adminCreatedServicePage";
     }
+
+
+    @PostMapping(value = "/findDoctors")
+    public String findDoctorsByService(Model model, @RequestParam Integer serviceId) {
+        ServiceDto serviceDto = serviceService.findByIdDto(serviceId);
+        String serviceType = serviceDto.getType();
+        String result = serviceType.replaceFirst(" appointment$", "");
+        List<PersonalJobDto> personalJobDtoList = personalJobService.findByJob(result);
+        model.addAttribute("personalList", personalJobDtoList);
+        model.addAttribute("personalJob", new PersonalJobDto());
+        return "adminFoundPersonalPage";
+    }
+
 
 }

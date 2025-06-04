@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <link rel="stylesheet" href="/css/styles.css"/>
     <link rel="stylesheet" href="/css/adminMainStyles.css"/>
@@ -103,12 +104,7 @@ buttonsFindCreateService.style.display=(buttonsFindCreateService.style.display==
    }
 
 
-
-
-
-
-
-
+<!-------------------------------------------------------------------------------------------------------->
 
    function toggleDropdown(button) {
                let dropdown = button.closest(".dropdown").querySelector(".dropdown-content");
@@ -134,6 +130,10 @@ function editDob(button) {
                let editEmploymentDateForm = button.closest(".dropdown").querySelector(".edit-employment-date");
                editEmploymentDateForm.style.display = (editEmploymentDateForm.style.display === "flex") ? "none" : "flex";
            }
+
+
+window.history.replaceState(null, "", window.location.href);
+
 
 
 </script>

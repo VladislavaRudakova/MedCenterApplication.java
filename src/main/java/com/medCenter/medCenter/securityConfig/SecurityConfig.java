@@ -44,7 +44,8 @@ public class SecurityConfig {
                         .requestMatchers( "client/**" ).hasAuthority("ROLE_CLIENT")
                         .requestMatchers( "admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers( "doctor/**").hasAuthority("ROLE_DOCTOR")
-                        .requestMatchers( "medCard/**").hasAnyAuthority("ROLE_DOCTOR","ROLE_CLIENT")
+                        .requestMatchers( "medCard/**").hasAnyAuthority("ROLE_DOCTOR","ROLE_CLIENT","ROLE_NURSE")
+                        .requestMatchers( "nurse/**").hasAuthority("ROLE_NURSE")
                         .requestMatchers("/images/**", "/css/**").permitAll()
                 )
 

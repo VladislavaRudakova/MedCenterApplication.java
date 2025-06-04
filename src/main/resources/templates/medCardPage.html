@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <head>
     <link rel="stylesheet" href="/css/styles.css"/>
     <link rel="stylesheet" href="/css/adminMainStyles.css"/>
@@ -25,56 +26,46 @@
 
         <span class="doctor-name">Medical card</span>
 
-
         <div class="found-personal">
-
             <span th:if="${medCards.empty}" class="instance-info">Medical card is empty</span>
-
-
-
             <div th:if="${!medCards.empty}" th:each="medCard:${medCards}" class="personal-block">
+                <div class="instance-info-block">
+                    <div class="personal-name-block">
+                        <span th:text="${medCard.date}" class="instance-info"></span>
+                    </div>
+                    <div class="personal-name-block">
+                        <span th:text="${medCard.personalJob.personal.name}" class="instance-info"></span>
+                        <span th:text="${medCard.personalJob.personal.surname}" class="instance-info"></span>
+                    </div>
+                    <div class="personal-name-block">
+                        <span th:text="${medCard.personalJob.jobTitle}" class="instance-info"></span>
+                    </div>
 
-                <div class="personal-name-block">
-                    <span th:text="${medCard.date}" class="instance-info"></span>
                 </div>
-                <div class="personal-name-block">
-                    <span th:text="${medCard.personalJob.personal.name}" class="instance-info"></span>
-                    <span th:text="${medCard.personalJob.personal.surname}" class="instance-info"></span>
-                </div>
-
-                <span th:text="${medCard.personalJob.jobTitle}" class="instance-info"></span>
 
                 <div class="founded-inst-buttons-block">
                     <form action="/medCard/seeRecordDetails" method="post">
                         <input type="hidden" name="medCardId" th:value="${medCard.id}">
                         <input class="button" type="submit" value="details">
                     </form>
-
                 </div>
 
                 <!------------------------------------------------------------------------------------->
 
             </div>
-
-            <form  class="regForms" action="/medCard/getMedCardForm" method="get">
-
-                <select  class="select" name="serviceType">
+            <form sec:authorize="hasAnyAuthority('ROLE_DOCTOR','ROLE_NURSE')" class="regForms"
+                  action="/medCard/getMedCardForm" method="get">
+                <select class="select" name="serviceType">
                     <option class="options" value="" disabled selected> service</option>
                     <option th:each="serviceType:${serviceTypes}" class="options" th:value="${serviceType}"
                             th:text="${serviceType}"></option>
                 </select>
-                <input  id="button" class="button" type="submit" value="make record">
-
+                <input id="button" class="button" type="submit" value="make record">
             </form>
-
-
-
 
         </div>
 
-
         <div class="back-button">
-
         </div>
 
     </div>

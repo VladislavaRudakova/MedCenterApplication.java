@@ -28,7 +28,7 @@ public interface PersonalJobRepository extends JpaRepository<PersonalJob, Intege
     @Query("select jobTitle from PersonalJob")
     Set<String> findAllJobs();
 
-    @Query("select jobTitle from PersonalJob p where p.jobTitle LIKE CONCAT(:job, '%')")
+    @Query("select jobTitle from PersonalJob p where p.jobTitle like concat(:job, '%')")
     Set<String> findJobsNearly(@Param("job") String job);
 
     @Modifying(clearAutomatically = true)
@@ -37,7 +37,7 @@ public interface PersonalJobRepository extends JpaRepository<PersonalJob, Intege
 
     @Modifying
     @Query("""
-        update PersonalJob p SET
+        update PersonalJob p set
            p.jobTitle = case when :jobTitle is not null then :jobTitle else p.jobTitle end,
            p.department.id = case when :departmentId is not null then :departmentId else p.department.id end
            where p.id = :id""")

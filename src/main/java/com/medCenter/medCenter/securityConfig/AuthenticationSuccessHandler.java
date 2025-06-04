@@ -35,6 +35,8 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
                     redirectUrl = "/client/clientTickets";
                 } else if ("ROLE_DOCTOR".equals(role)) {
                     redirectUrl = "/doctor/doctorStart";
+                }else if ("ROLE_NURSE".equals(role)) {
+                    redirectUrl = "/nurse/nurseStart";
                 }
             }
         }

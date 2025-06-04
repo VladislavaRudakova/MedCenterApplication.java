@@ -78,13 +78,13 @@
                     </div>
                 </div>
                 <div class="doctor-tickets-buttons">
-                    <form th:if="${ticket.state!='request for cancellation'}" class="client-form"
-                          action="/tickets/requestForCancellation" method="post">
+                    <form th:if="${ticket.cancelRequestFromRole!='ROLE_DOCTOR'}" class="client-form"
+                          action="/doctor/requestForCancellation" method="post">
                         <input class="button" type="hidden" name="ticketId" th:value="${ticket.id}">
-                        <input class="button" type="hidden" name="clientId" th:value="${ticket.client.id}">
+                        <input class="button" type="hidden" name="personalJobId" th:value="${ticket.personalJob.id}">
                         <input class="cancel-button" type="submit" value="cancel">
                     </form>
-                    <span class="for-cancel" th:if="${ticket.state=='request for cancellation'}"
+                    <span class="for-cancel" th:if="${ticket.subState=='REQUEST_FOR_CANCELLATION'&&ticket.cancelRequestFromRole=='ROLE_DOCTOR'}"
                           th:text="'request for cancellation'"></span>
                     <form class="client-form"
                           action="/medCard/seeMedicalCard" method="post">

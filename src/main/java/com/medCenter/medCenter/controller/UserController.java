@@ -6,17 +6,17 @@ import com.medCenter.medCenter.exception.LoginException;
 import com.medCenter.medCenter.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -29,12 +29,12 @@ public class UserController {
     @PostMapping(value = "/registration")
     public String registration(@ModelAttribute UserDto userDto, @RequestParam(required = false) Integer personalJobId, Model model) {
         try {
-            userService.registration(userDto,personalJobId, encoder);
-        }catch (LoginException e){
+            userService.registration(userDto, personalJobId, encoder);
+        } catch (LoginException e) {
             e.getLocalizedMessage();
-            return "";
+            return "loginPage"; //with message about error
         }
-        if (personalJobId!=null){
+        if (personalJobId != null) { //if not null it is registration of personal by admin
             model.addAttribute("personalJobId", personalJobId);
         }
         return "loginPage";

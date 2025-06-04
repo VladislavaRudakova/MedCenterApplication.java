@@ -11,6 +11,6 @@ public interface ClientRepositoryCustom {
 
     List<Client> findClients (ClientDto clientDto);
 
-
+    List<Client> findClientsByDoctor (ClientDto clientDto, Integer personalJobId);
 
 }

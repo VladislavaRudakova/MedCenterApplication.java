@@ -26,4 +26,5 @@ public class TicketDto {
     private LocalTime time;
     private String state;
     private String subState;
+    private String cancelRequestFromRole;
 }

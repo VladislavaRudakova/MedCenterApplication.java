@@ -30,4 +30,6 @@ public class Ticket {
     private String state;
     @Column(name = "sub_state")
     private String subState;
+    @Column(name = "cancel_request_from_role")
+    private String cancelRequestFromRole;
 }

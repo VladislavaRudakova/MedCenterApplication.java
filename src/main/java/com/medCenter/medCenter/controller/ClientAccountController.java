@@ -4,6 +4,7 @@ package com.medCenter.medCenter.controller;
 import com.medCenter.medCenter.dto.ClientDto;
 import com.medCenter.medCenter.dto.TicketDto;
 import com.medCenter.medCenter.dto.UserDto;
+import com.medCenter.medCenter.model.entity.Roles;
 import com.medCenter.medCenter.model.entity.TicketStates;
 import com.medCenter.medCenter.model.entity.TicketSubStates;
 import com.medCenter.medCenter.securityConfig.UserDetailsImpl;
@@ -85,7 +86,7 @@ public class ClientAccountController {
             ClientDto client = clientService.findByUserId(user.getUser().getId());
             clientId = client.getId();
         }
-        List<TicketDto> tickets = ticketService.findByClient(clientId); //find tickets to show it in client account
+        List<TicketDto> tickets = ticketService.findActualByClient(clientId); //find tickets to show it in client account
         model.addAttribute("tickets", tickets);
         model.addAttribute("clientId", clientId);
         return "clientTicketsPage";
@@ -93,8 +94,8 @@ public class ClientAccountController {
 
 
     @PostMapping(value = "/requestForCancellation")
-    public String cancelTicket(@RequestParam String clientId, @RequestParam String ticketId, Model model) {
-        ticketService.updateSubState(TicketSubStates.REQUEST_FOR_CANCELLATION.toString(), Integer.valueOf(ticketId)); //send request for ticket cancellation
+    public String cancelTicket(@RequestParam String clientId, @RequestParam Integer ticketId, Model model) {
+        ticketService.updateSubStateAndRole(TicketSubStates.REQUEST_FOR_CANCELLATION.toString(), Roles.ROLE_CLIENT.toString(), ticketId); //send request for ticket cancellation
         List<TicketDto> tickets = ticketService.findByClient(Integer.valueOf(clientId)); //reload updated tickets on page
         model.addAttribute("tickets", tickets);
         return "clientTicketsPage";

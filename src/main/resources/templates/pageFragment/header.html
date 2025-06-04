@@ -59,12 +59,6 @@
                 </div>
 
 
-                <div sec:authorize="hasAuthority('ROLE_DOCTOR')" >
-                    <form  class="regForms" action="/client/allDoctorClients" method="get">
-                        <input class="button" type="submit" value="my patients">
-                    </form>
-                </div>
-
                 <form sec:authorize="isAuthenticated()" class="regForms"  action="/exit" method="post">
                     <input class="button" type="submit" value="exit">
                 </form>

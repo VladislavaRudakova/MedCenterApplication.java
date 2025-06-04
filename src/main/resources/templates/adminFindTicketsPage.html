@@ -28,10 +28,14 @@
         <div class="modal-content">
             <div id="personal-operations">
                 <div class="personal-form-block">
-                    <form class="find-personal" action="/admin/findTickets" method="post">
-                        <input id="date" class="personal-input" type="text" placeholder="date">
-                        <select id="find-service" class="select-instance" name="service">
+                    <form class="find-personal" action="/admin/findTickets" th:object="${ticketForFind}" method="post">
+                        <input id="date" class="personal-input" type="text" th:field="*{date}" placeholder="date">
+                        <select id="find-service" class="select-instance" th:field="*{service.type}" name="service">
                             <option th:each="service:${services}" class="options" th:value="${service.type}" th:text="${service.type}"></option>
+                        </select>
+                        <select id="state" class="select" th:field="*{state}" name="state">
+                            <option th:each="ticketState:${ticketStates}" class="options"
+                                    th:value="${ticketState}" th:text="${ticketState}"></option>
                         </select>
                         <input class="button" type="submit" value="find">
                     </form>

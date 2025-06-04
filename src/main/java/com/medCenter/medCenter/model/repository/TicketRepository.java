@@ -37,8 +37,11 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer>, Ticket
     @Query("select t from Ticket t where t.personalJob.id is null and t.client.id is not null")
     List<Ticket> findWherePersonalIsNull();
 
-    @Query("select t from Ticket t where t.personalJob.id = :personalJobId and t.client.id is not null and state= :state" )
+    @Query("select t from Ticket t where t.personalJob.id = :personalJobId and t.client.id is not null and t.state= :state")
     List<Ticket> findActualByPersonalJob(@Param("personalJobId") Integer personalJobId, @Param("state") String state);
+
+    @Query("select t from Ticket t where t.client.id = :clientId and state = :state")
+    List<Ticket> findActualByClient(@Param("clientId") Integer clientId, @Param("state") String state);
 
     @Query("select date from Ticket t where t.personalJob.id = :personalJobId")
     Set<String> findDates(@Param("personalJobId") Integer personalJobId);
@@ -62,10 +65,18 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer>, Ticket
     @Query("update Ticket t set t.subState = :subState where t.id = :ticketId")
     void updateSubState(@Param("subState") String subState, @Param("ticketId") Integer ticketId);
 
+    @Modifying
+    @Query("update Ticket t set t.cancelRequestFromRole = :role where t.id = :ticketId")
+    void updateCancelFromRole(@Param("role") String role, @Param("ticketId") Integer ticketId);
+
+
+    @Modifying
+    @Query("update Ticket t set t.subState = :subState, t.cancelRequestFromRole = :role where t.id = :ticketId")
+    void updateSubStateAndRole(@Param("subState") String subState, @Param("role") String role, @Param("ticketId") Integer ticketId);
 
     @Modifying
     @Query("update Ticket t set t.client.id = null, t.state = :state, t.subState = :subState where t.id = :ticketId")
-    void updateClientToNullStateAndSubState(@Param("state") String state,@Param("subState") String subState, @Param("ticketId") Integer ticketId);
+    void updateClientToNullStateAndSubState(@Param("state") String state, @Param("subState") String subState, @Param("ticketId") Integer ticketId);
 
     List<Ticket> findByState(String state);
 

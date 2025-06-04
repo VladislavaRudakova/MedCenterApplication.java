@@ -93,23 +93,17 @@ public class UserServiceImpl implements UserService {
         User user = findByLoginForReg(userDto.getUserCredentials().getLogin());
         if (user != null) {
             throw new LoginException();
-
         } else {
             UserCredentials userCredentials = UserCredentials.builder()
                     .login(userDto.getUserCredentials().getLogin())
                     .password(encoder.encode(userDto.getUserCredentials().getPassword())).build();
-
             UserCredentialsDto userCredentialsDto = userCredentialsService.userCredToDto(userCredentials);
-
             userDto.setUserCredentials(userCredentialsDto);
-
-            if (userDto.getRole() == null) {
+            if (userDto.getRole() == null) { //if null it is client registration
                 userDto.setRole(Roles.ROLE_CLIENT.toString());
             }
-
-            createUser(userDto);
-
-            if (personalJobId != null) {
+            createUser(userDto); //creating user
+            if (personalJobId != null) { //if not null it is personal registration by admin
                 User userSaved = userRepository.findByLoginForReg(userDto.getUserCredentials().getLogin());
                 personalJobService.updateUserId(userSaved.getId(), personalJobId);
             }

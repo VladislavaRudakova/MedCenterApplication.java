@@ -8,10 +8,8 @@ import com.medCenter.medCenter.exception.ScheduleExistException;
 import com.medCenter.medCenter.exception.ScheduleNotFoundException;
 import com.medCenter.medCenter.model.entity.PersonalJob;
 import com.medCenter.medCenter.model.entity.Schedule;
-import com.medCenter.medCenter.model.repository.PersonalJobRepository;
 import com.medCenter.medCenter.model.repository.ScheduleRepository;
 import com.medCenter.medCenter.service.PersonalJobService;
-import com.medCenter.medCenter.service.PersonalService;
 import com.medCenter.medCenter.service.ScheduleService;
 import com.medCenter.medCenter.service.ServiceService;
 import lombok.RequiredArgsConstructor;
@@ -115,12 +113,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         List<Schedule> scheduleList = scheduleRepository.findByPersonalId(Integer.valueOf(personalJobId), "open");
         if (scheduleList.isEmpty()) throw new ScheduleNotFoundException();
         List<ScheduleDto> scheduleDtoList = new ArrayList<>();
-
         for (Schedule schedule : scheduleList) {
             ScheduleDto scheduleDto = scheduleForPersonalToDto(schedule);
             scheduleDtoList.add(scheduleDto);
         }
-
         return scheduleDtoList;
     }
 
@@ -156,12 +152,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     @Override
     public void setScheduleWithFixedTimeForPeriod(String date, ScheduleDto scheduleDto) {
-        LocalDate minDate = scheduleDto.getDate();
+        LocalDate minDate = scheduleDto.getDate(); //get min date from schedule
         LocalDate maxDate = Date.valueOf(date).toLocalDate();
 
-        while (minDate.isBefore(maxDate)||minDate.equals(maxDate)) {
+        while (minDate.isBefore(maxDate) || minDate.equals(maxDate)) {
             try {
-                setScheduleForDay(scheduleDto);
+                setScheduleForDay(scheduleDto); //set schedule for each day from period before selected date
             } catch (ScheduleExistException e) {
                 e.getLocalizedMessage();
             }

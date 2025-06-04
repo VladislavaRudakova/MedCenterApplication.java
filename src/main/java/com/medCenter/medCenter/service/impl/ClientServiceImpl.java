@@ -130,5 +130,15 @@ public class ClientServiceImpl implements ClientService {
         return clientDtoList;
     }
 
+    @Override
+    public List<ClientDto> findClientsByDoctor(ClientDto clientDto, Integer personalJobId) {
+        List<Client>clients = clientRepository.findClientsByDoctor(clientDto,personalJobId);
+        List<ClientDto> clientDtoList = new ArrayList<>();
+        for (Client client : clients) {
+            ClientDto clientDto1 = clientToDto(client);
+            clientDtoList.add(clientDto1);
+        }
+        return clientDtoList;
+    }
 
 }

@@ -5,6 +5,7 @@ import com.medCenter.medCenter.dto.ScheduleDto;
 import com.medCenter.medCenter.dto.ServiceDto;
 import com.medCenter.medCenter.dto.TicketDto;
 import com.medCenter.medCenter.exception.TicketException;
+import com.medCenter.medCenter.model.entity.Roles;
 import com.medCenter.medCenter.model.entity.TicketStates;
 import com.medCenter.medCenter.model.entity.TicketSubStates;
 import com.medCenter.medCenter.securityConfig.UserDetailsImpl;
@@ -17,10 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -41,7 +39,14 @@ public class AdminTicketController {
     @GetMapping(value = "/ticketOperations")
     public String getForm(Model model) { //get search form
         List<ServiceDto> services = serviceService.findAll();
+       TicketStates[] ticketStates = TicketStates.values();
+        List<String> ticketStatesList = new ArrayList<>();
+        for (TicketStates ticketStates1 : ticketStates) { //roles list for select user role
+            ticketStatesList.add(ticketStates1.toString());
+        }
         model.addAttribute("services", services);
+        model.addAttribute("ticketStates", ticketStatesList);
+        model.addAttribute("ticketForFind", new TicketDto());
         return "adminFindTicketsPage";
     }
 
@@ -75,8 +80,10 @@ public class AdminTicketController {
     }
 
     @PostMapping(value = "/findTickets")
-    public String findTickets() {
-        List<TicketDto> ticketDtoList = ticketService.findAll();
+    public String findTickets(@ModelAttribute TicketDto ticketDto, Model model) {
+        List<TicketDto> ticketDtoList = ticketService.findTickets(ticketDto);
+        model.addAttribute("tickets", ticketDtoList);
+
         return "adminFoundTicketsPage";
     }
 

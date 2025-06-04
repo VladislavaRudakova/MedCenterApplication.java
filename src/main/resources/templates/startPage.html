@@ -1,96 +1,52 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" href="/css/styles.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
-
 <body>
-
-<div th:replace="pageFragment/header::header"></div>
-
-<div class="header-back"></div>
-
-<div class="main-block">
-    
-    <div class="left-block">
-        <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
-    </div>
-    <div class="central-block">
-        <div class="search">
-            <div class="search-title">
-                Choose the necessary service and time!
-            </div>
-
-            <form class="service-search-form" action="/personal" method="post">
-
-                <div class="search-form-block">
-
-
-                    <div>
-
-                        <select id="service" class="select" name="serviceType">
-                            <option class="options" value="" disabled selected> service</option>
-                            <option th:each="serviceType:${serviceTypes}" class="options" th:value="${serviceType}"
-                                    th:text="${serviceType}"></option>
-                        </select>
-
-                        <select id="doctorSpec" class="select" name="job">
-                            <option th:each="job:${jobs}" class="options" th:value="${job}" th:text="${job}"></option>
-                        </select>
-
-                    </div>
-
-                    <select id="time" class="select" name="minTime">
-                        <option th:each="time:${times}" class="options" th:value="${time}" th:text="${time}"></option>
-
-                    </select>
-                    <select id="time1" class="select" name="maxTime">
-                        <option th:each="time:${times}" class="options" th:value="${time}" th:text="${time}"></option>
-
-                    </select>
-
-                    <input id="date" class="select" type="text" name="date" placeholder="date">
-
-                </div>
-
-                <div id="search-button-block">
-                    <input class="button" type="submit" value="search">
-                </div>
-            </form>
+    <div th:replace="pageFragment/header::header"></div>
+    <div class="header-back"></div>
+    <div class="main-block">
+        <div class="left-block">
+            <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
         </div>
-
-
+        <div class="central-block">
+            <div class="search">
+                <div class="search-title">
+                    Choose the necessary service and time!
+                </div>
+                <form class="service-search-form" action="/personal" method="post">
+                    <div class="search-form-block">
+                        <div>
+                            <select id="service" class="select" name="serviceType">
+                                <option class="options" value="" disabled selected> service</option>
+                                <option th:each="serviceType:${serviceTypes}" class="options" th:value="${serviceType}"
+                                        th:text="${serviceType}"></option>
+                            </select>
+                        </div>
+                        <select id="time" class="select" name="minTime">
+                            <option th:each="time:${times}" class="options" th:value="${time}" th:text="${time}"></option>
+                        </select>
+                        <select id="time1" class="select" name="maxTime">
+                            <option th:each="time:${times}" class="options" th:value="${time}" th:text="${time}"></option>
+                        </select>
+                        <input id="date" class="select" type="text" name="date" placeholder="date">
+                    </div>
+                    <div id="search-button-block">
+                        <input class="button" type="submit" value="search">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="right-block"></div>
     </div>
-    <div class="right-block">
-    </div>
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
 
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
+        flatpickr("#date", {});
 
-    flatpickr("#date", {});
-    
-const selectService = document.getElementById("service")
-const selectDoctor = document.getElementById("doctorSpec")
-
-
-selectService.addEventListener("change", function(){
-    const value = selectService.value;
-
-    if (value==="doctor appointment"){
-    selectDoctor.style.display='flex';
-} else {
-    selectDoctor.style.display='none'; 
-}
-
-
-
-})
-
-
-</script>
-
+    </script>
 
 </body>

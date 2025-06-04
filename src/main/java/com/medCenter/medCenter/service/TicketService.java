@@ -5,30 +5,29 @@ import com.medCenter.medCenter.dto.ScheduleDto;
 import com.medCenter.medCenter.dto.ServiceDto;
 import com.medCenter.medCenter.dto.TicketDto;
 import com.medCenter.medCenter.exception.TicketException;
-import com.medCenter.medCenter.model.entity.Personal;
-import com.medCenter.medCenter.model.entity.PersonalJob;
 import com.medCenter.medCenter.model.entity.Ticket;
-import lombok.Data;
 import org.springframework.data.repository.query.Param;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 
 public interface TicketService {
 
-    List<TicketDto>findAll();
+    List<TicketDto> findAll();
 
     TicketDto findById(Integer id);
 
-     TicketDto ticketToDto(Ticket ticket);
+    List<TicketDto> findTickets(TicketDto ticketDto);
+
+    TicketDto ticketToDto(Ticket ticket);
 
     Ticket dtoToTicket(TicketDto ticketDto);
 
     List<TicketDto> findActualByPersonalJob(Integer personalJobId);
+
+    List<TicketDto> findActualByClient(Integer clientId);
 
     List<TicketDto> findWherePersonalIsNull();
 
@@ -38,7 +37,7 @@ public interface TicketService {
 
     List<TicketDto> findByPersonalJobIdAndDate(Integer personalJobId, Date date);
 
-    List<TicketDto> findByServiceIdAndDate(Integer serviceId, Date date)throws TicketException;
+    List<TicketDto> findByServiceIdAndDate(Integer serviceId, Date date) throws TicketException;
 
     List<TicketDto> findByClient(Integer clientId);
 
@@ -66,7 +65,11 @@ public interface TicketService {
 
     void createTicketsForDay(ScheduleDto scheduleDto, TicketDto ticketDto, Integer timeRange) throws TicketException;
 
-    void createTicketsForPeriod(List<ScheduleDto>scheduleDtoList, ServiceDto serviceDto, PersonalJobDto personalJobDto, Integer timeRange) throws TicketException;
+    void createTicketsForPeriod(List<ScheduleDto> scheduleDtoList, ServiceDto serviceDto, PersonalJobDto personalJobDto, Integer timeRange) throws TicketException;
+
+    void updateCancelFromRole(String role, Integer ticketId);
+
+    void updateSubStateAndRole(String subState, String role, Integer ticketId);
 
 
 }
