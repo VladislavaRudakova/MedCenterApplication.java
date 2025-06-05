@@ -4,6 +4,4 @@ public enum ClientStates {
     ACTIVE,
     DELETED;
 
-
-
 }

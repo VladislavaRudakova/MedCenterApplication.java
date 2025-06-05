@@ -13,38 +13,40 @@
 
 <body>
 <div th:replace="pageFragment/header::header"></div>
-
-
 <div class="header-back"></div>
-
 <div class="main-block">
     <div class="left-block">
         <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
     </div>
-
-
     <div class="central-tickets-block">
-
-
         <div class="search-title">Hello, <span sec:authentication="name"> </span></div>
         <div class="search-title">Your schedule:</div>
-
         <div class="schedule-container">
             <div class="schedule-block">
-                <div th:if="${scheduleList!=null}" class="schedule" th:each="schedule: ${scheduleList}">
-                    <div th:text="${schedule.date}"></div>
-                    <div th:text="${schedule.startTime}"></div>
-                    <div th:text="${schedule.endTime}"></div>
+
+                <div class="schedule" th:each="schedule: ${scheduleList}">
+                    <div th:if="${schedule.dayOff==null}">
+                        <div class="schedule-weekday" th:text="${schedule.weekDay}"></div>
+                        <div class="schedule-date" th:text="${schedule.date}"></div>
+                        <div class="schedule-time">
+                            <div th:text="${schedule.startTime}"></div>
+                            <div th:text="${schedule.endTime}"></div>
+                        </div>
+                        <input class="schedule-id" type="hidden" value="${schedule.id}">
+                    </div>
+                    <div th:if="${schedule.dayOff!=null}">
+                        <div class="schedule-weekday" th:text="${schedule.weekDay}"></div>
+                        <div class="schedule-date" th:text="${schedule.date}"></div>
+                        <div class="day-off" th:text="${schedule.dayOff}"></div>
+                    </div>
                 </div>
                 <div class="schedule" th:if="${scheduleList==null}">No schedule</div>
             </div>
         </div>
     </div>
-
     <div th:replace="pageFragment/adminButtons::admin-buttons"></div>
 
 </div>
-
 
 <script>
     const buttonPersonal = document.getElementById("personal")

@@ -18,7 +18,6 @@ import java.util.List;
 public class NurseAccountController {
 
     private static final Logger logger = LogManager.getLogger(NurseAccountController.class);
-
     private final TicketService ticketService;
 
     @GetMapping("/nurseStart")

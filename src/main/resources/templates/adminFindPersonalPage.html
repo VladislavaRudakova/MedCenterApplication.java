@@ -34,9 +34,6 @@
                             <option  class="options" value="">job</option>
                             <option th:each="job:${jobs}" class="options" th:value="${job}" th:text="${job}"></option>
                         </select>
-
-
-
                         <select id="state" class="select" th:field="*{state}" name="state">
                             <option th:each="personalJobState:${personalStates}" class="options"
                                     th:value="${personalJobState}" th:text="${personalJobState}"></option>

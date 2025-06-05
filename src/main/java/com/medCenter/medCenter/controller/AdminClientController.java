@@ -25,7 +25,8 @@ public class AdminClientController {
 
     @GetMapping(value = "/clientOperations")
     public String findAllPersonal(Model model, @AuthenticationPrincipal UserDetailsImpl user) { //getting search form
-        model.addAttribute(user.getUser().getRole(), "role");
+        List<String> clientStates = getClientStates();
+        model.addAttribute("clientStates", clientStates);
         model.addAttribute("clientToFind", new ClientDto()); //object for data receiving
         return "adminFindClientsPage";
     }
@@ -33,6 +34,7 @@ public class AdminClientController {
 
     @PostMapping(value = "/findAllClients")
     public String findAllClients(Model model) {
+        logger.info("FIND ALL CLIENTS BEGIN");
         ClientStates[] clientStates = ClientStates.values();
         List<String> clientStatesList = new ArrayList<>();
         for (ClientStates clientState : clientStates) { //get states list
@@ -46,16 +48,12 @@ public class AdminClientController {
     }
 
     @PostMapping(value = "/findClient")
-    public String findClientByNameSurname(Model model, @ModelAttribute ClientDto client) {
-        ClientStates[] clientStates = ClientStates.values();
-        List<String> clientStatesList = new ArrayList<>();
-        for (ClientStates clientState : clientStates) {
-            clientStatesList.add(clientState.toString());
-        }
+    public String findClient(Model model, @ModelAttribute ClientDto client) {
+        logger.info("FIND CLIENT BEGIN");
+        logger.info("CLIENT DTO RECEIVED "+client);
+        List<String> clientStatesList=getClientStates();
         model.addAttribute("clientStates", clientStatesList);
         model.addAttribute("clientToEdit", new ClientDto());
-
-
         List<ClientDto> clients = clientService.findClients(client);
         model.addAttribute("clients", clients);
         return "adminFoundClientsPage";
@@ -63,11 +61,22 @@ public class AdminClientController {
 
     @PostMapping(value = "/editClient")
     public String editClient(Model model, @ModelAttribute ClientDto clientToEdit, @RequestParam Integer clientId) {
+        logger.info("EDIT CLIENT BEGIN");
         clientToEdit.setId(clientId);
         clientService.updateClient(clientToEdit);
         ClientDto clientDto = clientService.findByIdDto(clientId);
+        logger.info("UPDATED CLIENT "+clientDto);
         model.addAttribute("clientUpdated", clientDto);
         return "adminFoundClientsPage";
+    }
+
+    private List<String> getClientStates(){
+        ClientStates[] clientStates = ClientStates.values();
+        List<String> clientStatesList = new ArrayList<>();
+        for (ClientStates clientState : clientStates) { //get states list
+            clientStatesList.add(clientState.toString());
+        }
+        return clientStatesList;
     }
 
 

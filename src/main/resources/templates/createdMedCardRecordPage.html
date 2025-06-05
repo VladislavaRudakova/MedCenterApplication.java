@@ -22,7 +22,6 @@
     </div>
 
     <div class="central-tickets-block">
-
         <span class="doctor-name">Record is created</span>
         <div class="found-personal">
             <div class="personal-block">
@@ -31,6 +30,9 @@
                         <span th:text="${medCardSaved.date}" class="instance-info"></span>
                     </div>
                     <div class="personal-name-block">
+                        <div class="personal-name-block">
+                            <span th:text="${medCardSaved.service.type}" class="instance-info"></span>
+                        </div>
                         <span th:text="${medCardSaved.personalJob.personal.name}" class="instance-info"></span>
                         <span th:text="${medCardSaved.personalJob.personal.surname}" class="instance-info"></span>
                     </div>
@@ -43,22 +45,12 @@
                         <input type="hidden" name="medCardId" th:value="${medCardSaved.id}">
                         <input class="button" type="submit" value="details">
                     </form>
-
                 </div>
-
-
             </div>
-
-
         </div>
-
-
     </div>
-
     <div id="right-block"></div>
     <div th:replace="pageFragment/adminButtons::admin-buttons"></div>
-
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

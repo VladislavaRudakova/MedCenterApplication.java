@@ -28,8 +28,6 @@
             <div class="schedule-block">
 
                 <div class="schedule" th:each="schedule: ${scheduleList}">
-
-
                     <div th:if="${schedule.dayOff==null}">
                         <div class="schedule-weekday" th:text="${schedule.weekDay}"></div>
                         <div class="schedule-date" th:text="${schedule.date}"></div>

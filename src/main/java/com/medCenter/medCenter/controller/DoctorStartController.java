@@ -14,7 +14,6 @@ import com.medCenter.medCenter.service.ClientService;
 import com.medCenter.medCenter.service.PersonalJobService;
 import com.medCenter.medCenter.service.ScheduleService;
 import com.medCenter.medCenter.service.TicketService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,7 +38,7 @@ public class DoctorStartController {
     private final ClientService clientService;
 
     @GetMapping("/doctorStart")
-    public String findTickets(HttpSession session, Model model, @AuthenticationPrincipal UserDetailsImpl user) {
+    public String findTickets(Model model, @AuthenticationPrincipal UserDetailsImpl user) {
         logger.info("DOCTOR FIND TICKETS BEGIN");
         PersonalJobDto personalJob = personalJobService.findByUserId(user.getUser().getId());
         List<TicketDto> tickets = ticketService.findActualByPersonalJob(personalJob.getId()); //find tickets to show its on page
@@ -56,8 +55,7 @@ public class DoctorStartController {
     }
 
     @PostMapping("/findPatients")
-    public String findPatients(Model model, @AuthenticationPrincipal UserDetailsImpl user,
-                               @ModelAttribute ClientDto clientDto, @RequestParam Integer personalJobId) {
+    public String findPatients(Model model,  @ModelAttribute ClientDto clientDto, @RequestParam Integer personalJobId) {
         logger.info("DOCTOR FIND PATIENTS BEGIN");
         logger.info("CLIENT DTO RECEIVED: " + clientDto);
         List<ClientDto> clientDtoList = clientService.findClientsByDoctor(clientDto, personalJobId);
@@ -65,6 +63,17 @@ public class DoctorStartController {
         model.addAttribute("clients", clientDtoList);
         return "adminFoundClientsPage";
     }
+
+    @PostMapping("/findAllPatients")
+    public String findAllPatients(Model model,
+                                  @RequestParam Integer personalJobId) {
+        logger.info("DOCTOR FIND ALL PATIENTS BEGIN");
+        List<ClientDto> clientDtoList = clientService.findByDoctor(personalJobId);
+        logger.info("CLIENTS FOUND: " + clientDtoList);
+        model.addAttribute("clients", clientDtoList);
+        return "adminFoundClientsPage";
+    }
+
 
     @GetMapping("/getFindPatientsForm")
     public String getFindPatientsForm(Model model, @AuthenticationPrincipal UserDetailsImpl user) {
@@ -77,11 +86,11 @@ public class DoctorStartController {
     }
 
     @PostMapping(value = "/requestForCancellation")
-    public String cancelTicket(@RequestParam Integer personalJobId, @RequestParam Integer ticketId, Model model) {
+    public String cancelTicket(@RequestParam Integer personalJobId, @RequestParam Integer ticketId, Model model, @AuthenticationPrincipal UserDetailsImpl user) {
         ticketService.updateSubStateAndRole(TicketSubStates.REQUEST_FOR_CANCELLATION.toString(), Roles.ROLE_DOCTOR.toString(), ticketId); //send request for ticket cancellation
         List<TicketDto> tickets = ticketService.findActualByPersonalJob(personalJobId); //reload updated tickets on page
         model.addAttribute("tickets", tickets);
-        return "clientTicketsPage";
+        return findTickets(model, user);
     }
 
 

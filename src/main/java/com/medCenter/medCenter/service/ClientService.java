@@ -1,6 +1,7 @@
 package com.medCenter.medCenter.service;
 
 import com.medCenter.medCenter.dto.ClientDto;
+import com.medCenter.medCenter.exception.ClientNotFoundException;
 import com.medCenter.medCenter.model.entity.Client;
 
 import java.util.List;
@@ -15,7 +16,9 @@ public interface ClientService {
 
     List<ClientDto> findAll();
 
-    ClientDto findByUserId(Integer userId);
+    List<ClientDto>findByDoctor(Integer personalJobId);
+
+    ClientDto findByUserId(Integer userId) throws ClientNotFoundException;
 
     ClientDto findByIdDto(Integer id);
 

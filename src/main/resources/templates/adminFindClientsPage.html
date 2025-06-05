@@ -19,7 +19,6 @@
     <div class="left-block">
         <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
     </div>
-
     <div class="central-tickets-block">
         <div class="search-title">Find clients</span></div>
         <div class="modal-content">
@@ -31,6 +30,10 @@
                         <input class="select" type="text" name="surname" th:field="*{surname}" placeholder="surname">
                         <input class="select" type="text" name="telephone" th:field="*{telephoneNumber}"
                                placeholder="telephone">
+                        <select id="state" class="select" th:field="*{state}" name="state">
+                            <option th:each="clientState:${clientStates}" class="options"
+                                    th:value="${clientState}" th:text="${clientState}"></option>
+                        </select>
                         <input class="button" type="submit" value="find">
                     </form>
                     <div class="button-see-all-block">
@@ -51,6 +54,7 @@
 
                     <div class="button-see-all-block">
                         <form class="find-personal" action="/doctor/findAllPatients" method="post">
+                            <input class="button" type="hidden" name="personalJobId" th:value="${personalJobId}">
                             <input class="button" type="submit" value="see all">
                         </form>
                     </div>

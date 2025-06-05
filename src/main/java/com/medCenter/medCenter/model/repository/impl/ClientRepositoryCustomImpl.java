@@ -25,13 +25,13 @@ public class ClientRepositoryCustomImpl implements ClientRepositoryCustom {
         Root<Client> root = cq.from(Client.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        if (clientDto.getName() != null) {
+        if (clientDto.getName() != null && !clientDto.getName().isEmpty()) {
             predicates.add(cb.like(root.get("name"), "%" + clientDto.getName() + "%"));
         }
-        if (clientDto.getSurname() != null) {
+        if (clientDto.getSurname() != null && !clientDto.getSurname().isEmpty()) {
             predicates.add(cb.like(root.get("surname"), "%" + clientDto.getSurname() + "%"));
         }
-        if (clientDto.getTelephoneNumber() != null) {
+        if (clientDto.getTelephoneNumber() != null&&!clientDto.getTelephoneNumber().isEmpty()) {
             predicates.add(cb.equal(root.get("telephoneNumber"), clientDto.getTelephoneNumber()));
         }
         if (clientDto.getState() != null) {

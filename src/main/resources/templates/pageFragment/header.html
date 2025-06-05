@@ -41,6 +41,12 @@
                         <input class="button" type="submit" value="my account">
                     </form>
                 </div>
+                <div sec:authorize="hasAuthority('ROLE_NURSE')" >
+                    <form  class="regForms" action="/nurse/nurseStart" method="get">
+                        <input class="button" type="submit" value="my account">
+                    </form>
+                </div>
+
 
                 <form sec:authorize="!isAuthenticated()" class="regForms" action="/login" method="get">
                     <input class="button" type="submit" value="log in">

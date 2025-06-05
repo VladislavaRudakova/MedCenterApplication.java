@@ -23,6 +23,8 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +36,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 
     public ScheduleDto scheduleForPersonalToDto(Schedule schedule) {
-
 
         ScheduleDto scheduleDto = ScheduleDto.builder()
                 .id(schedule.getId())
@@ -49,11 +50,9 @@ public class ScheduleServiceImpl implements ScheduleService {
             ServiceDto serviceDto = serviceService.findByIdDto(schedule.getService().getId());
             scheduleDto.setService(serviceDto);
         }
-
         if (schedule.getStartTime() != null) {
             scheduleDto.setStartTime(schedule.getStartTime().toLocalTime());
         }
-
         if (schedule.getEndTime() != null) {
             scheduleDto.setEndTime(schedule.getEndTime().toLocalTime());
         }
@@ -143,10 +142,14 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .build();
         if (scheduleDto.getPersonalJob() != null) {
             PersonalJob personalJob = personalJobService.findById(scheduleDto.getPersonalJob().getId());
+            if (isDoctor(personalJob.getJobTitle())){
+                com.medCenter.medCenter.model.entity.Service service = serviceService.findById(scheduleDto.getService().getId());
+                schedule.setService(service);
+            }
             scheduleList = findByDateAndPersonalId(scheduleDto.getPersonalJob().getId().toString(), scheduleDto.getDate().toString());
             schedule.setPersonalJob(personalJob);
         }
-        if (scheduleDto.getService() != null) {
+        else  {
             com.medCenter.medCenter.model.entity.Service service = serviceService.findById(scheduleDto.getService().getId());
             scheduleList = findByDateAndServiceId(service.getId(), Date.valueOf(scheduleDto.getDate()));
             schedule.setService(service);
@@ -281,6 +284,14 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public void updateSchedule(Time startTime, Time endTime, Integer scheduleId) {
         scheduleRepository.updateSchedule(startTime, endTime, scheduleId);
+    }
+
+    private boolean isDoctor(String jobTitle) { //define is service doctor appointment
+        String regex = "doctor \\w+";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(jobTitle);
+        return matcher.find();
+
     }
 
 

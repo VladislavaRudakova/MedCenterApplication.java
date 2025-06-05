@@ -11,7 +11,6 @@ import com.medCenter.medCenter.model.repository.PersonalRepository;
 import com.medCenter.medCenter.service.DepartmentService;
 import com.medCenter.medCenter.service.PersonalJobService;
 import com.medCenter.medCenter.service.PersonalService;
-import com.medCenter.medCenter.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,6 @@ public class PersonalJobServiceImpl implements PersonalJobService {
     private final DepartmentRepository departmentRepository;
 
 
-
     @Override
     public PersonalJobDto personalJobToDto(PersonalJob personalJob) {
         PersonalDto personalDto = personalService.personalToDto(personalJob.getPersonal());
@@ -46,12 +44,11 @@ public class PersonalJobServiceImpl implements PersonalJobService {
                 .jobTitle(personalJob.getJobTitle())
                 .state(personalJob.getState())
                 .build();
-        if (personalJob.getUser()!=null){
-          UserDto userDto = UserDto.builder()
-                          .id(personalJob.getUser().getId()).build();
+        if (personalJob.getUser() != null) {
+            UserDto userDto = UserDto.builder()
+                    .id(personalJob.getUser().getId()).build();
             personalJobDto.setUser(userDto);
         }
-
         if (personalJob.getTickets() != null) {
             List<TicketDto> ticketDtoList = new ArrayList<>();
             for (Ticket ticket : personalJob.getTickets()) {
@@ -80,12 +77,14 @@ public class PersonalJobServiceImpl implements PersonalJobService {
                 .personal(personalList.getLast())
                 .jobTitle(personalJobDto.getJobTitle())
                 .department(department)
+                .state(personalJobDto.getState())
                 .build();
     }
 
 
     @Override
     public List<PersonalJobDto> findAll() {
+
         List<PersonalJob> personalJobList = personalJobRepository.findAll();
         List<PersonalJobDto> personalJobDtoList = new ArrayList<>();
         for (PersonalJob personalJob : personalJobList) {
@@ -97,6 +96,7 @@ public class PersonalJobServiceImpl implements PersonalJobService {
 
     @Override
     public List<PersonalJobDto> findPersonalJob(PersonalJobWithoutPersonalDto personalJob) {
+
         List<PersonalJob> personalJobList = personalJobRepository.findPersonalJob(personalJob);
         List<PersonalJobDto> personalJobDtoList = new ArrayList<>();
         for (PersonalJob personalJob1 : personalJobList) {
@@ -113,12 +113,14 @@ public class PersonalJobServiceImpl implements PersonalJobService {
 
     @Override
     public PersonalJobDto findByIdDto(Integer id) {
+
         PersonalJob personalJob = personalJobRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         return personalJobToDto(personalJob);
     }
 
     @Override
     public PersonalJobDto findByUserId(Integer userId) {
+
         PersonalJob personalJob = personalJobRepository.findByUserId(userId);
         return personalJobToDto(personalJob);
     }
@@ -126,6 +128,7 @@ public class PersonalJobServiceImpl implements PersonalJobService {
 
     @Override
     public List<PersonalJobDto> findByJob(String job) {
+
         List<PersonalJob> personalJobList = personalJobRepository.findByJob(job);
         List<PersonalJobDto> personalJobDtoList = new ArrayList<>();
         for (PersonalJob personalJob : personalJobList) {
@@ -148,6 +151,7 @@ public class PersonalJobServiceImpl implements PersonalJobService {
 
     @Override
     public List<PersonalJobDto> findByNameSurnameJob(String name, String surname, String job) {
+
         List<PersonalJob> personalJobList = personalJobRepository.findByNameSurnameJob(name, surname, job);
         List<PersonalJobDto> personalJobDtoList = new ArrayList<>();
         for (PersonalJob personalJob : personalJobList) {
@@ -162,8 +166,6 @@ public class PersonalJobServiceImpl implements PersonalJobService {
     public void createPersonalJob(PersonalJobDto personalJobDto) {
 
         PersonalJob personalJob = dtoToPersonalJobWithCreatePersonal(personalJobDto);
-
-        System.out.println("PERSONAL JOB TO SAVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + personalJob);
         personalJobRepository.save(personalJob);
 
     }
@@ -185,8 +187,6 @@ public class PersonalJobServiceImpl implements PersonalJobService {
     public void updateDismissalDate(Date dismissalDate, Integer personalJobId) {
         personalJobRepository.updateDismissalDate(dismissalDate, personalJobId);
     }
-
-
 
 
 }

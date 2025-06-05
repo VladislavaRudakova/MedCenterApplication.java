@@ -10,7 +10,6 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,11 +29,11 @@ public class PersonalJobRepositoryCustomImpl implements PersonalJobRepositoryCus
         Join<PersonalJob, Department> departmentJoin = root.join("department");
 
         List<Predicate> predicates = new ArrayList<>();
-        if (personal.getName() != null) {
-            predicates.add(cb.like(personalJoin.get("name"), "%"+personal.getName()+"%"));
+        if (personal.getName() != null && !personal.getName().isEmpty()) {
+            predicates.add(cb.like(personalJoin.get("name"), "%" + personal.getName() + "%"));
         }
-        if (personal.getSurname() != null) {
-            predicates.add(cb.like(personalJoin.get("surname"), "%"+personal.getSurname()+"%"));
+        if (personal.getSurname() != null && !personal.getSurname().isEmpty()) {
+            predicates.add(cb.like(personalJoin.get("surname"), "%" + personal.getSurname() + "%"));
         }
         if (personal.getBirthdate() != null) {
             predicates.add(cb.equal(personalJoin.get("dob"), personal.getBirthdate()));
@@ -51,7 +50,7 @@ public class PersonalJobRepositoryCustomImpl implements PersonalJobRepositoryCus
         if (personal.getJobTitle() != null && !personal.getJobTitle().isEmpty()) {
             predicates.add(cb.like(root.get("jobTitle"), personal.getJobTitle()));
         }
-        if (personal.getDepartmentName() != null) {
+        if (personal.getDepartmentName() != null && !personal.getDepartmentName().isEmpty()) {
             predicates.add(cb.like(departmentJoin.get("name"), personal.getDepartmentName()));
         }
         if (personal.getState() != null) {

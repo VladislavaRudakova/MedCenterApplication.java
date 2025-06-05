@@ -2,6 +2,7 @@ package com.medCenter.medCenter.service.impl;
 
 import com.medCenter.medCenter.dto.ClientDto;
 import com.medCenter.medCenter.dto.UserDto;
+import com.medCenter.medCenter.exception.ClientNotFoundException;
 import com.medCenter.medCenter.model.entity.Client;
 import com.medCenter.medCenter.model.entity.User;
 import com.medCenter.medCenter.model.repository.ClientRepository;
@@ -29,6 +30,7 @@ public class ClientServiceImpl implements ClientService {
                 .name(client.getName())
                 .surname(client.getSurname())
                 .telephoneNumber(client.getTelephoneNumber())
+                .state(client.getState())
                 .build();
         if (client.getState() != null) {
             clientDto.setState(client.getState());
@@ -67,7 +69,6 @@ public class ClientServiceImpl implements ClientService {
     public List<ClientDto> findAll() {
         List<Client> clients = clientRepository.findAll();
         List<ClientDto> clientDtoList = new ArrayList<>();
-
         for (Client client : clients) {
             ClientDto clientDto = clientToDto(client);
             clientDtoList.add(clientDto);
@@ -76,10 +77,21 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDto findByUserId(Integer userId) {
+    public List<ClientDto> findByDoctor(Integer personalJobId) {
+        List<Client> clients = clientRepository.findByDoctor(personalJobId);
+        List<ClientDto> clientDtoList = new ArrayList<>();
+        for (Client client : clients) {
+            ClientDto clientDto = clientToDto(client);
+            clientDtoList.add(clientDto);
+        }
+        return clientDtoList;
+    }
+
+    @Override
+    public ClientDto findByUserId(Integer userId) throws ClientNotFoundException {
         Client client = clientRepository.findByUserId(userId);
         if (client == null) {
-            throw new EntityNotFoundException();
+           throw new ClientNotFoundException();
         }
         return clientToDto(client);
     }
@@ -121,7 +133,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<ClientDto> findClients(ClientDto clientDto) {
-       List<Client>clients = clientRepository.findClients(clientDto);
+        List<Client> clients = clientRepository.findClients(clientDto);
         List<ClientDto> clientDtoList = new ArrayList<>();
         for (Client client : clients) {
             ClientDto clientDto1 = clientToDto(client);
@@ -132,7 +144,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<ClientDto> findClientsByDoctor(ClientDto clientDto, Integer personalJobId) {
-        List<Client>clients = clientRepository.findClientsByDoctor(clientDto,personalJobId);
+        List<Client> clients = clientRepository.findClientsByDoctor(clientDto, personalJobId);
         List<ClientDto> clientDtoList = new ArrayList<>();
         for (Client client : clients) {
             ClientDto clientDto1 = clientToDto(client);

@@ -41,16 +41,19 @@ public class ScheduleController {
     private final ServiceService serviceService;
 
     @PostMapping(value = "/findSchedule")
-    public String findSchedule(@RequestParam String personalJobId, HttpSession session, Model model) {
-
-        PersonalJobDto personalJobDto = personalJobService.findByIdDto(Integer.valueOf(personalJobId));
+    public String findSchedule(@RequestParam Integer personalJobId, HttpSession session, Model model) {
+        logger.info("FIND SCHEDULE BEGIN");
+        logger.info("PERSONAL JOB ID RECEIVED " + personalJobId);
+        PersonalJobDto personalJobDto = personalJobService.findByIdDto(personalJobId);
+        logger.info("PERSONAL JOB FOUND " + personalJobDto);
         List<String> times = generateTime(); //time list for correct schedule block
         session.setAttribute("personalJob", personalJobDto);
         model.addAttribute("personalJob", personalJobDto);
         model.addAttribute("times", times);
         List<ScheduleDto> scheduleList = new ArrayList<>();
         try {
-            scheduleList = scheduleService.findByPersonalId(personalJobId); //find schedule
+            scheduleList = scheduleService.findByPersonalId(personalJobId.toString()); //find schedule
+            logger.info("SCHEDULE FOUND " + scheduleList);
         } catch (ScheduleNotFoundException e) {
             return "adminPersonalSchedulePage";
         }
@@ -103,10 +106,10 @@ public class ScheduleController {
 
 
     @PostMapping(value = "/setScheduleForDay")
-    public String setScheduleForDay(Model model, HttpSession session, @RequestParam String date1, @RequestParam String startTime1, @RequestParam String endTime1, @RequestParam String personalJobId) {
+    public String setScheduleForDay(Model model, HttpSession session, @RequestParam String date1, @RequestParam String startTime1, @RequestParam String endTime1, @RequestParam Integer personalJobId) {
 
         PersonalJobDto personalJobDto = PersonalJobDto.builder()
-                .id(Integer.valueOf(personalJobId))
+                .id(personalJobId)
                 .build();
         ScheduleDto scheduleDto = ScheduleDto.builder()
                 .date(Date.valueOf(date1).toLocalDate())
@@ -120,7 +123,7 @@ public class ScheduleController {
         } catch (ScheduleExistException e) {
             e.getLocalizedMessage();
         }
-        return findSchedule(personalJobId, session, model);
+        return findSchedule(Integer.valueOf(personalJobId), session, model);
     }
 
 
@@ -147,10 +150,18 @@ public class ScheduleController {
 
     @PostMapping(value = "/setScheduleForPeriod") //for personal
     public String setFixedScheduleForPeriod(Model model, HttpSession session, @RequestParam String date1,
-                                            @RequestParam String date2, @RequestParam String startTime1, @RequestParam String endTime1, @RequestParam String personalJobId) {
+                                            @RequestParam String date2, @RequestParam String startTime1, @RequestParam String endTime1, @RequestParam Integer personalJobId) {
 
-        PersonalJobDto personalJobDto = (PersonalJobDto) session.getAttribute("personalJob");
-        ServiceDto serviceDto = serviceService.findByType(personalJobDto.getJobTitle() + " appointment");
+        logger.info("SET SCHEDULE FOR PERIOD BEGIN");
+        logger.info("PERSONAL JOB ID RECEIVED " + personalJobId);
+//        PersonalJobDto personalJobDto = (PersonalJobDto) session.getAttribute("personalJob");
+        PersonalJobDto personalJobDto = personalJobService.findByIdDto(personalJobId);
+        logger.info("PERSONAL JOB FOUND " + personalJobDto);
+        ServiceDto serviceDto = null;
+        if (isDoctor(personalJobDto.getJobTitle())) {
+            serviceDto = serviceService.findByType(personalJobDto.getJobTitle() + " appointment");
+        }
+
         ScheduleDto scheduleDto = ScheduleDto.builder()
                 .date(Date.valueOf(date1).toLocalDate())
                 .service(serviceDto)
@@ -192,7 +203,7 @@ public class ScheduleController {
             return findScheduleForService(serviceDto.getId().toString(), session, model);
         } else {
             PersonalJobDto personalJobDto = (PersonalJobDto) session.getAttribute("personalJob");
-            return findSchedule(personalJobDto.getId().toString(), session, model);
+            return findSchedule(personalJobDto.getId(), session, model);
         }
     }
 
@@ -201,8 +212,8 @@ public class ScheduleController {
     public String setDayOff(Model model, HttpSession session, @RequestParam Integer scheduleId) {
         scheduleService.setDayOff("day off", scheduleId);
         ScheduleDto scheduleDto = scheduleService.findById(scheduleId);
-        if (isAppointment(scheduleDto.getService().getType())) {
-            return findSchedule(scheduleDto.getPersonalJob().getId().toString(), session, model);
+        if (scheduleDto.getService()==null||isAppointment(scheduleDto.getService().getType())) {
+            return findSchedule(scheduleDto.getPersonalJob().getId(), session, model);
         } else {
             return findScheduleForService(scheduleDto.getService().getId().toString(), session, model);
         }
@@ -229,5 +240,11 @@ public class ScheduleController {
 
     }
 
+    private boolean isDoctor(String jobTitle) { //define is service doctor appointment
+        String regex = "doctor \\w+";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(jobTitle);
+        return matcher.find();
 
+    }
 }

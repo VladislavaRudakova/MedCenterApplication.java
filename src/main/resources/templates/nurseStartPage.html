@@ -3,30 +3,25 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <link rel="stylesheet" href="/css/styles.css"/>
+    <link rel="stylesheet" href="/css/buttonStyles.css"/>
     <link rel="stylesheet" href="/css/adminMainStyles.css"/>
+    <link rel="stylesheet" href="/css/adminStartPageStyles.css"/>
+    <link rel="stylesheet" href="/css/findCreatePageStyles.css"/>
+    <link rel="stylesheet" href="/css/setShedulePageStyles.css"/>
 </head>
-
 <body>
-
 <div th:replace="pageFragment/header::header"></div>
-
 <div class="header-back"></div>
-
-
 <div class="main-block">
     <div class="left-block">
         <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
     </div>
-
     <div class="central-tickets-block">
-
         <div class="search-title" th:if="${!tickets.empty}" th:text="'Your tickets'"></div>
         <div class="search-title" th:if="${tickets.empty}" th:text="'You have no tickets'"></div>
-
         <div class="ticket-block-main">
-
             <div th:if="${!tickets.empty}" th:each="ticket: ${tickets}" class="client-block">
-                <div>
+                <div class="client-info">
                     <div class="client-name">
                         <span th:text=${ticket.client.name}></span>
                         <span th:text=${ticket.client.surname}></span>
@@ -46,32 +41,25 @@
                                                                       class="client-date"></span>
                    </div>
                 </div>
-                <div class="client-tickets">
-                    <form th:if="${ticket.subState!='REQUEST_FOR_CANCELLATION'}"
-                          class="client-form"
-                          action="/client/requestForCancellation" method="post">
+                <div class="doctor-tickets-buttons">
+                    <form th:if="${ticket.cancelRequestFromRole!='ROLE_NURSE'}" class="client-form"
+                          action="/doctor/requestForCancellation" method="post">
                         <input class="button" type="hidden" name="ticketId" th:value="${ticket.id}">
-                        <input class="button" type="hidden" name="clientId" th:value="${ticket.client.id}">
-                        <input class="button" type="submit" value="cancel">
+                        <input class="cancel-button" type="submit" value="cancel">
                     </form>
-                    <span class="for-cancel" th:if="${ticket.subState=='REQUEST_FOR_CANCELLATION'}"
+                    <span class="for-cancel" th:if="${ticket.subState=='REQUEST_FOR_CANCELLATION'&&ticket.cancelRequestFromRole=='ROLE_NURSE'}"
                           th:text="'request for cancellation'"></span>
                     <form class="client-form"
                           action="/medCard/seeMedicalCard" method="post">
                         <input class="button" type="hidden" name="clientId" th:value="${ticket.client.id}">
                         <input class="button" type="submit" value="medical card">
                     </form>
+
                 </div>
-
             </div>
-
-
-
         </div>
 
         <!---------------------------------------------------------contentBlock-->
-
-
     </div>
 
 </div>

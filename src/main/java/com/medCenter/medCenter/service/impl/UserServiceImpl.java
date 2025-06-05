@@ -1,6 +1,5 @@
 package com.medCenter.medCenter.service.impl;
 
-import com.medCenter.medCenter.controller.UserController;
 import com.medCenter.medCenter.dto.UserCredentialsDto;
 import com.medCenter.medCenter.dto.UserDto;
 import com.medCenter.medCenter.exception.LoginException;
@@ -94,8 +93,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void registration(UserDto userDto, Integer personalJobId, BCryptPasswordEncoder encoder) throws LoginException {
-
+        logger.info("REGISTRATION BEGIN");
         User user = findByLoginForReg(userDto.getUserCredentials().getLogin());
+        logger.info("USER FOUND "+ user);
         if (user != null) {
             throw new LoginException();
         } else {

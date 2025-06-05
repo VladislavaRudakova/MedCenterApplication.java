@@ -93,6 +93,8 @@ public class AdminPersonalController {
         personalJobService.createPersonalJob(personalJob); //create personal
         List<PersonalJobDto> personalJobDtoList = personalJobService.findByNameSurnameJob(personalJob.getPersonal().getName(), //find created
                 personalJob.getPersonal().getSurname(), personalJob.getJobTitle());
+        List<DepartmentDto> departments = departmentService.findAll();
+        model.addAttribute("departments", departments);
         model.addAttribute("personalList", personalJobDtoList.getLast());
         model.addAttribute("personalJob", new PersonalJobDto());
         return "adminFoundPersonalPage";
@@ -133,16 +135,21 @@ public class AdminPersonalController {
         List<PersonalJobDto> personalJobDtoList = new ArrayList<>();
         personalJobDtoList.add(personalJobDto);
         List<DepartmentDto> departments = departmentService.findAll();
-        PersonalJobStates[] personalJobStates = PersonalJobStates.values();
-        List<String> personalJobStatesList = new ArrayList<>();
-        for (PersonalJobStates personalJobState : personalJobStates) {
-            personalJobStatesList.add(personalJobState.toString());
-        }
+        List<String> personalJobStatesList = getPersonalStates();
         model.addAttribute("personalStates", personalJobStatesList);
         model.addAttribute("departments", departments);
         model.addAttribute("personalList", personalJobDtoList);
         model.addAttribute("personalJob", new PersonalJobDto());
         return "adminFoundPersonalPage";
+    }
+
+    private List<String> getPersonalStates() {
+        PersonalJobStates[] personalJobStates = PersonalJobStates.values();
+        List<String> personalJobStatesList = new ArrayList<>();
+        for (PersonalJobStates personalJobState : personalJobStates) {
+            personalJobStatesList.add(personalJobState.toString());
+        }
+        return personalJobStatesList;
     }
 
 

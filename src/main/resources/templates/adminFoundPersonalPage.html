@@ -47,7 +47,6 @@
                 <div class="dropdown-personal-details">
                     <input onclick="openDetails(this)" class="button-details" type="button" value="details">
                     <div class="dropdown-personal-details-content">
-
                         <div class="personal-info">
                             <span class="doctor-experience">Birth date: </span> <span
                                 th:text="${personal.personal.birthDate}"
@@ -58,161 +57,144 @@
                                 th:text="${personal.personal.experience}"
                                 class="doctor-experience"></span>
                         </div>
-
                         <div class="personal-info">
                             <span class="doctor-experience">Employment date: </span><span
                                 th:text="${personal.personal.employmentDate}" class="doctor-experience"></span>
                         </div>
-
                     </div>
-
-
                 </div>
-
 
                 <div class="personal-info">
-                    <span class="doctor-experience"></span><span th:text="${personal.state}" class="doctor-experience"></span>
+                    <span class="doctor-experience"></span><span th:text="${personal.state}"
+                                                                 class="doctor-experience"></span>
                 </div>
 
 
-                <form action="/admin/findSchedule" method="post">
-                    <input type="hidden" name="personalJobId" th:value="${personal.id}">
-                    <input class="button" type="submit" value="see schedule">
-                </form>
+                <div class="personal-found-buttons">
+                    <form action="/admin/findSchedule" method="post">
+                        <input type="hidden" name="personalJobId" th:value="${personal.id}">
+                        <input class="button" type="submit" value="see schedule">
+                    </form>
+                    <form th:if="${personal.user==null}" action="/admin/personalRegistration" method="post">
+                        <input type="hidden" name="personalJobId" th:value="${personal.id}">
+                        <input class="button" type="submit" value="register">
+                    </form>
 
-                <form th:if="${personal.user==null}" action="/admin/personalRegistration" method="post">
-                    <input type="hidden" name="personalJobId" th:value="${personal.id}">
-                    <input class="button" type="submit" value="register">
-                </form>
+                    <!------------------------------------------------------------------------------------->
+                    <div class="dropdown">
+                        <input onclick="toggleDropdown(this)" class="button" type="button" value="edit">
+                        <div class="dropdown-content">
+                            <!----------------------------------------------->
+                            <form class="edit-form" action="/admin/editPersonal" th:object="${personalJob}"
+                                  method="post">
+                                <div class="">
+                                    <input class="name-input" type="text" name="name" th:field="*{personal.name}"
+                                           placeholder="name">
+                                </div>
+                                <div class="">
+                                    <input class="name-input" type="text" name="surname" th:field="*{personal.surname}"
+                                           placeholder="surname">
+                                </div>
+                                <div class="">
+                                    <input id="date" class="name-input" type="text" name="birthDate"
+                                           th:field="*{personal.birthDate}" placeholder="birth date">
+                                </div>
 
-                <!------------------------------------------------------------------------------------->
-                <div class="dropdown">
-                    <input onclick="toggleDropdown(this)" class="button" type="button" value="edit">
-                    <div class="dropdown-content">
-                        <!----------------------------------------------->
-                        <form class="edit-form" action="/admin/editPersonal" th:object="${personalJob}" method="post">
+                                <div class="">
+                                    <input id="date1" class="name-input" type="text" name="employmentDate"
+                                           th:field="*{personal.employmentDate}" placeholder="employment">
+                                </div>
+                                <div class="">
+                                    <input class="name-input" type="text" name="name" th:field="*{jobTitle}"
+                                           placeholder="job">
+                                </div>
+                                <div class="">
+                                    <select class="select" th:field="*{department.name}" name="department">
+                                        <option class="options" value="" disabled selected> department</option>
+                                        <option th:each="department:${departments}" class="options"
+                                                th:value="${department.name}" th:text="${department.name}"></option>
+                                    </select>
+                                </div>
 
-                            <div class="">
-                                <input class="name-input" type="text" name="name" th:field="*{personal.name}"
-                                       placeholder="name">
-                            </div>
-
-                            <div class="">
-                                <input class="name-input" type="text" name="surname" th:field="*{personal.surname}"
-                                       placeholder="surname">
-                            </div>
-
-
-                            <div class="">
-                                <input id="date" class="name-input" type="text" name="birthDate"
-                                       th:field="*{personal.birthDate}" placeholder="birth date">
-                            </div>
-
-                            <div class="">
-                                <input id="date1" class="name-input" type="text" name="employmentDate"
-                                       th:field="*{personal.employmentDate}" placeholder="employment">
-
-                            </div>
-                            <div class="">
-                                <input class="name-input" type="text" name="name" th:field="*{jobTitle}"
-                                       placeholder="job">
-                            </div>
-
-                            <div class="">
-                                <select  class="select" th:field="*{department.name}" name="department">
-                                    <option class="options" value="" disabled selected> department</option>
-                                    <option th:each="department:${departments}" class="options"
-                                            th:value="${department.name}" th:text="${department.name}"></option>
-                                </select>
-                            </div>
-
-                            <div class="">
-                                <select  class="select" th:field="*{state}" name="state">
-                                    <option th:each="personalJobState:${personalStates}" class="options"
-                                            th:value="${personalJobState}" th:text="${personalJobState}"></option>
-                                </select>
-                            </div>
-                            <input class="button" type="hidden" name="personalJobId" th:value="${personal.id}">
-                            <input class="button" type="submit" value="send">
-                        </form>
-
+                                <div class="">
+                                    <select class="select" th:field="*{state}" name="state">
+                                        <option th:each="personalJobState:${personalStates}" class="options"
+                                                th:value="${personalJobState}" th:text="${personalJobState}"></option>
+                                    </select>
+                                </div>
+                                <input class="button" type="hidden" name="personalJobId" th:value="${personal.id}">
+                                <input class="button" type="submit" value="send">
+                            </form>
+                        </div>
                     </div>
                 </div>
 
             </div>
-
-
         </div>
-
-
     </div>
     <div id="right-block"></div>
     <div th:replace="pageFragment/adminButtons::admin-buttons"></div>
-
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
 
     flatpickr("#date", {});
- flatpickr("#date1", {});
+     flatpickr("#date1", {});
 
 
     const buttonPersonal = document.getElementById("personal")
-   const buttonService = document.getElementById("service")
-   let buttonsFindCreatePersonal = document.getElementById("buttons-find-create-personal")
-   const buttonsFindCreateService = document.getElementById("buttons-find-create-service")
+    const buttonService = document.getElementById("service")
+    let buttonsFindCreatePersonal = document.getElementById("buttons-find-create-personal")
+    const buttonsFindCreateService = document.getElementById("buttons-find-create-service")
 
-buttonPersonal.onclick = function(){
-buttonsFindCreatePersonal.style.display=  (buttonsFindCreatePersonal.style.display=== "flex") ? "none" : "flex";
-   }
+    buttonPersonal.onclick = function(){
+    buttonsFindCreatePersonal.style.display=  (buttonsFindCreatePersonal.style.display=== "flex") ? "none" : "flex";
+    }
 
-   buttonService.onclick = function(){
-buttonsFindCreateService.style.display=(buttonsFindCreateService.style.display=== "flex") ? "none" : "flex";
-   }
-
-
-
-
-
-
-
-
-
-   function toggleDropdown(button) {
-               let dropdown = button.closest(".dropdown").querySelector(".dropdown-content");
-               dropdown.style.display = (dropdown.style.display === "flex") ? "none" : "flex";
-           }
-
-    function editName(button) {
-               let editNameForm = button.closest(".dropdown").querySelector(".edit-name");
-               editNameForm.style.display = (editNameForm.style.display === "flex") ? "none" : "flex";
-           }
-
-    function editSurname(button) {
-               let editSurnameForm = button.closest(".dropdown").querySelector(".edit-surname");
-               editSurnameForm.style.display = (editSurnameForm.style.display === "flex") ? "none" : "flex";
-           }
-
-function editDob(button) {
-               let editDobForm = button.closest(".dropdown").querySelector(".edit-dob");
-               editDobForm.style.display = (editDobForm.style.display === "flex") ? "none" : "flex";
-           }
-
-    function editEmploymentDate(button) {
-               let editEmploymentDateForm = button.closest(".dropdown").querySelector(".edit-employment-date");
-               editEmploymentDateForm.style.display = (editEmploymentDateForm.style.display === "flex") ? "none" : "flex";
-           }
-
-
-    function openDetails(button){
-    let dropdownDetails = button.closest(".dropdown-personal-details").querySelector(".dropdown-personal-details-content");
-    dropdownDetails.style.display = (dropdownDetails.style.display === "flex") ? "none" : "flex";
-
+    buttonService.onclick = function(){
+    buttonsFindCreateService.style.display=(buttonsFindCreateService.style.display=== "flex") ? "none" : "flex";
     }
 
 
+
+
+
+
+
+
+
+       function toggleDropdown(button) {
+                   let dropdown = button.closest(".dropdown").querySelector(".dropdown-content");
+                   dropdown.style.display = (dropdown.style.display === "flex") ? "none" : "flex";
+               }
+
+        function editName(button) {
+                   let editNameForm = button.closest(".dropdown").querySelector(".edit-name");
+                   editNameForm.style.display = (editNameForm.style.display === "flex") ? "none" : "flex";
+               }
+
+        function editSurname(button) {
+                   let editSurnameForm = button.closest(".dropdown").querySelector(".edit-surname");
+                   editSurnameForm.style.display = (editSurnameForm.style.display === "flex") ? "none" : "flex";
+               }
+
+    function editDob(button) {
+                   let editDobForm = button.closest(".dropdown").querySelector(".edit-dob");
+                   editDobForm.style.display = (editDobForm.style.display === "flex") ? "none" : "flex";
+               }
+
+        function editEmploymentDate(button) {
+                   let editEmploymentDateForm = button.closest(".dropdown").querySelector(".edit-employment-date");
+                   editEmploymentDateForm.style.display = (editEmploymentDateForm.style.display === "flex") ? "none" : "flex";
+               }
+
+
+        function openDetails(button){
+        let dropdownDetails = button.closest(".dropdown-personal-details").querySelector(".dropdown-personal-details-content");
+        dropdownDetails.style.display = (dropdownDetails.style.display === "flex") ? "none" : "flex";
+
+        }
 
 
 </script>

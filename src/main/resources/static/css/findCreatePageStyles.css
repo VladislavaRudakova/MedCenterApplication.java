@@ -257,5 +257,8 @@ display:flex;
      border-color: #c1c9d1;
      border-width:1px;
      border-radius:20px;
+}
 
+.instance-info-block{
+    display:flex;
 }

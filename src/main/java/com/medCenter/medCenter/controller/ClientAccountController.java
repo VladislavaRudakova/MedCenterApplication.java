@@ -4,6 +4,8 @@ package com.medCenter.medCenter.controller;
 import com.medCenter.medCenter.dto.ClientDto;
 import com.medCenter.medCenter.dto.TicketDto;
 import com.medCenter.medCenter.dto.UserDto;
+import com.medCenter.medCenter.exception.ClientNotFoundException;
+import com.medCenter.medCenter.model.entity.ClientStates;
 import com.medCenter.medCenter.model.entity.Roles;
 import com.medCenter.medCenter.model.entity.TicketStates;
 import com.medCenter.medCenter.model.entity.TicketSubStates;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -41,12 +44,12 @@ public class ClientAccountController {
 
 
     @PostMapping(value = "/clientTicket")
-    public String clientTicketRegistration(@RequestParam Integer ticketId, Model model, @AuthenticationPrincipal UserDetailsImpl user, HttpSession session) {
+    public String clientTicketRegistration(@RequestParam Integer ticketId, Model model, @AuthenticationPrincipal UserDetailsImpl user, HttpSession session) throws ClientNotFoundException {
         TicketDto ticket = ticketService.findById(ticketId); //find ticket selected by user
         ClientDto client = null;
         try {
             client = clientService.findByUserId(user.getUser().getId()); //if user is already attached to client find him
-        } catch (EntityNotFoundException e) {
+        } catch (ClientNotFoundException e) {
             session.setAttribute("ticket", ticket); //if user is not attached to client save new client
             return "saveClientPage";
         }
@@ -56,12 +59,13 @@ public class ClientAccountController {
 
     @PostMapping(value = "/saveClient")
     public String saveClient(@RequestParam String name, @RequestParam String surname, @RequestParam String telephone,
-                             HttpSession session, Model model, @AuthenticationPrincipal UserDetailsImpl user) {
+                             HttpSession session, Model model, @AuthenticationPrincipal UserDetailsImpl user) throws ClientNotFoundException {
         UserDto userDto = userService.userToDto(user.getUser());
         ClientDto client = ClientDto.builder()
                 .name(name)
                 .surname(surname)
                 .telephoneNumber(telephone)
+                .state(ClientStates.ACTIVE.toString())
                 .user(userDto)
                 .build();
         clientService.createClient(client); //save new client
@@ -83,13 +87,20 @@ public class ClientAccountController {
     public String findAllTickets(@AuthenticationPrincipal UserDetailsImpl user, Model model, HttpSession session) {
         TicketDto ticketDto = (TicketDto) session.getAttribute("ticket");
         Integer clientId = null;
+        List<TicketDto> tickets = new ArrayList<>();
         if (ticketDto != null) {
             clientId = ticketDto.getClient().getId();
         } else {
-            ClientDto client = clientService.findByUserId(user.getUser().getId());
-            clientId = client.getId();
+            try {
+                ClientDto client = clientService.findByUserId(user.getUser().getId());
+                clientId = client.getId();
+            } catch (ClientNotFoundException e){
+                model.addAttribute("tickets",tickets);
+                return "clientTicketsPage";
+            }
+
         }
-        List<TicketDto> tickets = ticketService.findActualByClient(clientId); //find tickets to show it in client account
+        tickets = ticketService.findActualByClient(clientId); //find tickets to show it in client account
         model.addAttribute("tickets", tickets);
         model.addAttribute("clientId", clientId);
         return "clientTicketsPage";

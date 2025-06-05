@@ -22,7 +22,7 @@
 
         <div class="search-title" th:if="${!tickets.empty}" th:text="'Your tickets'"></div>
         <div class="search-title" th:if="${tickets.empty}" th:text="'You have no tickets'"></div>
-
+        <div class="search-title" th:if="${client!=null}" th:text="'You have no tickets'"></div>
         <div class="ticket-block-main">
 
             <div th:if="${!tickets.empty}" th:each="ticket: ${tickets}" class="client-block">
