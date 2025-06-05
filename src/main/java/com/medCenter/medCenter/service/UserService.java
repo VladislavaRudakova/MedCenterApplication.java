@@ -27,7 +27,5 @@ public interface UserService {
 
     void registration(UserDto userDto,Integer personalJobId, BCryptPasswordEncoder encoder) throws LoginException;
 
-//    void personalRegistration(String name, String email, String login, String password, String role, Integer personalJobId, BCryptPasswordEncoder encoder) throws LoginException;
-
 
 }

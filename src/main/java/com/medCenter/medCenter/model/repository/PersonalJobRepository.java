@@ -38,7 +38,7 @@ public interface PersonalJobRepository extends JpaRepository<PersonalJob, Intege
     @Modifying
     @Query("""
         update PersonalJob p set
-           p.jobTitle = case when :jobTitle is not null then :jobTitle else p.jobTitle end,
+           p.jobTitle = case when :jobTitle is not null and :jobTitle != ''  then :jobTitle else p.jobTitle end,
            p.department.id = case when :departmentId is not null then :departmentId else p.department.id end
            where p.id = :id""")
     void updatePersonalJob1(@Param("jobTitle") String jobTitle, @Param("departmentId") Integer departmentId, @Param("personalJobId") Integer personalJobId);
@@ -46,7 +46,7 @@ public interface PersonalJobRepository extends JpaRepository<PersonalJob, Intege
     @Modifying(clearAutomatically = true)
     @Query("""
         update PersonalJob p set
-           p.jobTitle = case when :jobTitle is not null then :jobTitle else p.jobTitle end,
+           p.jobTitle = case when :jobTitle is not null and :jobTitle != '' then :jobTitle else p.jobTitle end,
            p.department.id = case when :departmentId is not null then :departmentId else p.department.id end,
            p.state = case when :state is not null then :state else p.state end
            where p.id = :id""")

@@ -14,6 +14,8 @@ import com.medCenter.medCenter.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ClientAccountController {
 
+    private static final Logger logger = LogManager.getLogger(ClientAccountController.class);
 
     private final TicketService ticketService;
     private final ClientService clientService;
@@ -81,7 +84,7 @@ public class ClientAccountController {
         TicketDto ticketDto = (TicketDto) session.getAttribute("ticket");
         Integer clientId = null;
         if (ticketDto != null) {
-            clientId = ticketDto.getId();
+            clientId = ticketDto.getClient().getId();
         } else {
             ClientDto client = clientService.findByUserId(user.getUser().getId());
             clientId = client.getId();

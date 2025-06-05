@@ -8,6 +8,8 @@ import com.medCenter.medCenter.service.ServiceService;
 import com.medCenter.medCenter.service.TicketService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +26,8 @@ import java.util.regex.Pattern;
 @Controller
 @RequiredArgsConstructor
 public class ServiceSearchController {
+
+    private static final Logger logger = LogManager.getLogger(ServiceSearchController.class);
 
     private final PersonalJobService personalJobService;
     private final TicketService ticketService;

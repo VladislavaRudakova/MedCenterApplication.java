@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+>
 
 <head>
     <link rel="stylesheet" href="/css/styles.css"/>
@@ -21,18 +21,14 @@
     <div class="left-block">
         <img class="main-image" src="/images/mainPhoto.jpg" alt="photo">
     </div>
-
-
     <div class="central-tickets-block">
-
-
         <div th:if="${personalJob!=null}" class="search-title">
             <span th:text="${personalJob.personal.name}"></span>
             <span th:text="${personalJob.personal.surname}"></span>
             <span th:text="${personalJob.jobTitle}"></span>
             <span> schedule</span>
         </div>
-        <div th:if="${service!=null}" id="service-title"  class="search-title">
+        <div th:if="${service!=null}" id="service-title" class="search-title">
             <span th:text="${service.type}"></span>
             <span> schedule</span>
         </div>
@@ -41,40 +37,39 @@
         <div class="schedule-container">
             <div class="schedule-block">
                 <div class="schedule" th:if="${scheduleList!=null}" th:each="schedule: ${scheduleList}">
-
-                    <input class="checkbox" type="checkbox" value="tickets">
-                    <div th:if="${schedule.dayOff==null}">
-                        <div class="schedule-weekday" th:text="${schedule.weekDay}"></div>
-                        <div class="schedule-date" th:text="${schedule.date}"></div>
-                        <div class="schedule-time">
-                        <div th:text="${schedule.startTime}"></div>
-                        <div th:text="${schedule.endTime}"></div>
+                    <div th:with="filteredTickets=${ticketsByDate[schedule.date]}">
+                        <input th:if="${#lists.isEmpty(filteredTickets)}" class="checkbox" type="checkbox"
+                               value="tickets">
+                        <div th:if="${schedule.dayOff==null}">
+                            <div class="schedule-weekday" th:text="${schedule.weekDay}"></div>
+                            <div class="schedule-date" th:text="${schedule.date}"></div>
+                            <div class="schedule-time">
+                                <div th:text="${schedule.startTime}"></div>
+                                <div th:text="${schedule.endTime}"></div>
+                            </div>
+                            <input class="schedule-id" type="hidden" value="${schedule.id}">
                         </div>
-                        <input class="schedule-id" type="hidden" value="${schedule.id}">
-                    </div>
-                    <div th:if="${schedule.dayOff!=null}">
-                        <div class="schedule-weekday" th:text="${schedule.weekDay}"></div>
-                        <div class="schedule-date" th:text="${schedule.date}"></div>
-                        <div class="day-off" th:text="${schedule.dayOff}"></div>
+                        <div th:if="${schedule.dayOff!=null}">
+                            <div class="schedule-weekday" th:text="${schedule.weekDay}"></div>
+                            <div class="schedule-date" th:text="${schedule.date}"></div>
+                            <div class="day-off" th:text="${schedule.dayOff}"></div>
+                        </div>
                     </div>
 
                     <!-----------------------------------------------------------------------------------tickets------------->
                     <div th:with="filteredTickets=${ticketsByDate[schedule.date]}">
                         <div th:if="${not #lists.isEmpty(filteredTickets)}" class="tickets-dropdown">
-
                             <input onclick="seeDayTickets(this)" class="ticket-button" type="button" value="tickets">
-
                             <div class="day-tickets">
                                 <div th:each="ticket: ${dayTickets}" th:if="${ticket.date==schedule.date}"
                                      class="day-ticket">
                                     <div th:text="${ticket.time}+' '+${ticket.state}"></div>
                                 </div>
-
                                 <form action="/admin/findDayTickets" class="correct-ticket-time" method="post">
-                                    <input th:if="${personalJob!=null}" class="button" type="hidden" name="personalJobId"
+                                    <input th:if="${personalJob!=null}" class="button" type="hidden"
+                                           name="personalJobId"
                                            th:value="${personalJob.id}">
                                     <input class="button" type="hidden" name="date" th:value="${schedule.date}">
-
                                     <input class="button" type="submit" value="details">
                                 </form>
 
@@ -113,8 +108,10 @@
                                 <input class="button" type="submit" value="send">
                             </form>
                             <form action="/admin/setDayOff" class="set-day-off" method="post">
-                                <input th:if="${personalJob!=null}"  class="button" type="hidden" name="personalJobId"
+                                <input th:if="${personalJob!=null}" class="button" type="hidden" name="personalJobId"
                                        th:value="${personalJob.id}">
+                                <input th:if="${service!=null}" class="button" type="hidden" name="serviceId"
+                                       th:value="${service.id}">
                                 <input class="button" type="hidden" name="scheduleId" th:value="${schedule.id}">
 
                                 <input class="button" type="submit" value="set day off">
@@ -125,8 +122,6 @@
                 </div>
                 <!------------------------------------------------------------------------------------------------------>
                 <div class="schedule" th:if="${scheduleList==null}">No schedule</div>
-
-
             </div>
         </div>
         <!------------------------------------------------------------------------------------buttons set-------->
@@ -151,11 +146,6 @@
 
         <div id="set-schedule">
             <div class="personal-set-schedule-block">
-                <div class="close-button">
-                    <div id="close">&times;</div>
-
-                </div>
-
                 <form id="set-schedule-form" action="/admin/setSchedule" method="post">
 
                     <div id="selects">
@@ -189,7 +179,7 @@
 
                         </div>
                         <select id="set-schedule-style" class="select" name="shift">
-                            <option class="options" value="" disabled selected></option>
+                            <option class="options" value="" disabled selected>shift</option>
                             <option class="options" value="for day">for day</option>
                             <option class="options" value="fixed">fixed</option>
                             <option class="options" value="1/1">shift schedule 1/1</option>
@@ -226,19 +216,19 @@
                         </div>
 
                         <select id="service-type" class="select" name="serviceType">
-                            <option class="options" value="" disabled selected></option>
+                            <option class="options" value="" disabled selected>service</option>
                             <option class="options" name="serviceType" th:each="serviceType: ${serviceTypes}"
                                     th:value="${serviceType}" th:text="${serviceType}"></option>
                         </select>
                         <select id="set-ticket-style" class="select" name="setTicketStyle">
-                            <option class="options" value="" disabled selected></option>
+                            <option class="options" value="" disabled selected>period</option>
                             <option class="options" value="for day">for day</option>
                             <option class="options" value="for period">for period</option>
                         </select>
                     </div>
 
                     <select id="ticket-time-range" class="select" name="timeRange">
-                        <option class="options" value="" disabled selected></option>
+                        <option class="options" value="" disabled selected>time range, min</option>
                         <option class="options" value="10">10</option>
                         <option class="options" value="20">20</option>
                     </select>
@@ -432,7 +422,6 @@ const startDate = document.getElementById("start-ticket-date")
 
     if (value==="for day"){
     endDate.style.display='none';
-
     startDate.style.width='210px';
 } else if (value==="for period"){
     endDate.style.display='flex';

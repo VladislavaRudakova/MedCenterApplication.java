@@ -5,6 +5,8 @@ import com.medCenter.medCenter.dto.ServiceDto;
 import com.medCenter.medCenter.service.PersonalJobService;
 import com.medCenter.medCenter.service.ServiceService;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,8 @@ import java.util.List;
 @RequestMapping("admin/")
 @PreAuthorize("isAuthenticated()")
 public class AdminServiceController {
+
+    private static final Logger logger = LogManager.getLogger(AdminServiceController.class);
 
     private final ServiceService serviceService;
     private final PersonalJobService personalJobService;

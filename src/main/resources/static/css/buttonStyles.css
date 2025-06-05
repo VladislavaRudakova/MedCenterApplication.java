@@ -145,5 +145,26 @@
 
       .doctor-tickets-buttons{
       display:flex;
+      }
+
+
+      .button-details{
+        border: none;
+       border-bottom:solid;
+        border-width:1px;
+      color: rgb(106, 117, 141);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size:100%;
+       border-color: rgb(106, 117, 141);
+       background-color: rgb(255, 255, 255);
 
       }
+      .button-details:hover{
+
+          border:solid;
+          background-color: rgb(255, 255, 255);
+          border-width:1px;
+           margin-bottom: 0;
+           cursor: pointer;
+          }
+

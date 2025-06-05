@@ -16,6 +16,8 @@ public interface ScheduleService {
 
     List<ScheduleDto> findByUserId(Integer userId, String state) throws ScheduleNotFoundException;
 
+    ScheduleDto findById(Integer id);
+
     List<ScheduleDto> findByPersonalId(String personalJobId) throws ScheduleNotFoundException;
 
     void setScheduleForDay(ScheduleDto scheduleDto) throws ScheduleExistException;

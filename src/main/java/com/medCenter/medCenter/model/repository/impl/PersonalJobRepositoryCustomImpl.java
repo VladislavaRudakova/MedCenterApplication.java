@@ -48,7 +48,7 @@ public class PersonalJobRepositoryCustomImpl implements PersonalJobRepositoryCus
         if (personal.getExperience() != null) {
             predicates.add(cb.equal(personalJoin.get("experience"), personal.getExperience()));
         }
-        if (personal.getJobTitle() != null) {
+        if (personal.getJobTitle() != null && !personal.getJobTitle().isEmpty()) {
             predicates.add(cb.like(root.get("jobTitle"), personal.getJobTitle()));
         }
         if (personal.getDepartmentName() != null) {

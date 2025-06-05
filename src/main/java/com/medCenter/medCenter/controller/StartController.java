@@ -26,7 +26,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class StartController {
 
-    private static final Logger logger = LogManager.getLogger(MedCenterApplication.class);
+    private static final Logger logger = LogManager.getLogger(StartController.class);
     private final ServiceService serviceService;
     private final ScheduleService scheduleService;
     private final TicketService ticketService;

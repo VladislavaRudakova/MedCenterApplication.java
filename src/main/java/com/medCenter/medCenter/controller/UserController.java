@@ -7,6 +7,8 @@ import com.medCenter.medCenter.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class UserController {
 
+    private static final Logger logger = LogManager.getLogger(UserController.class);
     private final UserService userService;
     private final BCryptPasswordEncoder encoder;
 

@@ -47,7 +47,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer>, Ticket
     Set<String> findDates(@Param("personalJobId") Integer personalJobId);
 
     @Modifying
-    @Query("update Ticket t set t.client.id = :clientId, t.state = :state where t.id = :ticketId")
+    @Query("update Ticket t set t.client.id = :clientId, t.state = :state, t.cancelRequestFromRole = null where t.id = :ticketId")
     void updateClientAndState(@Param("clientId") Integer clientId, @Param("state") String state, @Param("ticketId") Integer ticketId);
 
 

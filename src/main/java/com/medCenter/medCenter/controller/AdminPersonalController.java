@@ -7,6 +7,8 @@ import com.medCenter.medCenter.service.DepartmentService;
 import com.medCenter.medCenter.service.PersonalJobService;
 import com.medCenter.medCenter.service.PersonalService;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,8 @@ import java.util.Set;
 @RequestMapping("admin/")
 @RequiredArgsConstructor
 public class AdminPersonalController {
+
+    private static final Logger logger = LogManager.getLogger(AdminPersonalController.class);
 
     private final PersonalJobService personalJobService;
     private final DepartmentService departmentService;
@@ -41,10 +45,12 @@ public class AdminPersonalController {
 
     @PostMapping(value = "/findAllPersonal")
     public String foundAllPersonal(Model model) {
+        logger.info("FIND ALL PERSONAL BEGIN");
         List<DepartmentDto> departments = departmentService.findAll();
         model.addAttribute("departments", departments);
         model.addAttribute("personalJob", new PersonalJobDto());
         List<PersonalJobDto> personalJobs = personalJobService.findAll();
+        logger.info("PERSONAL FOUND: " + personalJobs);
         model.addAttribute("personalList", personalJobs);
         PersonalJobStates[] personalJobStates = PersonalJobStates.values();
         List<String> personalJobStatesList = new ArrayList<>();
@@ -57,10 +63,12 @@ public class AdminPersonalController {
 
     @PostMapping(value = "/findPersonal")
     public String findPersonal(Model model, @ModelAttribute PersonalJobWithoutPersonalDto personalJobDto) {
+        logger.info("FIND PERSONAL BEGIN");
         List<DepartmentDto> departments = departmentService.findAll();
-        model.addAttribute("departments", departments); //department list for search select
+        model.addAttribute("departments", departments); //department list for edit block select
         model.addAttribute("personalJob", new PersonalJobDto()); //object for receiving data in Edit section
         List<PersonalJobDto> personalJobs = personalJobService.findPersonalJob(personalJobDto);
+        logger.info("PERSONAL FOUND: " + personalJobs);
         model.addAttribute("personalList", personalJobs); // list of found personal
         PersonalJobStates[] personalJobStates = PersonalJobStates.values();
         List<String> personalJobStatesList = new ArrayList<>();
@@ -122,7 +130,18 @@ public class AdminPersonalController {
         personalJob.setId(personalJobDto.getId());
         personalJobService.updatePersonalJob(personalJob);//update personalJob
         personalJobDto = personalJobService.findByIdDto(personalJobDto.getId());
-        model.addAttribute("personalJob", personalJobDto);
+        List<PersonalJobDto> personalJobDtoList = new ArrayList<>();
+        personalJobDtoList.add(personalJobDto);
+        List<DepartmentDto> departments = departmentService.findAll();
+        PersonalJobStates[] personalJobStates = PersonalJobStates.values();
+        List<String> personalJobStatesList = new ArrayList<>();
+        for (PersonalJobStates personalJobState : personalJobStates) {
+            personalJobStatesList.add(personalJobState.toString());
+        }
+        model.addAttribute("personalStates", personalJobStatesList);
+        model.addAttribute("departments", departments);
+        model.addAttribute("personalList", personalJobDtoList);
+        model.addAttribute("personalJob", new PersonalJobDto());
         return "adminFoundPersonalPage";
     }
 

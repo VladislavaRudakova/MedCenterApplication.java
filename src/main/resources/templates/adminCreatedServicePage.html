@@ -22,30 +22,19 @@
     </div>
 
     <div class="central-tickets-block">
-
         <span class="doctor-name">New service is created!</span>
-
-
         <div class="found-personal">
-
-
             <div class="personal-block">
-
                 <div class="inst-info-block">
-
-
                     <div class="personal-name-block">
                         <span th:text="${service.type}" class="doctor-name"></span>
                     </div>
-
                     <div class="personal-info">
                         <span th:text="${service.price}+' BYN'" class="doctor-experience"></span>
                     </div>
-
                 </div>
-
                 <div class="founded-inst-buttons-block">
-                    <form action="/admin/findSchedule" method="post">
+                    <form action="/admin/findScheduleForService" method="post">
                         <input type="hidden" name="serviceId" th:value="${service.id}">
                         <input class="button" type="submit" value="see schedule">
                     </form>
@@ -56,37 +45,22 @@
                         <div class="dropdown-content">
                             <!----------------------------------------------->
                             <form class="edit-form" action="/admin/editService" method="post">
-
                                 <div class="name-input-block">
                                     <input class="name-input" type="text" placeholder="type">
-
                                 </div>
-
                                 <div class="name-input-block">
                                     <input class="name-input" type="text" placeholder="price">
-
                                 </div>
-
                                 <input class="button" type="submit" value="send">
                             </form>
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
-
         </div>
-
-
-
-
     </div>
-
+    <div id="right-block"></div>
     <div th:replace="pageFragment/adminButtons::admin-buttons"></div>
-
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

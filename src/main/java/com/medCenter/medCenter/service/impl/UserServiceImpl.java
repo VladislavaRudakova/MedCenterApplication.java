@@ -1,5 +1,6 @@
 package com.medCenter.medCenter.service.impl;
 
+import com.medCenter.medCenter.controller.UserController;
 import com.medCenter.medCenter.dto.UserCredentialsDto;
 import com.medCenter.medCenter.dto.UserDto;
 import com.medCenter.medCenter.exception.LoginException;
@@ -12,6 +13,8 @@ import com.medCenter.medCenter.service.UserCredentialsService;
 import com.medCenter.medCenter.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +25,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+
+    private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
     private final UserRepository userRepository;
     private final UserCredentialsService userCredentialsService;

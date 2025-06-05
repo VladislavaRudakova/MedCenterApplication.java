@@ -11,6 +11,8 @@ import com.medCenter.medCenter.service.PersonalJobService;
 import com.medCenter.medCenter.service.ServiceService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +29,8 @@ import java.util.regex.Pattern;
 @RequestMapping("medCard/")
 @RequiredArgsConstructor
 public class MedCardController {
+
+    private static final Logger logger = LogManager.getLogger(MedCardController.class);
 
     private final MedCardService medCardService;
     private final ClientService clientService;

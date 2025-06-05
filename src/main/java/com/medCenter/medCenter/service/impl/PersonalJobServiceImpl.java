@@ -11,6 +11,7 @@ import com.medCenter.medCenter.model.repository.PersonalRepository;
 import com.medCenter.medCenter.service.DepartmentService;
 import com.medCenter.medCenter.service.PersonalJobService;
 import com.medCenter.medCenter.service.PersonalService;
+import com.medCenter.medCenter.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class PersonalJobServiceImpl implements PersonalJobService {
     private final DepartmentRepository departmentRepository;
 
 
+
     @Override
     public PersonalJobDto personalJobToDto(PersonalJob personalJob) {
         PersonalDto personalDto = personalService.personalToDto(personalJob.getPersonal());
@@ -42,7 +44,13 @@ public class PersonalJobServiceImpl implements PersonalJobService {
                 .personal(personalDto)
                 .department(departmentDto)
                 .jobTitle(personalJob.getJobTitle())
+                .state(personalJob.getState())
                 .build();
+        if (personalJob.getUser()!=null){
+          UserDto userDto = UserDto.builder()
+                          .id(personalJob.getUser().getId()).build();
+            personalJobDto.setUser(userDto);
+        }
 
         if (personalJob.getTickets() != null) {
             List<TicketDto> ticketDtoList = new ArrayList<>();
@@ -53,7 +61,6 @@ public class PersonalJobServiceImpl implements PersonalJobService {
                         .time(ticket.getTime().toLocalTime())
                         .state(ticket.getState())
                         .build();
-
                 ticketDtoList.add(ticketDto);
             }
             personalJobDto.setTickets(ticketDtoList);
@@ -68,7 +75,6 @@ public class PersonalJobServiceImpl implements PersonalJobService {
         List<Personal> personalList = personalRepository.findByNameSurnameAndBirthDate(personalJobDto.getPersonal().getName(),
                 personalJobDto.getPersonal().getSurname(),
                 Date.valueOf(personalJobDto.getPersonal().getBirthDate()));
-
         Department department = departmentRepository.findByName(personalJobDto.getDepartment().getName());
         return PersonalJob.builder()
                 .personal(personalList.getLast())
@@ -82,7 +88,6 @@ public class PersonalJobServiceImpl implements PersonalJobService {
     public List<PersonalJobDto> findAll() {
         List<PersonalJob> personalJobList = personalJobRepository.findAll();
         List<PersonalJobDto> personalJobDtoList = new ArrayList<>();
-
         for (PersonalJob personalJob : personalJobList) {
             PersonalJobDto personalJobDto = personalJobToDto(personalJob);
             personalJobDtoList.add(personalJobDto);
@@ -94,7 +99,6 @@ public class PersonalJobServiceImpl implements PersonalJobService {
     public List<PersonalJobDto> findPersonalJob(PersonalJobWithoutPersonalDto personalJob) {
         List<PersonalJob> personalJobList = personalJobRepository.findPersonalJob(personalJob);
         List<PersonalJobDto> personalJobDtoList = new ArrayList<>();
-
         for (PersonalJob personalJob1 : personalJobList) {
             PersonalJobDto personalJobDto1 = personalJobToDto(personalJob1);
             personalJobDtoList.add(personalJobDto1);
@@ -124,7 +128,6 @@ public class PersonalJobServiceImpl implements PersonalJobService {
     public List<PersonalJobDto> findByJob(String job) {
         List<PersonalJob> personalJobList = personalJobRepository.findByJob(job);
         List<PersonalJobDto> personalJobDtoList = new ArrayList<>();
-
         for (PersonalJob personalJob : personalJobList) {
             PersonalJobDto personalJobDto = personalJobToDto(personalJob);
             personalJobDtoList.add(personalJobDto);
@@ -147,7 +150,6 @@ public class PersonalJobServiceImpl implements PersonalJobService {
     public List<PersonalJobDto> findByNameSurnameJob(String name, String surname, String job) {
         List<PersonalJob> personalJobList = personalJobRepository.findByNameSurnameJob(name, surname, job);
         List<PersonalJobDto> personalJobDtoList = new ArrayList<>();
-
         for (PersonalJob personalJob : personalJobList) {
             PersonalJobDto personalJobDto = personalJobToDto(personalJob);
             personalJobDtoList.add(personalJobDto);

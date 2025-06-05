@@ -1,10 +1,7 @@
 package com.medCenter.medCenter;
 
 import com.medCenter.medCenter.dto.*;
-import com.medCenter.medCenter.model.entity.Client;
-import com.medCenter.medCenter.model.entity.PersonalJob;
-import com.medCenter.medCenter.model.entity.Service;
-import com.medCenter.medCenter.model.entity.Ticket;
+import com.medCenter.medCenter.model.entity.*;
 import com.medCenter.medCenter.model.repository.ClientRepository;
 import com.medCenter.medCenter.model.repository.PersonalJobRepository;
 import com.medCenter.medCenter.model.repository.PersonalRepository;
@@ -213,7 +210,9 @@ public class TicketServiceTest {
                 .service(serviceDto)
                 .personalJob(personalJobDto)
                 .date(date)
-                .time(time1).build();
+                .time(time1)
+                .state(TicketStates.AVAILABLE.toString())
+                .build();
         ticketService.createTicket(ticketDto);
         ticketDto.setTime(time2);
         ticketService.createTicket(ticketDto);
@@ -224,10 +223,10 @@ public class TicketServiceTest {
         ticketDto.setTime(time5);
         ticketService.createTicket(ticketDto);
 
-//        List<PersonalJobDto> ticketDtoList = ticketService.findByServiceDateTime(serviceDto.getType(), Date.valueOf(date), Time.valueOf(time1), Time.valueOf(time3));
-//        System.out.println("PERSONAL LIST: " + ticketDtoList);
-//        Assertions.assertEquals(ticketDtoList.size(), 1);
-//        Assertions.assertEquals(ticketDtoList.getFirst().getId(), personalJob.getId());
+        List<PersonalJobDto> ticketDtoList = ticketService.findByServiceDateTime(serviceDto.getType(), Date.valueOf(date), Time.valueOf(time1), Time.valueOf(time3),TicketStates.AVAILABLE.toString());
+        System.out.println("PERSONAL LIST: " + ticketDtoList);
+        Assertions.assertEquals(ticketDtoList.size(), 1);
+        Assertions.assertEquals(ticketDtoList.getFirst().getId(), personalJob.getId());
 
     }
 
@@ -339,33 +338,6 @@ public class TicketServiceTest {
         Assertions.assertEquals(ticketDtoFound.getState(), "testState");
     }
 
-    @Test
-    public void createTicket() {
 
-
-    }
-
-    @Test
-    public void updateClientAndState() {
-
-
-    }
-
-    @Test
-    public void updateState() {
-
-
-    }
-
-    @Test
-    public void makeAvailable() {
-
-    }
-
-    @Test
-    public void findByPersonalJob() {
-
-
-    }
 
 }

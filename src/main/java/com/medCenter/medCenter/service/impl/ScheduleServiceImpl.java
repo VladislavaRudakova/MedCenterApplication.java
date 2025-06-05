@@ -6,12 +6,14 @@ import com.medCenter.medCenter.dto.ScheduleDto;
 import com.medCenter.medCenter.dto.ServiceDto;
 import com.medCenter.medCenter.exception.ScheduleExistException;
 import com.medCenter.medCenter.exception.ScheduleNotFoundException;
+import com.medCenter.medCenter.model.entity.Days;
 import com.medCenter.medCenter.model.entity.PersonalJob;
 import com.medCenter.medCenter.model.entity.Schedule;
 import com.medCenter.medCenter.model.repository.ScheduleRepository;
 import com.medCenter.medCenter.service.PersonalJobService;
 import com.medCenter.medCenter.service.ScheduleService;
 import com.medCenter.medCenter.service.ServiceService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -109,6 +111,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    public ScheduleDto findById(Integer id) {
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return scheduleForPersonalToDto(schedule);
+    }
+
+    @Override
     public List<ScheduleDto> findByPersonalId(String personalJobId) throws ScheduleNotFoundException {
         List<Schedule> scheduleList = scheduleRepository.findByPersonalId(Integer.valueOf(personalJobId), "open");
         if (scheduleList.isEmpty()) throw new ScheduleNotFoundException();
@@ -161,7 +169,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             } catch (ScheduleExistException e) {
                 e.getLocalizedMessage();
             }
-            minDate = minDate.plusDays(1);
+            minDate = minDate.plusDays(Days.ONE_DAY.getDaysQuantity());
             scheduleDto.setDate(minDate);
         }
     }

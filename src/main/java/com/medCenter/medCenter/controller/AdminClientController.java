@@ -5,6 +5,8 @@ import com.medCenter.medCenter.model.entity.ClientStates;
 import com.medCenter.medCenter.securityConfig.UserDetailsImpl;
 import com.medCenter.medCenter.service.ClientService;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import java.util.List;
 public class AdminClientController {
 
     private final ClientService clientService;
+    private static final Logger logger = LogManager.getLogger(AdminClientController.class);
 
     @GetMapping(value = "/clientOperations")
     public String findAllPersonal(Model model, @AuthenticationPrincipal UserDetailsImpl user) { //getting search form

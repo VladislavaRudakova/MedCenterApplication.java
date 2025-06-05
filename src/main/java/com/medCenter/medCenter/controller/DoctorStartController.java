@@ -16,6 +16,8 @@ import com.medCenter.medCenter.service.ScheduleService;
 import com.medCenter.medCenter.service.TicketService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +31,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DoctorStartController {
 
+    private static final Logger logger = LogManager.getLogger(DoctorStartController.class);
+
     private final TicketService ticketService;
     private final ScheduleService scheduleService;
     private final PersonalJobService personalJobService;
@@ -36,6 +40,7 @@ public class DoctorStartController {
 
     @GetMapping("/doctorStart")
     public String findTickets(HttpSession session, Model model, @AuthenticationPrincipal UserDetailsImpl user) {
+        logger.info("DOCTOR FIND TICKETS BEGIN");
         PersonalJobDto personalJob = personalJobService.findByUserId(user.getUser().getId());
         List<TicketDto> tickets = ticketService.findActualByPersonalJob(personalJob.getId()); //find tickets to show its on page
         model.addAttribute("tickets", tickets);
@@ -53,16 +58,17 @@ public class DoctorStartController {
     @PostMapping("/findPatients")
     public String findPatients(Model model, @AuthenticationPrincipal UserDetailsImpl user,
                                @ModelAttribute ClientDto clientDto, @RequestParam Integer personalJobId) {
-//        model.addAttribute(user.getUser().getRole(), "role");
-        System.out.println("CLIENT DTO!!!!!!!!!!!!!!!!!!!!!!!!!!!" + clientDto);
+        logger.info("DOCTOR FIND PATIENTS BEGIN");
+        logger.info("CLIENT DTO RECEIVED: " + clientDto);
         List<ClientDto> clientDtoList = clientService.findClientsByDoctor(clientDto, personalJobId);
-        System.out.println("CLIENT LIST!!!!!!!!!!!!!!!!!!!!!!!!!!!" + clientDtoList);
+        logger.info("CLIENTS FOUND: " + clientDto);
         model.addAttribute("clients", clientDtoList);
         return "adminFoundClientsPage";
     }
 
     @GetMapping("/getFindPatientsForm")
     public String getFindPatientsForm(Model model, @AuthenticationPrincipal UserDetailsImpl user) {
+        logger.info("DOCTOR GET FORM BEGIN");
         PersonalJobDto personalJob = personalJobService.findByUserId(user.getUser().getId());
         model.addAttribute("role", user.getUser().getRole());
         model.addAttribute("clientToFind", new ClientDto());

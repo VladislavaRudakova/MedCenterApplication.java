@@ -6,6 +6,7 @@ import com.medCenter.medCenter.dto.ServiceDto;
 import com.medCenter.medCenter.dto.TicketDto;
 import com.medCenter.medCenter.exception.TicketException;
 import com.medCenter.medCenter.model.entity.Roles;
+import com.medCenter.medCenter.model.entity.Ticket;
 import com.medCenter.medCenter.model.entity.TicketStates;
 import com.medCenter.medCenter.model.entity.TicketSubStates;
 import com.medCenter.medCenter.securityConfig.UserDetailsImpl;
@@ -14,6 +15,8 @@ import com.medCenter.medCenter.service.ServiceService;
 import com.medCenter.medCenter.service.TicketService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -31,6 +34,8 @@ import java.util.regex.Pattern;
 @RequestMapping("admin/")
 public class AdminTicketController {
 
+    private static final Logger logger = LogManager.getLogger(AdminTicketController.class);
+
     private final TicketService ticketService;
     private final ServiceService serviceService;
     private final ScheduleService scheduleService;
@@ -41,7 +46,7 @@ public class AdminTicketController {
         List<ServiceDto> services = serviceService.findAll();
        TicketStates[] ticketStates = TicketStates.values();
         List<String> ticketStatesList = new ArrayList<>();
-        for (TicketStates ticketStates1 : ticketStates) { //roles list for select user role
+        for (TicketStates ticketStates1 : ticketStates) { //states list for select
             ticketStatesList.add(ticketStates1.toString());
         }
         model.addAttribute("services", services);
@@ -67,7 +72,9 @@ public class AdminTicketController {
     }
 
     @PostMapping(value = "/editTicket")
-    public String editTicketState(@RequestParam String ticketId, Model model) {
+    public String editTicketState(@RequestParam Integer ticketId, @RequestParam String state, Model model) {
+       ticketService.updateState(state,ticketId);
+       TicketDto ticket = ticketService.findById(ticketId);
 
         return "";
     }
@@ -75,6 +82,12 @@ public class AdminTicketController {
     @PostMapping(value = "/findAllTickets")
     public String findAllTickets(Model model) {
         List<TicketDto> ticketDtoList = ticketService.findAll();
+        TicketStates[] ticketStates = TicketStates.values();
+        List<String> ticketStatesList = new ArrayList<>();
+        for (TicketStates ticketStates1 : ticketStates) { //states list for select
+            ticketStatesList.add(ticketStates1.toString());
+        }
+        model.addAttribute("ticketStates", ticketStatesList);
         model.addAttribute("tickets", ticketDtoList);
         return "adminFoundTicketsPage";
     }
@@ -83,7 +96,6 @@ public class AdminTicketController {
     public String findTickets(@ModelAttribute TicketDto ticketDto, Model model) {
         List<TicketDto> ticketDtoList = ticketService.findTickets(ticketDto);
         model.addAttribute("tickets", ticketDtoList);
-
         return "adminFoundTicketsPage";
     }
 
@@ -119,7 +131,6 @@ public class AdminTicketController {
         } else {
             scheduleDtoList = scheduleService.findByDateAndServiceId(serviceDto.getId(), Date.valueOf(date1)); //if service is not doctor appointment find schedule by service id
         }
-
         ScheduleDto scheduleDto = scheduleDtoList.getFirst();
         ticketDto.setTime(scheduleDto.getStartTime());
         ticketService.createTicketsForDay(scheduleDto, ticketDto, Integer.valueOf(timeRange)); //create tickets
@@ -148,7 +159,6 @@ public class AdminTicketController {
         } else {
             scheduleDtoList = scheduleService.findByDatePeriodAndServiceIdNoDayOff(Date.valueOf(date1), Date.valueOf(date2), serviceDto.getId()); //if service is not doctor appointment
             ticketService.createTicketsForPeriod(scheduleDtoList, serviceDto, null, Integer.valueOf(timeRange));
-//            ticketDtoList = ticketService.f(serviceDto.getId(), Date.valueOf(date1), Date.valueOf(date2));
         }
         model.addAttribute("tickets", ticketDtoList);
         return "adminFoundTicketsPage";

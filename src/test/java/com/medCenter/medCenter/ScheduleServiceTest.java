@@ -77,14 +77,6 @@ public class ScheduleServiceTest {
 
 
     @Test
-    public void dtoToSchedule() {
-//        Assertions.assertNotNull(scheduleService);
-//
-//        ScheduleDto scheduleDto
-
-    }
-
-    @Test
     public void findByPeriodAndPersonalId() throws ScheduleExistException {
         Assertions.assertNotNull(scheduleService);
         PersonalJobDto personalJobDto = createSubInstances();
@@ -152,28 +144,28 @@ public class ScheduleServiceTest {
     @Test
     public void setScheduleWithFixedTimeForPeriod() {
 
-//        Assertions.assertNotNull(scheduleService);
-//        PersonalJobDto personalJobDto = createSubInstances();
-//        Assertions.assertNotNull(personalJobDto);
-//        ScheduleDto scheduleDto = ScheduleDto.builder()
-//                .date(LocalDate.of(2025, 5, 5))
-//                .startTime(LocalTime.of(8, 0))
-//                .endTime(LocalTime.of(14, 0))
-//                .personalJob(personalJobDto).build();
-//
-//        String date1 = "2025-05-05";
-//        String date2 = "2025-05-10";
-//        String time1 = "08:00:00";
-//        String time2 = "14:00:00";
-//        String personalJobId = String.valueOf(personalJobDto.getId());
-//
-//        scheduleService.setScheduleWithFixedTimeForPeriod(date1, date2, time1, time2, personalJobId);
-//
-//        List<ScheduleDto> scheduleDtoList = scheduleService.findByPeriodAndPersonalId(date1, date2, personalJobId);
-//        System.out.println("SCHEDULE LIST " + scheduleDtoList);
-//        System.out.println("SCHEDULE LIST SIZE " + scheduleDtoList.size());
-//        Assertions.assertNotNull(scheduleDtoList);
-//        Assertions.assertEquals(scheduleDtoList.size(), 5);
+        Assertions.assertNotNull(scheduleService);
+        PersonalJobDto personalJobDto = createSubInstances();
+        Assertions.assertNotNull(personalJobDto);
+        ScheduleDto scheduleDto = ScheduleDto.builder()
+                .date(LocalDate.of(2025, 5, 5))
+                .startTime(LocalTime.of(8, 0))
+                .endTime(LocalTime.of(14, 0))
+                .personalJob(personalJobDto).build();
+
+        String date1 = "2025-05-05";
+        String date2 = "2025-05-10";
+        String time1 = "08:00:00";
+        String time2 = "14:00:00";
+        String personalJobId = String.valueOf(personalJobDto.getId());
+
+        scheduleService.setScheduleWithFixedTimeForPeriod(date2, scheduleDto);
+
+        List<ScheduleDto> scheduleDtoList = scheduleService.findByPeriodAndPersonalId(date1, date2, personalJobId);
+        System.out.println("SCHEDULE LIST " + scheduleDtoList);
+        System.out.println("SCHEDULE LIST SIZE " + scheduleDtoList.size());
+        Assertions.assertNotNull(scheduleDtoList);
+        Assertions.assertEquals(scheduleDtoList.size(), 6);
     }
 
     @Test

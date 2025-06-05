@@ -11,6 +11,8 @@ import com.medCenter.medCenter.service.ScheduleService;
 import com.medCenter.medCenter.service.TicketService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("admin/")
 public class AdminStartController {
+
+    private static final Logger logger = LogManager.getLogger(AdminStartController.class);
 
     private final TicketService ticketService;
     private final ScheduleService scheduleService;

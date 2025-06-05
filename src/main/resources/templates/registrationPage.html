@@ -47,7 +47,7 @@
                                                   th:field="*{userCredentials.password}" name="password"></div>
                     </div>
 
-                    <select id="role" class="personal-input" th:field="*{role}" name="role">
+                    <select sec:authorize="hasAuthority('ROLE_ADMIN')" id="role" class="personal-input" th:field="*{role}" name="role">
                         <option th:each="role:${roles}" class="options" th:value="${role}"
                                 th:text="${role}"></option>
                     </select>

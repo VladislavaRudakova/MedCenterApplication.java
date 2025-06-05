@@ -5,19 +5,19 @@
       }
 
 .personal-form-block{
-display: flex;
-flex-direction:column;
-border:solid;
-border-radius: 30px;
-border-width: 1px;
-border-color: #c1c9d1;
-padding:30px;
+    display: flex;
+    flex-direction:column;
+    border:solid;
+    border-radius: 30px;
+    border-width: 1px;
+    border-color: #c1c9d1;
+    padding:30px;
 
 }
 
 .button-see-all-block{
-display:flex;
-justify-content:flex-end;
+    display:flex;
+    justify-content:flex-end;
 
 }
 
@@ -57,12 +57,12 @@ display:flex;
 }
 
 #personal-secondary-info-block{
-display:flex;
-flex-direction:column;
+    display:flex;
+    flex-direction:column;
 }
 
 .personal-label{
-font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 90%;
   color: #464a50;
 }
@@ -75,8 +75,8 @@ font-family: Arial, Helvetica, sans-serif;
 }
 
 #button-create{
-display:flex;
-justify-content:flex-end;
+    display:flex;
+    justify-content:flex-end;
 }
 
 
@@ -99,7 +99,7 @@ justify-content:flex-end;
 .personal-block{
     display: flex;
     align-items: center;
-     justify-content: space-between;
+    justify-content: space-between;
     width: auto;
     padding: 50px;
     padding-top:30px;
@@ -153,30 +153,30 @@ justify-content:flex-end;
 }
 
 .founded-inst-buttons-block{
-display:flex;
-justify-content:flex-end;
+    display:flex;
+    justify-content:flex-end;
 }
 
 .inst-info-block{
-display: flex;
-align-items:center;
-justify-content:center;
+    display: flex;
+    align-items:center;
+    justify-content:center;
 }
 
 .select-instance{
-  color: #c1c9d1;
-  background-color: rgb(255, 255, 255);
-  border-radius: 20px;
-  border: solid;
-  border-color: #c1c9d1;;
-  border-width: 1px;
-  height: 30px;
-  width: 150px;
-  margin:5px;
+    color: #c1c9d1;
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px;
+    border: solid;
+    border-color: #c1c9d1;;
+    border-width: 1px;
+    height: 30px;
+    width: 150px;
+    margin:5px;
 }
 
 #find-service{
-width:200px;
+    width:200px;
 }
 
 
@@ -206,8 +206,6 @@ width:200px;
     flex-direction:column;
 }
 
-
-
 .med-card-details{
      display:flex;
      flex-direction:column;
@@ -222,4 +220,42 @@ width:200px;
 .med-card-info-block{
      display:flex;
      flex-direction:column;
+}
+
+.dropdown-personal-details{
+    position:relative;
+}
+
+.dropdown-personal-details-content{
+     display:none;
+     position:absolute;
+     width:300px;
+     border: solid;
+     border-width:1px;
+     border-radius:10px;
+     border-color: #c1c9d1;
+     background-color:white;
+     padding:20px;
+     flex-direction:column;
+}
+
+.name-input{
+     width: 170px;
+     height: 25px;
+     border: solid;
+     border-color: #c1c9d1;
+     border-width:1px;
+     border-radius:20px;
+     margin:10px;
+     padding-left:10px;
+}
+
+#date{
+     width: 160px;
+     height: 25px;
+     border: solid;
+     border-color: #c1c9d1;
+     border-width:1px;
+     border-radius:20px;
+
 }

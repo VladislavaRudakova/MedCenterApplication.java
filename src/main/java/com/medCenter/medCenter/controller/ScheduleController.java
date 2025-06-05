@@ -12,6 +12,8 @@ import com.medCenter.medCenter.service.ScheduleService;
 import com.medCenter.medCenter.service.ServiceService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,12 +25,16 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("admin/")
 @RequiredArgsConstructor
 public class ScheduleController {
+
+    private static final Logger logger = LogManager.getLogger(ScheduleController.class);
 
     private final ScheduleService scheduleService;
     private final PersonalJobService personalJobService;
@@ -144,8 +150,10 @@ public class ScheduleController {
                                             @RequestParam String date2, @RequestParam String startTime1, @RequestParam String endTime1, @RequestParam String personalJobId) {
 
         PersonalJobDto personalJobDto = (PersonalJobDto) session.getAttribute("personalJob");
+        ServiceDto serviceDto = serviceService.findByType(personalJobDto.getJobTitle() + " appointment");
         ScheduleDto scheduleDto = ScheduleDto.builder()
                 .date(Date.valueOf(date1).toLocalDate())
+                .service(serviceDto)
                 .startTime(Time.valueOf(startTime1 + ":00").toLocalTime())
                 .endTime(Time.valueOf(endTime1 + ":00").toLocalTime())
                 .state(ScheduleStates.OPEN.toString())
@@ -164,7 +172,7 @@ public class ScheduleController {
                 .startTime(Time.valueOf(startTime1 + ":00").toLocalTime())
                 .endTime(Time.valueOf(endTime1 + ":00").toLocalTime())
                 .service(serviceDto)
-                .state("open")
+                .state(ScheduleStates.OPEN.toString())
                 .build();
         scheduleService.setScheduleWithFixedTimeForPeriod(date2, scheduleDto);
         return findScheduleForService(serviceDto.getId().toString(), session, model);
@@ -190,9 +198,14 @@ public class ScheduleController {
 
 
     @PostMapping(value = "/setDayOff")
-    public String setDayOff(Model model, HttpSession session, @RequestParam Integer scheduleId, @RequestParam Integer personalJobId) {
+    public String setDayOff(Model model, HttpSession session, @RequestParam Integer scheduleId) {
         scheduleService.setDayOff("day off", scheduleId);
-        return findSchedule(personalJobId.toString(), session, model);
+        ScheduleDto scheduleDto = scheduleService.findById(scheduleId);
+        if (isAppointment(scheduleDto.getService().getType())) {
+            return findSchedule(scheduleDto.getPersonalJob().getId().toString(), session, model);
+        } else {
+            return findScheduleForService(scheduleDto.getService().getId().toString(), session, model);
+        }
     }
 
 
@@ -205,7 +218,16 @@ public class ScheduleController {
             time = time.plusHours(1);
             times.add(time.toString());
         }
-        System.out.println(times);
         return times;
     }
+
+    private boolean isAppointment(String serviceType) { //define is service doctor appointment
+        String regex = "doctor \\w+ appointment";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(serviceType);
+        return matcher.find();
+
+    }
+
+
 }
