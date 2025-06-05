@@ -20,15 +20,15 @@ public class ServiceServiceImpl implements ServiceService {
 
     private final ServiceRepository serviceRepository;
 
-    public ServiceDto serviceToDto(com.medCenter.medCenter.model.entity.Service service){
+    public ServiceDto serviceToDto(com.medCenter.medCenter.model.entity.Service service) {
         ServiceDto serviceDto = ServiceDto.builder()
                 .id(service.getId())
                 .type(service.getType())
                 .price(service.getPrice()).build();
-        if (service.getState()!=null){
+        if (service.getState() != null) {
             serviceDto.setState(service.getState());
         }
-        if (service.getTickets()!=null){
+        if (service.getTickets() != null) {
             List<TicketDto> ticketDtoList = new ArrayList<>();
             for (Ticket ticket : service.getTickets()) {
                 TicketDto ticketDto = TicketDto.builder()
@@ -59,7 +59,7 @@ public class ServiceServiceImpl implements ServiceService {
         List<com.medCenter.medCenter.model.entity.Service> services = serviceRepository.findAll();
         List<ServiceDto> serviceDtoList = new ArrayList<>();
         for (com.medCenter.medCenter.model.entity.Service service : services) {
-            ServiceDto serviceDto =serviceToDto(service);
+            ServiceDto serviceDto = serviceToDto(service);
             serviceDtoList.add(serviceDto);
         }
         return serviceDtoList;
@@ -67,10 +67,10 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public List<ServiceDto> findService(String type, Double price) {
-      List<com.medCenter.medCenter.model.entity.Service> services = serviceRepository.findService(type, price);
+        List<com.medCenter.medCenter.model.entity.Service> services = serviceRepository.findService(type, price);
         List<ServiceDto> serviceDtoList = new ArrayList<>();
         for (com.medCenter.medCenter.model.entity.Service service : services) {
-            ServiceDto serviceDto =serviceToDto(service);
+            ServiceDto serviceDto = serviceToDto(service);
             serviceDtoList.add(serviceDto);
         }
         return serviceDtoList;
@@ -104,9 +104,15 @@ public class ServiceServiceImpl implements ServiceService {
     public void createService(ServiceDto serviceDto) {
 
         com.medCenter.medCenter.model.entity.Service service = com.medCenter.medCenter.model.entity.Service.builder()
-                        .type(serviceDto.getType())
-                        .price(serviceDto.getPrice()).build();
+                .type(serviceDto.getType())
+                .price(serviceDto.getPrice()).build();
         serviceRepository.save(service);
+    }
+
+    @Transactional
+    @Override
+    public void updateService(ServiceDto serviceDto) {
+        serviceRepository.updateService(serviceDto.getType(), serviceDto.getPrice(), serviceDto.getState(), serviceDto.getId());
     }
 
     @Override

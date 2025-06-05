@@ -23,7 +23,6 @@
         <div class="search-title">Your schedule:</div>
         <div class="schedule-container">
             <div class="schedule-block">
-
                 <div class="schedule" th:each="schedule: ${scheduleList}">
                     <div th:if="${schedule.dayOff==null}">
                         <div class="schedule-weekday" th:text="${schedule.weekDay}"></div>

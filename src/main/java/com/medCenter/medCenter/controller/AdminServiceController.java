@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -35,6 +36,7 @@ public class AdminServiceController {
     public String findAllService(Model model) {
         List<ServiceDto> services = serviceService.findAll();
         model.addAttribute("services", services);
+        model.addAttribute("service", new ServiceDto());
         return "adminFoundServicePage";
     }
 
@@ -42,6 +44,7 @@ public class AdminServiceController {
     public String findService(Model model, @ModelAttribute ServiceDto service) {
         List<ServiceDto> services = serviceService.findService(service.getType(), service.getPrice()); //dynamic search
         model.addAttribute("services", services);
+        model.addAttribute("service", new ServiceDto());
         return "adminFoundServicePage";
     }
 
@@ -74,5 +77,24 @@ public class AdminServiceController {
         return "adminFoundPersonalPage";
     }
 
+    @PostMapping(value = "/editService")
+    public String editService(@RequestParam String type, @RequestParam Double price, @RequestParam Integer serviceId, Model model) {
+        logger.info("EDIT SERVICE BEGIN");
+        logger.info("SERVICE ID RECEIVED " + serviceId);
+        ServiceDto serviceDto = ServiceDto.builder()
+                .id(serviceId)
+                .type(type)
+                .price(price)
+                .build();
+        logger.info("SERVICE DTO " + serviceDto);
+        serviceService.updateService(serviceDto);
+        ServiceDto serviceDto1 = serviceService.findByIdDto(serviceId);
+        List<ServiceDto> serviceDtoList = new ArrayList<>();
+        serviceDtoList.add(serviceDto1);
+        logger.info("SERVICE UPDATED " + serviceDto);
+        model.addAttribute("services", serviceDtoList);
+        model.addAttribute("service", new ServiceDto());
+        return "adminFoundServicePage";
+    }
 
 }

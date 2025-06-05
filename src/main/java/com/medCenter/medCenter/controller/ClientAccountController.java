@@ -108,9 +108,10 @@ public class ClientAccountController {
 
 
     @PostMapping(value = "/requestForCancellation")
-    public String cancelTicket(@RequestParam String clientId, @RequestParam Integer ticketId, Model model) {
+    public String cancelTicket(@RequestParam Integer clientId, @RequestParam Integer ticketId, Model model) {
         ticketService.updateSubStateAndRole(TicketSubStates.REQUEST_FOR_CANCELLATION.toString(), Roles.ROLE_CLIENT.toString(), ticketId); //send request for ticket cancellation
-        List<TicketDto> tickets = ticketService.findByClient(Integer.valueOf(clientId)); //reload updated tickets on page
+        List<TicketDto> tickets = ticketService.findByClient(clientId); //reload updated tickets on page
+        model.addAttribute("clientId", clientId);
         model.addAttribute("tickets", tickets);
         return "clientTicketsPage";
     }

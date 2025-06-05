@@ -35,6 +35,7 @@ public class UserController {
             userService.registration(userDto, personalJobId, encoder);
         } catch (LoginException e) {
             e.getLocalizedMessage();
+            model.addAttribute("exception", e.getLocalizedMessage());
             return "loginPage"; //with message about error
         }
         if (personalJobId != null) { //if not null it is registration of personal by admin

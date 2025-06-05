@@ -27,6 +27,8 @@ public interface ServiceService {
 
     void createService(ServiceDto serviceDto);
 
+    void updateService(ServiceDto serviceDto);
+
     List<ServiceDto> findByTypeLike(String type);
 
 

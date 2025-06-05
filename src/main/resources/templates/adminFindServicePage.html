@@ -24,6 +24,10 @@
                         <form class="find-personal" action="/admin/findService" th:object="${service}" method="post">
                             <input class="select" type="text" name="type" th:field="*{type}" placeholder="type">
                             <input class="select" type="text" name="price" th:field="*{price}" placeholder="price">
+                            <select id="state" class="select" th:field="*{state}" name="state">
+                                <option th:each="serviceState:${serviceStates}" class="options"
+                                        th:value="${serviceState}" th:text="${serviceState}"></option>
+                            </select>
                             <input class="button" type="submit" value="find">
                         </form>
                         <div class="button-see-all-block">

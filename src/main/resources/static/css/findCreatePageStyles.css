@@ -40,11 +40,11 @@
 }
 
 .personal-input{
-color: #c1c9d1;
+color: rgb(106, 117, 141);;
   background-color: rgb(255, 255, 255);
   border-radius: 20px;
   border: solid;
-  border-color: #c1c9d1;;
+  border-color: rgb(106, 117, 141);
   border-width: 1px;
   height: 30px;
   width: 150px;
@@ -66,8 +66,6 @@ display:flex;
   font-size: 90%;
   color: #464a50;
 }
-
-
 
 
 #department-for-create{

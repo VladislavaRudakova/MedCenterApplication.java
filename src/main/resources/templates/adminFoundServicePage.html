@@ -48,41 +48,29 @@
                         <input onclick="toggleDropdown(this)" class="button" type="button" value="edit">
                         <div class="dropdown-content">
                             <!----------------------------------------------->
-                            <form class="edit-form" action="/admin/editService" method="post">
+                            <form class="edit-form" action="/admin/editService" th:object="${service}" method="post">
 
                                 <div class="name-input-block">
-                                    <input class="name-input" type="text" placeholder="type">
-
+                                    <input class="name-input" type="text" th:field="*{type}" placeholder="type">
                                 </div>
-
                                 <div class="name-input-block">
-                                    <input class="name-input" type="text" placeholder="price">
-
+                                    <input class="name-input" type="text" th:field="*{price}" placeholder="price">
                                 </div>
-
+                                <select id="state" class="select" th:field="*{state}" name="state">
+                                    <option th:each="serviceState:${serviceStates}" class="options"
+                                            th:value="${serviceState}" th:text="${serviceState}"></option>
+                                </select>
+                                <input class="button" type="hidden" name="serviceId" th:value="${service.id}">
                                 <input class="button" type="submit" value="send">
                             </form>
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
-
         </div>
-
-
-        <div class="back-button">
-            <form class="regForms" action="/" method="get">
-                <input id="cancel-button" class="button" type="submit" value="back">
-            </form>
-        </div>
-
     </div>
     <div id="right-block"></div>
     <div th:replace="pageFragment/adminButtons::admin-buttons"></div>
-
 
 </div>
 
@@ -93,10 +81,10 @@
  flatpickr("#date1", {});
 
 
-    const buttonPersonal = document.getElementById("personal")
-   const buttonService = document.getElementById("service")
-   let buttonsFindCreatePersonal = document.getElementById("buttons-find-create-personal")
-   const buttonsFindCreateService = document.getElementById("buttons-find-create-service")
+const buttonPersonal = document.getElementById("personal")
+const buttonService = document.getElementById("service")
+let buttonsFindCreatePersonal = document.getElementById("buttons-find-create-personal")
+const buttonsFindCreateService = document.getElementById("buttons-find-create-service")
 
 buttonPersonal.onclick = function(){
 buttonsFindCreatePersonal.style.display=  (buttonsFindCreatePersonal.style.display=== "flex") ? "none" : "flex";
